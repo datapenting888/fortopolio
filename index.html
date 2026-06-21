@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Absensi</title>
+  <link rel="stylesheet" href="assets/css/colors.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Font Monospace untuk jam -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <div class="topbar-user">
+      <span class="topbar-name" id="namaUser">RIKI ANDIKA NAINGGOLAN</span>
+      <span class="topbar-role" id="roleUser">CS</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-topbar" onclick="gantiPassword()">🔑 Ganti Password</button>
+      <button class="btn-topbar btn-logout" onclick="logout()">⏏ Logout</button>
+    </div>
+  </header>
+
+  <!-- ── MAIN CARD ── -->
+  <main class="container">
+
+    <!-- Kartu Identitas + Jam -->
+    <div class="card-identity">
+      <h1 class="identity-name" id="namaKartu">RIKI ANDIKA NAINGGOLAN</h1>
+      <span class="identity-badge" id="roleBadge">CS</span>
+      <div class="jam-digital" id="jamDigital">00.00.00</div>
+      <div class="tanggal" id="tanggalHari">Memuat...</div>
+    </div>
+
+    <!-- Tombol Izin -->
+    <div class="card-buttons">
+      <button class="btn-izin btn-keluar" id="btnKeluar" onclick="izinKeluar()">
+        <span class="btn-icon">↪</span>
+        <span class="btn-label">IZIN KELUAR</span>
+        <span class="btn-sub">Klik untuk keluar kantor</span>
+      </button>
+      <button class="btn-izin btn-masuk" id="btnMasuk" onclick="kembaliMasuk()">
+        <span class="btn-icon">↩</span>
+        <span class="btn-label">KEMBALI MASUK</span>
+        <span class="btn-sub">Klik saat kembali ke kantor</span>
+      </button>
+    </div>
+
+    <!-- Status -->
+    <div class="card-status" id="cardStatus">
+      <span class="status-icon" id="statusIcon">✔</span>
+      <div class="status-text">
+        <small>STATUS SAAT INI</small>
+        <strong id="statusLabel">Sudah Kembali ke Office</strong>
+      </div>
+    </div>
+
+    <!-- Sisa Izin -->
+    <div class="card-izin">
+      <div class="izin-header">
+        <span>📋 Sisa Izin Hari Ini</span>
+        <span id="sisaLabel">1 / 4</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar" style="width: 25%"></div>
+      </div>
+      <div class="izin-footer">
+        <span>✅ Terpakai: <strong id="terpakai">3</strong></span>
+        <span>📅 Kuota: <strong id="kuota">4 / hari</strong></span>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

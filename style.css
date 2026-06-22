@@ -290,3 +290,50 @@ body {
   .card-buttons { grid-template-columns: 1fr 1fr; }
   .btn-label { font-size: 0.85rem; }
 }
+
+/* ── ANALOG CLOCK ── */
+.clock-display {
+  position: relative;
+  z-index: 1;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.clock-face {
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--orange);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.2);
+}
+
+.center-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--orange);
+  border-radius: 50%;
+  z-index: 10;
+  box-shadow: 0 0 10px var(--orange-glow);
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  border-radius: 4px;
+  z-index: 5;
+}
+
+.hour { width: 4px; height: 18px; background: var(--text); transform: translateX(-50%); }
+.minute { width: 3px; height: 25px; background: var(--text2); transform: translateX(-50%); }
+.second { width: 2px; height: 28px; background: var(--orange); transform: translateX(-50%); }

@@ -150,22 +150,20 @@ button{cursor:pointer}
 .panel.active{display:block}
 
 /* ══════════════════════════════
-   AVATAR CARD + JAM DIGITAL KEREN
+   AVATAR CARD + JAM ANALOG KEREN
 ══════════════════════════════ */
-.avatar-card{
-  background:var(--bg3);border:1px solid var(--border);border-radius:18px;
-  padding:1.4rem;margin-bottom:1.1rem;position:relative;overflow:hidden;
-}
-/* subtle scan-line texture */
-.avatar-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,.012) 3px,rgba(255,255,255,.012) 4px);pointer-events:none;z-index:0}
-.avatar-card::after{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--orange-glow) 0%,transparent 70%);pointer-events:none}
-
-.ac-top{display:flex;align-items:center;gap:1rem;position:relative;z-index:1;margin-bottom:1.1rem}
-.avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange2));display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;color:#000;flex-shrink:0;border:2.5px solid var(--orange);letter-spacing:-.02em;box-shadow:0 0 16px var(--orange-glow)}
-.av-info{flex:1;min-width:0}
-.av-name{font-size:1rem;font-weight:800;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.av-badge{display:inline-block;background:var(--orange);color:#000;font-size:.65rem;font-weight:700;padding:.1rem .55rem;border-radius:999px;letter-spacing:.07em;margin:.28rem 0}
-.av-date{font-size:.74rem;color:var(--text2)}
+<div class="clock-display">
+  <div class="clock-face">
+    <div class="hand hour"></div>
+    <div class="hand minute"></div>
+    <div class="hand second"></div>
+    <div class="center-dot"></div>
+  </div>
+  <div class="clock-right">
+    <div class="clock-day" id="day-text">--</div>
+    <div class="clock-date" id="date-text">--/--/--</div>
+  </div>
+</div>
 
 /* ── CLOCK DISPLAY ── */
 .clock-display{

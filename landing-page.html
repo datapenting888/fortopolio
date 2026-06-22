@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Landing Page</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --text: #1e1b4b;
+      --muted: #6b7280;
+      --bg: #f9fafb;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--primary); }
+
+    .nav-cta {
+      background: var(--primary);
+      color: white !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--primary-dark) !important; color: white !important; }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #ede9fe;
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 span { color: var(--primary); }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.75rem 1.75rem;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover { background: #ede9fe; }
+
+    /* ── GALLERY ── */
+    .gallery-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p { color: var(--muted); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .gallery-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    }
+
+    .gallery-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #ede9fe 0%, #c7d2fe 100%);
+    }
+
+    .gallery-img.img2 { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); }
+    .gallery-img.img3 { background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); }
+    .gallery-img.img4 { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+    .gallery-img.img5 { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); }
+    .gallery-img.img6 { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); }
+
+    .img-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .gallery-info { padding: 1rem 1.25rem; }
+
+    .gallery-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .gallery-info p { font-size: 0.875rem; color: var(--muted); }
+
+    /* ── WELCOME MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      transform: translateY(20px);
+      transition: transform 0.25s;
+    }
+
+    .modal-overlay.active .modal { transform: translateY(0); }
+
+    .modal-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .modal h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .modal p { color: var(--muted); margin-bottom: 1.5rem; }
+
+    .modal-close {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.65rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.875rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero { padding: 3rem 1.25rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a class="logo" href="#">✦ MyBrand</a>
+  <ul class="nav-links">
+    <li><a href="#beranda">Beranda</a></li>
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#" class="nav-cta" onclick="tampilkanSambutan(event)">Mulai</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="beranda">
+  <span class="badge">✦ Selamat Datang</span>
+  <h1>Solusi Kreatif untuk<br><span>Dunia Digital</span></h1>
+  <p>Kami membantu bisnis Anda tumbuh melalui desain yang indah dan pengalaman pengguna yang tak terlupakan.</p>
+  <div class="hero-buttons">
+    <button class="btn btn-primary" onclick="tampilkanSambutan(event)">Mulai Sekarang</button>
+    <button class="btn btn-outline">Lihat Portofolio</button>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="galeri">
+  <div class="section-header">
+    <h2>Galeri Karya</h2>
+    <p>Beberapa proyek terbaik yang pernah kami kerjakan</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <div class="gallery-img img1 img-placeholder">🎨</div>
+      <div class="gallery-info">
+        <h3>Desain UI Modern</h3>
+        <p>Antarmuka bersih dan intuitif</p>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img img2 img-placeholder">🌿</div>
+      <div class="gallery-info">
+        <h3>Branding Organik</h3>
+        <p>Identitas merek yang alami</p>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img img3 img-placeholder">💎</div>
+      <div class="gallery-info">
+        <h3>E-commerce Premium</h3>
+        <p>Toko online berkelas tinggi</p>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img img4 img-placeholder">⚡</div>
+      <div class="gallery-info">
+        <h3>Dashboard Analitik</h3>
+        <p>Visualisasi data real-time</p>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img img5 img-placeholder">📱</div>
+      <div class="gallery-info">
+        <h3>Aplikasi Mobile</h3>
+        <p>iOS & Android yang mulus</p>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img img6 img-placeholder">🚀</div>
+      <div class="gallery-info">
+        <h3>Landing Page</h3>
+        <p>Konversi tinggi, tampilan memukau</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WELCOME MODAL -->
+<div class="modal-overlay" id="modal" onclick="tutupModal(event)">
+  <div class="modal">
+    <div class="modal-icon">👋</div>
+    <h2>Selamat Datang!</h2>
+    <p>Terima kasih sudah mengunjungi halaman kami. Kami siap membantu mewujudkan ide Anda!</p>
+    <button class="modal-close" onclick="document.getElementById('modal').classList.remove('active')">
+      Mulai Eksplorasi →
+    </button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 MyBrand. Dibuat dengan ❤️ di Indonesia.</p>
+</footer>
+
+<script src="welcome.js"></script>
+</body>
+</html>

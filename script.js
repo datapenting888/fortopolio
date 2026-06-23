@@ -242,25 +242,3 @@ function logout() {
 
 // ── MULAI ──
 document.addEventListener("DOMContentLoaded", init);
-
-function updateAnalogClock() {
-  const now = new Date();
-  const s = now.getSeconds();
-  const m = now.getMinutes();
-  const h = now.getHours();  
-
-  const sDeg = (s / 60) * 360;
-  const mDeg = ((m + s / 60) / 60) * 360;
-  const hDeg = ((h % 12 + m / 60) / 12) * 360;
-
-  document.querySelector('.second').style.transform = `translateX(-50%) rotate(${sDeg}deg)`;
-  document.querySelector('.minute').style.transform = `translateX(-50%) rotate(${mDeg}deg)`;
-  document.querySelector('.hour').style.transform = `translateX(-50%) rotate(${hDeg}deg)`;
-
-  // Update text tanggal
-  document.getElementById('day-text').textContent = now.toLocaleDateString('id-ID', {weekday:'long'});
-  document.getElementById('date-text').textContent = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
-}
-
-setInterval(updateAnalogClock, 1000);
-updateAnalogClock();

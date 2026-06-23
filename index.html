@@ -631,9 +631,9 @@ tr:hover td{background:var(--bg4)}
 // ════════════════════════════════════════════
 let USERS={
   "CS001":{nama:"RIKI ANDIKA NAINGGOLAN",role:"CS",      kuota:4,pw:btoa("cs001")},
-  "HRD01":{nama:"SARI DEWI KUSUMA",      role:"HRD",     kuota:6,pw:btoa("hrd01")},
+  "HRD01":{nama:"SARI DEWI KUSUMA",      role:"HRD",     kuota:4,pw:btoa("hrd01")},
   "MKT02":{nama:"BUDI SANTOSO",          role:"Marketing",kuota:4,pw:btoa("mkt02")},
-  "ADM01":{nama:"ADMIN SISTEM",          role:"Admin",   kuota:8,pw:btoa("admin1")},
+  "ADM01":{nama:"ADMIN SISTEM",          role:"Admin",   kuota:4,pw:btoa("admin1")},
 };
 const BASE_USERS=["CS001","HRD01","MKT02","ADM01"];
 function loadExtra(){const r=lsGet("l99_extra");if(r)try{Object.assign(USERS,JSON.parse(r))}catch(e){}}

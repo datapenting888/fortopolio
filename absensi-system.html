@@ -542,7 +542,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
   <div class="lwrap">
     <div class="logo-area">
       <div class="logo-icon">⏱</div>
-      <h1><em>LAPAK</em>99</h1>
+      <h1><em>SMB GROUP</em>99</h1>
       <p>Sistem Informasi Absensi Karyawan</p>
     </div>
     <div class="lcard">
@@ -603,7 +603,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
   <div class="topbar">
     <div class="tbl">
       <button class="hambtn" onclick="toggleSB()">☰</button>
-      <div class="tb-brand"><em>LAPAK</em>99</div>
+      <div class="tb-brand"><em>SMB GROUP</em>99</div>
       <div class="tb-sep"></div>
       <div class="tb-user">
         <span class="tb-name" id="tbName">—</span>
@@ -1718,7 +1718,7 @@ function exportAllData() {
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const a    = document.createElement("a");
   a.href     = URL.createObjectURL(blob);
-  a.download = "lapak99_absensi_" + new Date().toISOString().slice(0, 10) + ".csv";
+  a.download = "SMB GROUP_absensi_" + new Date().toISOString().slice(0, 10) + ".csv";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

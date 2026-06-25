@@ -1,79 +1,1871 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Absensi</title>
-  <link rel="stylesheet" href="assets/css/colors.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <!-- Font Monospace untuk jam -->
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LAPAK99 — Absensi</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Orbitron:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+:root{
+  --bg0:#060810;--bg1:#0A0D1A;--bg2:#0E1220;--bg3:#131929;--bg4:#182035;--bg5:#1D2840;--bg6:#22304C;
+  --b0:rgba(255,255,255,.04);--b1:rgba(255,255,255,.07);--b2:rgba(255,255,255,.11);--b3:rgba(255,255,255,.17);
+  --gold:#F4A700;--gold2:#E09000;--gold3:#FFD060;--goldg:rgba(244,167,0,.22);--goldd:rgba(244,167,0,.10);
+  --rose:#FF4D6D;--rosed:rgba(255,77,109,.12);
+  --jade:#00C98B;--jaded:rgba(0,201,139,.10);
+  --sky:#38BDF8;--skyd:rgba(56,189,248,.10);
+  --vio:#A78BFA;--viod:rgba(167,139,250,.10);
+  --t0:#FFFFFF;--t1:#E8EEFF;--t2:#8A9BBF;--t3:#4A5878;--t4:#2A3450;
+  --r:16px;--rs:10px;--rx:7px;
+  --sans:'Plus Jakarta Sans',sans-serif;
+  --orb:'Orbitron',sans-serif;
+  --mono:'DM Mono',monospace;
+  --sw:262px;--th:58px;
+}
+body{font-family:var(--sans);background:var(--bg0);color:var(--t1);min-height:100vh;overflow-x:hidden}
+input,button,select{font-family:var(--sans)} button{cursor:pointer}
+
+/* ── screens ── */
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex}
+
+/* ── shared field ── */
+.field{margin-bottom:.85rem}
+.field label{display:block;font-size:.66rem;font-weight:800;color:var(--t3);margin-bottom:.35rem;letter-spacing:.12em;text-transform:uppercase}
+.fw{position:relative}
+.field input,.field select{
+  width:100%;background:var(--bg5);border:1.5px solid var(--b1);
+  color:var(--t1);padding:.62rem .95rem;border-radius:var(--rs);
+  font-size:.875rem;outline:none;transition:all .2s;
+}
+.field input:focus,.field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--goldd)}
+.field input::placeholder{color:var(--t4)}
+.field select option{background:var(--bg4)}
+.eye{position:absolute;right:.68rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);font-size:.88rem;transition:color .2s}
+.eye:hover{color:var(--gold)}
+.sbar{height:3px;border-radius:999px;background:var(--bg6);margin-top:.28rem;overflow:hidden}
+.sfill{height:100%;border-radius:999px;transition:width .3s,background .3s;width:0}
+.fhint{font-size:.67rem;color:var(--t3);margin-top:.25rem}
+
+/* ── buttons ── */
+.btn-primary{
+  width:100%;padding:.7rem;border:none;border-radius:var(--rs);
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;font-weight:800;font-size:.88rem;letter-spacing:.03em;
+  transition:opacity .2s,transform .1s;margin-top:.18rem;
+  box-shadow:0 4px 22px var(--goldg);
+}
+.btn-primary:hover{opacity:.88} .btn-primary:active{transform:scale(.97)}
+.btn-ghost{
+  width:100%;padding:.66rem;border:1.5px solid var(--b1);border-radius:var(--rs);
+  background:transparent;color:var(--t2);font-weight:600;font-size:.875rem;transition:all .2s;
+}
+.btn-ghost:hover{border-color:var(--b2);color:var(--t1)}
+.bsm{padding:.28rem .65rem;border-radius:var(--rx);font-size:.7rem;font-weight:700;border:none;transition:all .2s}
+.bedit{background:var(--viod);color:var(--vio);border:1px solid rgba(167,139,250,.22)}
+.bedit:hover{background:var(--vio);color:#fff}
+.bdel{background:var(--rosed);color:var(--rose);border:1px solid rgba(255,77,109,.2)}
+.bdel:hover{background:var(--rose);color:#fff}
+
+.emsg{background:var(--rosed);border:1px solid rgba(255,77,109,.28);border-radius:var(--rs);padding:.55rem .82rem;font-size:.78rem;color:var(--rose);margin-bottom:.82rem;display:none}
+.emsg.show{display:block}
+.omsg{background:var(--jaded);border:1px solid rgba(0,201,139,.28);border-radius:var(--rs);padding:.55rem .82rem;font-size:.78rem;color:var(--jade);margin-bottom:.82rem;display:none}
+.omsg.show{display:block}
+.lnk{background:none;border:none;color:var(--gold);font-size:.82rem;cursor:pointer;font-weight:600;padding:0}
+.lnk:hover{color:var(--gold3)}
+.backbtn{display:inline-flex;align-items:center;gap:.35rem;background:none;border:none;color:var(--t2);font-size:.8rem;cursor:pointer;margin-bottom:1.35rem;transition:color .2s;font-weight:600;padding:0}
+.backbtn:hover{color:var(--gold)}
+
+/* ════ LOGIN ════ */
+#screen-login{
+  align-items:center;justify-content:center;
+  background:
+    radial-gradient(ellipse 70% 55% at 0% 100%,rgba(244,167,0,.07) 0%,transparent 58%),
+    radial-gradient(ellipse 45% 40% at 100% 0%,rgba(167,139,250,.06) 0%,transparent 55%),
+    var(--bg0);
+}
+.lwrap{width:100%;max-width:388px;padding:1.4rem}
+.logo-area{text-align:center;margin-bottom:1.9rem}
+.logo-icon{
+  width:58px;height:58px;border-radius:15px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:1.65rem;margin-bottom:.6rem;
+  box-shadow:0 0 0 8px var(--goldd),0 8px 28px var(--goldg);
+}
+.logo-area h1{font-family:var(--orb);font-size:1.55rem;font-weight:900;letter-spacing:-.02em}
+.logo-area h1 em{color:var(--gold);font-style:normal}
+.logo-area p{color:var(--t2);font-size:.77rem;margin-top:.18rem;font-weight:500}
+.lcard{
+  background:rgba(14,18,32,.82);backdrop-filter:blur(24px);
+  border:1px solid var(--b1);border-radius:20px;padding:1.7rem;
+  box-shadow:0 12px 48px rgba(0,0,0,.45);
+}
+.lcard h2{font-size:1rem;font-weight:800;margin-bottom:.16rem}
+.lcard .lsub{color:var(--t2);font-size:.78rem;margin-bottom:1.35rem;font-weight:500}
+
+/* ════ FORGOT ════ */
+#screen-forgot{align-items:center;justify-content:center;background:var(--bg0)}
+.awrap{width:100%;max-width:388px;padding:1.4rem}
+.acard{
+  background:rgba(14,18,32,.82);backdrop-filter:blur(24px);
+  border:1px solid var(--b1);border-radius:20px;padding:1.7rem;
+}
+.acard h2{font-size:1rem;font-weight:800;margin-bottom:.16rem}
+.acard .asub{color:var(--t2);font-size:.78rem;margin-bottom:1.35rem;line-height:1.55;font-weight:500}
+.ibox{background:var(--bg5);border:1px solid var(--b1);border-radius:var(--rs);padding:.68rem .92rem;margin-bottom:.88rem;font-size:.77rem;color:var(--t2);line-height:1.6}
+.ibox strong{color:var(--t1)}
+
+/* ════ DASHBOARD LAYOUT ════ */
+#screen-dash{flex-direction:column}
+.dlayout{display:flex;flex:1;overflow:hidden;min-height:calc(100vh - var(--th))}
+
+/* TOPBAR */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.2rem;height:var(--th);
+  background:rgba(6,8,16,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--b0);
+  position:sticky;top:0;z-index:300;flex-shrink:0;
+}
+.tbl{display:flex;align-items:center;gap:.72rem}
+.tb-brand{font-family:var(--orb);font-size:1rem;font-weight:900;letter-spacing:-.01em}
+.tb-brand em{color:var(--gold);font-style:normal}
+.tb-sep{width:1px;height:20px;background:var(--b1)}
+.tb-user{display:flex;flex-direction:column}
+.tb-name{font-size:.8rem;font-weight:700;line-height:1.2}
+.tb-role{font-size:.63rem;color:var(--t2);letter-spacing:.06em;font-weight:600}
+.tbr{display:flex;align-items:center;gap:.42rem}
+.tbbtn{
+  height:30px;padding:0 .75rem;border-radius:var(--rx);
+  background:var(--bg5);border:1px solid var(--b1);
+  font-size:.7rem;font-weight:700;color:var(--t2);
+  display:flex;align-items:center;gap:.28rem;transition:all .2s;white-space:nowrap;
+}
+.tbbtn:hover{border-color:var(--b2);color:var(--t1)}
+.tbbtn.logout{background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent;color:#000}
+.tbbtn.logout:hover{opacity:.85}
+.hambtn{
+  display:none;width:30px;height:30px;border-radius:var(--rx);
+  background:var(--bg5);border:1px solid var(--b1);
+  align-items:center;justify-content:center;font-size:.9rem;color:var(--t2);flex-shrink:0;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sw);flex-shrink:0;
+  background:rgba(10,13,26,.97);backdrop-filter:blur(20px);
+  border-right:1px solid var(--b0);
+  display:flex;flex-direction:column;
+  height:calc(100vh - var(--th));
+  position:sticky;top:var(--th);
+  overflow-y:auto;transition:transform .28s ease;
+}
+.sidebar::-webkit-scrollbar{width:2px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--b2);border-radius:999px}
+.sbsec{padding:1rem .65rem .3rem}
+.sblbl{font-size:.58rem;font-weight:800;color:var(--t4);letter-spacing:.15em;text-transform:uppercase;padding:0 .45rem;margin-bottom:.35rem}
+.sbi{
+  display:flex;align-items:center;gap:.55rem;
+  padding:.53rem .65rem;border-radius:var(--rx);
+  font-size:.8rem;font-weight:600;color:var(--t2);
+  cursor:pointer;transition:all .17s;margin-bottom:.06rem;border:1px solid transparent;
+}
+.sbi:hover{background:var(--bg4);color:var(--t1)}
+.sbi.active{background:var(--goldd);color:var(--gold);border-color:rgba(244,167,0,.18);font-weight:700}
+.sbic{font-size:.85rem;width:17px;text-align:center;flex-shrink:0}
+.sbbadge{margin-left:auto;background:var(--gold);color:#000;font-size:.56rem;font-weight:800;padding:.06rem .38rem;border-radius:999px;min-width:15px;text-align:center}
+/* group */
+.sbgh{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.53rem .65rem;border-radius:var(--rx);
+  font-size:.8rem;font-weight:700;color:var(--t1);
+  cursor:pointer;transition:all .17s;border:1px solid transparent;
+}
+.sbgh:hover,.sbgh.open{background:var(--bg4)}
+.sbgt{display:flex;align-items:center;gap:.55rem}
+.sbarr{font-size:.54rem;color:var(--t3);transition:transform .25s}
+.sbgh.open .sbarr{transform:rotate(90deg)}
+.sbgb{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.sbgb.open{max-height:500px}
+.sbsub{
+  display:flex;align-items:center;gap:.52rem;
+  padding:.44rem .65rem .44rem 2.35rem;border-radius:var(--rx);
+  font-size:.77rem;font-weight:600;color:var(--t2);
+  cursor:pointer;transition:all .17s;margin-bottom:.04rem;
+}
+.sbsub:hover{background:var(--bg5);color:var(--t1)}
+.sbsub.active{color:var(--gold);font-weight:700}
+.sbsi{font-size:.8rem;width:14px;text-align:center;flex-shrink:0}
+.sbfoot{margin-top:auto;padding:.8rem .65rem;border-top:1px solid var(--b0)}
+.sbout{
+  display:flex;align-items:center;gap:.52rem;
+  padding:.55rem .65rem;border-radius:var(--rx);
+  font-size:.8rem;font-weight:700;color:var(--rose);
+  cursor:pointer;transition:all .17s;border:1px solid transparent;
+  background:none;width:100%;text-align:left;
+}
+.sbout:hover{background:var(--rosed);border-color:rgba(255,77,109,.18)}
+
+.sbovl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:150}
+.sbovl.open{display:block}
+
+/* MAIN AREA */
+.main-area{
+  flex:1;overflow-y:auto;padding:1.35rem;min-width:0;
+  background:
+    radial-gradient(ellipse 50% 30% at 80% 5%,rgba(167,139,250,.03) 0%,transparent 55%),
+    var(--bg0);
+}
+.main-area::-webkit-scrollbar{width:3px}
+.main-area::-webkit-scrollbar-thumb{background:var(--b2);border-radius:999px}
+.ph{margin-bottom:1.1rem}
+.pt{font-size:1.08rem;font-weight:800;letter-spacing:-.02em}
+.ps{font-size:.75rem;color:var(--t2);margin-top:.18rem;font-weight:500}
+.panel{display:none} .panel.active{display:block}
+
+/* ── AVATAR CARD ── */
+.avcard{
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,var(--bg3) 0%,var(--bg4) 60%,var(--bg5) 100%);
+  border:1px solid var(--b1);border-radius:20px;
+  padding:1.3rem;margin-bottom:.95rem;
+}
+.avcard::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:190px;height:190px;border-radius:50%;
+  background:radial-gradient(circle,var(--goldg) 0%,transparent 68%);
+  pointer-events:none;
+}
+.avcard::after{
+  content:'';position:absolute;bottom:-35px;left:-35px;
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(167,139,250,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.avrow{display:flex;align-items:center;gap:.95rem;position:relative;z-index:1}
+.avbub{
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.15rem;font-weight:900;color:#000;flex-shrink:0;
+  border:2.5px solid rgba(244,167,0,.5);
+  box-shadow:0 0 0 5px var(--goldd),0 0 18px var(--goldg);
+}
+.avinfo{flex:1;min-width:0}
+.avname{font-size:.97rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
+.avbadge{
+  display:inline-flex;align-items:center;gap:.25rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;font-size:.58rem;font-weight:800;
+  padding:.09rem .52rem;border-radius:999px;letter-spacing:.08em;
+  margin:.24rem 0;
+}
+.avdate{font-size:.68rem;color:var(--t2);font-weight:500}
+
+/* DIGITAL CLOCK (no analog) */
+.clkwrap{
+  position:relative;z-index:1;margin-top:.95rem;
+  background:rgba(6,8,16,.65);border:1px solid var(--b1);
+  border-radius:12px;padding:.72rem .95rem;
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  overflow:hidden;
+}
+.clkwrap::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:55%;
+  background:linear-gradient(180deg,transparent,var(--gold),transparent);
+  border-radius:999px;
+}
+.clksegs{display:flex;align-items:center;gap:.07rem}
+.cseg{display:flex;flex-direction:column;align-items:center;gap:.09rem}
+.cval{
+  font-family:var(--orb);
+  font-size:clamp(1.45rem,5vw,2.1rem);
+  font-weight:900;color:var(--gold);line-height:1;
+  letter-spacing:.06em;
+  text-shadow:0 0 22px var(--goldg);
+}
+.cval span{display:inline-block;min-width:.54em;text-align:center;transition:transform .11s,opacity .11s}
+.clbl{font-size:.42rem;font-weight:700;color:var(--t4);letter-spacing:.16em;text-transform:uppercase}
+.csep{
+  font-family:var(--orb);
+  font-size:clamp(1.15rem,4vw,1.75rem);
+  font-weight:900;color:var(--gold);opacity:.4;
+  padding-bottom:.2rem;animation:blink 1s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:.42}50%{opacity:.06}}
+.clkright{text-align:right;flex-shrink:0}
+.clkday{font-size:.85rem;font-weight:800;color:var(--t0)}
+.clkdate{font-size:.67rem;color:var(--t2);margin-top:.1rem;font-weight:500}
+.livedot{display:inline-flex;align-items:center;gap:.28rem;font-size:.6rem;font-weight:700;color:var(--jade);margin-top:.26rem;letter-spacing:.05em}
+.ld{width:5px;height:5px;border-radius:50%;background:var(--jade);animation:lpulse 2s ease-in-out infinite}
+@keyframes lpulse{0%,100%{box-shadow:0 0 0 0 rgba(0,201,139,.5)}50%{box-shadow:0 0 0 5px rgba(0,201,139,0)}}
+
+/* ── CIRCULAR COUNTDOWN (hidden until outside) ── */
+.ccwrap{display:none;margin-bottom:.95rem}
+.ccwrap.show{
+  display:flex;gap:.95rem;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,var(--bg3),var(--bg4));
+  border:1.5px solid var(--b2);border-radius:20px;
+  padding:1.15rem;align-items:flex-start;
+}
+.ccwrap.show::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle,var(--goldg) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ccleft{display:flex;flex-direction:column;align-items:center;gap:.5rem;flex-shrink:0;position:relative;z-index:1}
+.ccring{position:relative;width:106px;height:106px}
+.ccsvg{width:106px;height:106px;transform:rotate(-90deg);display:block}
+.cctrack{fill:none;stroke:var(--bg6);stroke-width:7}
+.ccfill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .5s ease,stroke .4s ease}
+.ccctr{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.cctm{font-family:var(--orb);font-size:1.12rem;font-weight:900;line-height:1}
+.cctmlbl{font-size:.42rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-top:.1rem}
+.ccstlbl{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+/* state classes toggled via JS on .ccwrap */
+.ccwrap.st-ok  .ccfill{stroke:var(--gold)}  .ccwrap.st-ok  .cctm{color:var(--gold)}  .ccwrap.st-ok  .ccstlbl,.ccwrap.st-ok  .cctitle{color:var(--gold)}
+.ccwrap.st-warn .ccfill{stroke:var(--rose)} .ccwrap.st-warn .cctm{color:var(--rose)} .ccwrap.st-warn .ccstlbl,.ccwrap.st-warn .cctitle{color:var(--rose)}
+.ccwrap.st-over .ccfill{stroke:var(--rose)} .ccwrap.st-over .cctm{color:var(--rose);animation:rflash .55s step-end infinite} .ccwrap.st-over .ccstlbl,.ccwrap.st-over .cctitle{color:var(--rose)}
+@keyframes rflash{0%,100%{opacity:1}50%{opacity:.25}}
+.ccright{flex:1;min-width:155px;display:flex;flex-direction:column;gap:.42rem;padding-top:.05rem;position:relative;z-index:1}
+.cctitle{font-size:.68rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.ccmsg{font-size:.8rem;color:var(--t2);line-height:1.5;font-weight:500}
+.ccwho{font-size:.78rem;font-weight:700;color:var(--gold);margin-top:.08rem}
+
+/* ── TELAT ── */
+.telatcard{background:var(--rosed);border:1.5px solid rgba(255,77,109,.22);border-radius:var(--r);padding:.88rem .98rem;margin-bottom:.95rem;display:none}
+.telatcard.show{display:block}
+.telathead{font-size:.68rem;font-weight:800;color:var(--rose);text-transform:uppercase;letter-spacing:.09em;margin-bottom:.58rem}
+.telatitem{display:flex;align-items:center;gap:.6rem;padding:.44rem .64rem;border-radius:var(--rx);background:rgba(255,77,109,.07);border:1px solid rgba(255,77,109,.13);margin-bottom:.28rem}
+.telatav{width:27px;height:27px;border-radius:50%;background:var(--rose);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:#fff;flex-shrink:0}
+.telatnm{font-size:.78rem;font-weight:700}
+.telatsb{font-size:.67rem;color:var(--t2);font-weight:500}
+.telatdur{font-family:var(--mono);font-size:.72rem;color:var(--rose);font-weight:600;flex-shrink:0}
+
+/* ── STATS ── */
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:.68rem;margin-bottom:.95rem}
+.statcard{
+  background:linear-gradient(145deg,var(--bg3),var(--bg4));
+  border:1px solid var(--b1);border-radius:var(--r);
+  padding:.82rem;text-align:center;position:relative;overflow:hidden;
+}
+.statcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--acc,var(--gold));opacity:.45}
+.si{font-size:1.15rem;margin-bottom:.22rem} .sv{font-size:1.3rem;font-weight:900;line-height:1} .sl{font-size:.6rem;color:var(--t2);margin-top:.14rem;letter-spacing:.04em;font-weight:600}
+.sc-j{--acc:var(--jade)} .sc-j .sv{color:var(--jade)}
+.sc-g{--acc:var(--gold)} .sc-g .sv{color:var(--gold)}
+.sc-v{--acc:var(--vio)} .sc-v .sv{color:var(--vio)}
+
+/* ── ACTION BUTTONS ── */
+.actrow{display:grid;grid-template-columns:1fr 1fr;gap:.82rem;margin-bottom:.95rem}
+.abtn{
+  padding:1.25rem .82rem;border:none;border-radius:var(--r);
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.3rem;
+  font-family:var(--sans);transition:transform .14s,filter .14s,opacity .3s;
+  position:relative;overflow:hidden;
+}
+.abtn::before{content:'';position:absolute;inset:0;background:linear-gradient(155deg,rgba(255,255,255,.07),transparent);pointer-events:none}
+.abtn:active{transform:scale(.95)}
+.abtn:hover:not(.disabled){filter:brightness(1.08)}
+.abtn.disabled{opacity:.3;cursor:not-allowed;filter:none !important;transform:none !important}
+.aico{font-size:1.6rem;line-height:1} .albl{font-size:.83rem;font-weight:800;letter-spacing:.04em} .asub{font-size:.65rem;opacity:.7;font-weight:500}
+.abk{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;box-shadow:0 4px 20px var(--goldg)}
+.abm{background:linear-gradient(135deg,var(--bg5),var(--bg6));border:1.5px solid var(--b2);color:var(--t2)}
+.abm.ready{background:linear-gradient(135deg,#00C98B,#00A572);color:#fff;border-color:transparent;box-shadow:0 4px 20px rgba(0,201,139,.2)}
+
+/* ── STATUS CARD ── */
+.stcard{
+  display:flex;align-items:center;gap:.82rem;
+  border-radius:var(--r);padding:.82rem .98rem;margin-bottom:.95rem;
+  border:1.5px solid;transition:all .28s;position:relative;overflow:hidden;
+}
+.stcard::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.012),transparent);pointer-events:none}
+.st-in{background:linear-gradient(135deg,rgba(0,201,139,.07),var(--bg4));border-color:rgba(0,201,139,.25)}
+.st-out{background:linear-gradient(135deg,rgba(244,167,0,.07),var(--bg4));border-color:rgba(244,167,0,.25)}
+.stdot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;transition:background .28s;position:relative;z-index:1}
+.st-in .stdot{background:linear-gradient(135deg,#00C98B,#00A572);box-shadow:0 0 12px rgba(0,201,139,.28)}
+.st-out .stdot{background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 0 12px var(--goldg)}
+.stinfo{flex:1;position:relative;z-index:1}
+.stinfo small{font-size:.6rem;color:var(--t2);text-transform:uppercase;letter-spacing:.09em;display:block;font-weight:700}
+.stinfo strong{font-size:.87rem;font-weight:800;display:block;margin-top:.09rem}
+.st-in .stinfo strong{color:var(--jade)} .st-out .stinfo strong{color:var(--gold)}
+.sttime{margin-left:auto;font-size:.67rem;color:var(--t3);text-align:right;position:relative;z-index:1}
+.sttime span{display:block;font-size:.74rem;font-weight:700;color:var(--t2)}
+
+/* ── QUOTA ── */
+.qcard{
+  background:linear-gradient(145deg,var(--bg3),var(--bg4));
+  border:1px solid var(--b1);border-radius:var(--r);
+  padding:.9rem 1rem;margin-bottom:.95rem;
+}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:.46rem}
+.qhead span{font-size:.78rem;color:var(--t2);font-weight:600} .qhead strong{font-size:.88rem;font-weight:800}
+.qtrack{background:var(--bg6);border-radius:999px;height:7px;overflow:hidden;margin-bottom:.46rem}
+.qfill{height:100%;border-radius:999px;transition:width .5s,background .3s}
+.qfoot{display:flex;justify-content:space-between;font-size:.7rem;color:var(--t3);font-weight:600}
+.qfoot b{color:var(--t2)}
+
+/* ── HISTORY CARD ── */
+.hcard{
+  background:linear-gradient(145deg,var(--bg3),var(--bg4));
+  border:1px solid var(--b1);border-radius:var(--r);
+  padding:.9rem 1rem;margin-bottom:.95rem;
+}
+.hhead{font-size:.68rem;font-weight:800;color:var(--t2);margin-bottom:.62rem;letter-spacing:.07em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}
+.hlist{display:flex;flex-direction:column;gap:.33rem}
+.hitem{display:flex;align-items:center;gap:.58rem;padding:.46rem .6rem;border-radius:var(--rx);background:rgba(255,255,255,.022);border:1px solid rgba(255,255,255,.035)}
+.hitem.hlate{background:var(--rosed);border-color:rgba(255,77,109,.14)}
+.hdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.hdot.keluar{background:var(--gold)} .hdot.masuk{background:var(--jade)}
+.htxt{flex:1;font-size:.76rem;color:var(--t2);font-weight:500}
+.hdur{font-size:.67rem;color:var(--rose);font-weight:700;margin-right:.2rem}
+.htm{font-size:.68rem;color:var(--t3);font-family:var(--mono)}
+.hempty{text-align:center;color:var(--t3);font-size:.76rem;padding:.75rem 0;font-weight:500}
+
+/* ── LIVE KELUAR (bottom of dash) ── */
+.lkcard{
+  background:linear-gradient(145deg,var(--bg3),var(--bg4));
+  border:1.5px solid rgba(244,167,0,.16);border-radius:var(--r);
+  padding:.9rem 1rem;margin-top:.95rem;
+}
+.lkhead{font-size:.68rem;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.58rem;display:flex;align-items:center;gap:.42rem}
+.lkpulse{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:lpulse 1.5s ease-in-out infinite}
+.lklist{display:flex;flex-direction:column;gap:.38rem}
+.lkitem{display:flex;align-items:center;gap:.65rem;padding:.48rem .65rem;border-radius:var(--rx);background:rgba(244,167,0,.04);border:1px solid rgba(244,167,0,.09)}
+.lkav{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#000;flex-shrink:0}
+.lkinfo{flex:1;min-width:0}
+.lknm{font-size:.78rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lksb{font-size:.66rem;color:var(--t2);font-weight:500}
+.lktimer{font-family:var(--mono);font-size:.76rem;font-weight:600;flex-shrink:0}
+.lktimer.ok{color:var(--gold)} .lktimer.warn{color:var(--rose)} .lktimer.over{color:var(--rose);animation:rflash .55s step-end infinite}
+.lkempty{text-align:center;color:var(--t3);font-size:.75rem;padding:.55rem 0;font-weight:500}
+
+/* ── SETTING CARD ── */
+.scard{
+  background:linear-gradient(145deg,var(--bg3),var(--bg4));
+  border:1px solid var(--b1);border-radius:20px;padding:1.35rem;max-width:488px;
+}
+.sdiv{border:none;border-top:1px solid var(--b1);margin:1rem 0}
+.auparea{border:2px dashed var(--b2);border-radius:var(--r);padding:1.6rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg5);margin-bottom:.9rem}
+.auparea:hover{border-color:var(--gold);background:var(--goldd)}
+.aupprev{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:1.7rem;font-weight:900;color:#000;margin:0 auto .62rem;border:3px solid var(--b2);overflow:hidden}
+.aupprev img{width:100%;height:100%;object-fit:cover}
+.auplbl{font-size:.8rem;font-weight:700;color:var(--t2);margin-bottom:.18rem}
+.auphint{font-size:.67rem;color:var(--t3);font-weight:500}
+.fhidden{display:none}
+
+/* ── STAFF TABLE ── */
+.stblwrap{overflow-x:auto;border-radius:var(--rs);border:1px solid var(--b1);margin-bottom:.9rem;background:var(--bg3)}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--bg5)}
+th{padding:.55rem .75rem;font-size:.63rem;font-weight:800;color:var(--t2);text-align:left;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+td{padding:.55rem .75rem;font-size:.77rem;color:var(--t1);border-top:1px solid var(--b0)}
+tr:hover td{background:rgba(255,255,255,.012)}
+.tbadge{display:inline-block;background:var(--goldd);color:var(--gold);font-size:.58rem;font-weight:800;padding:.06rem .4rem;border-radius:999px;border:1px solid rgba(244,167,0,.2)}
+.tbadge.admin{background:var(--viod);color:var(--vio);border-color:rgba(167,139,250,.2)}
+.tbadge.hrd{background:var(--skyd);color:var(--sky);border-color:rgba(56,189,248,.2)}
+.lst{display:inline-flex;align-items:center;gap:.28rem;font-size:.7rem;font-weight:700}
+.ldots{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ldots.in{background:var(--jade)} .ldots.out{background:var(--gold);animation:lpulse 1.5s infinite}
+
+/* ── EXPORT BAR ── */
+.expbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem;flex-wrap:wrap;gap:.55rem}
+.btnexp{
+  padding:.48rem .95rem;border-radius:var(--rs);
+  background:linear-gradient(135deg,var(--vio),#7C3AED);
+  color:#fff;font-size:.75rem;font-weight:800;border:none;
+  display:inline-flex;align-items:center;gap:.38rem;
+  letter-spacing:.02em;box-shadow:0 4px 16px rgba(167,139,250,.22);transition:opacity .2s;
+}
+.btnexp:hover{opacity:.85}
+
+/* ── EDIT STAFF MODAL ── */
+.emodwrap{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.emodwrap.open{opacity:1;pointer-events:all}
+.emod{background:linear-gradient(145deg,var(--bg3),var(--bg4));border:1px solid var(--b2);border-radius:20px;width:100%;max-width:375px;padding:1.35rem;transform:translateY(14px);transition:transform .2s}
+.emodwrap.open .emod{transform:translateY(0)}
+.emodtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+.emodtitle{font-size:.92rem;font-weight:800}
+.emodclose{background:none;border:none;color:var(--t3);font-size:1.05rem;cursor:pointer;padding:.1rem;transition:color .2s}
+.emodclose:hover{color:var(--t1)}
+
+/* ── CONFIRM MODAL ── */
+.movl{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:999;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.movl.open{opacity:1;pointer-events:all}
+.mbox{background:linear-gradient(145deg,var(--bg3),var(--bg4));border:1px solid var(--b2);border-radius:18px;width:100%;max-width:355px;padding:1.35rem;transform:translateY(13px);transition:transform .2s}
+.movl.open .mbox{transform:translateY(0)}
+.mtitle{font-size:.92rem;font-weight:800;margin-bottom:.17rem}
+.mmsg{font-size:.8rem;color:var(--t2);margin-bottom:1.1rem;line-height:1.52;font-weight:500}
+.macts{display:flex;gap:.5rem}
+.macts .btn-ghost{flex:1}
+.mok{flex:1;padding:.63rem;border-radius:var(--rs);background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#000;font-weight:800;font-size:.84rem;cursor:pointer;transition:opacity .2s}
+.mok:hover{opacity:.85}
+
+/* ── TOAST ── */
+.twrap{position:fixed;top:.88rem;right:.88rem;z-index:9999;display:flex;flex-direction:column;gap:.38rem;max-width:275px}
+.toast{
+  background:linear-gradient(145deg,var(--bg3),var(--bg4));
+  border:1px solid var(--b2);border-radius:var(--rs);
+  padding:.65rem .82rem;font-size:.77rem;font-weight:600;
+  border-left:3.5px solid;animation:tIn .27s ease;
+  color:var(--t1);display:flex;align-items:flex-start;gap:.44rem;line-height:1.38;
+  box-shadow:0 4px 20px rgba(0,0,0,.35);
+  transition:opacity .34s;
+}
+.toast.success{border-left-color:var(--jade)} .toast.error{border-left-color:var(--rose)}
+.toast.info{border-left-color:var(--gold)} .toast.warn{border-left-color:#FBBF24}
+@keyframes tIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{position:fixed;left:0;top:var(--th);height:calc(100vh - var(--th));z-index:160;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)} .hambtn{display:flex} .main-area{padding:.88rem}
+  .tbbtn .tbx{display:none}
+}
+@media(max-width:420px){
+  .actrow{grid-template-columns:1fr}
+  .ccwrap.show{flex-direction:column}
+}
+</style>
 </head>
 <body>
 
-  <!-- ── TOPBAR ── -->
-  <header class="topbar">
-    <div class="topbar-user">
-      <span class="topbar-name" id="namaUser">RIKI ANDIKA NAINGGOLAN</span>
-      <span class="topbar-role" id="roleUser">CS</span>
-    </div>
-    <div class="topbar-actions">
-      <button class="btn-topbar" onclick="gantiPassword()">🔑 Ganti Password</button>
-      <button class="btn-topbar btn-logout" onclick="logout()">⏏ Logout</button>
-    </div>
-  </header>
+<div class="twrap" id="twrap"></div>
+<div class="sbovl" id="sbovl" onclick="closeSB()"></div>
 
-  <!-- ── MAIN CARD ── -->
-  <main class="container">
-
-    <!-- Kartu Identitas + Jam -->
-    <div class="card-identity">
-      <h1 class="identity-name" id="namaKartu">RIKI ANDIKA NAINGGOLAN</h1>
-      <span class="identity-badge" id="roleBadge">CS</span>
-      <div class="jam-digital" id="jamDigital">00.00.00</div>
-      <div class="tanggal" id="tanggalHari">Memuat...</div>
+<!-- ══════════ LOGIN ══════════ -->
+<div class="screen active" id="screen-login">
+  <div class="lwrap">
+    <div class="logo-area">
+      <div class="logo-icon">⏱</div>
+      <h1><em>LAPAK</em>99</h1>
+      <p>Sistem Informasi Absensi Karyawan</p>
     </div>
-
-    <!-- Tombol Izin -->
-    <div class="card-buttons">
-      <button class="btn-izin btn-keluar" id="btnKeluar" onclick="izinKeluar()">
-        <span class="btn-icon">↪</span>
-        <span class="btn-label">IZIN KELUAR</span>
-        <span class="btn-sub">Klik untuk keluar kantor</span>
-      </button>
-      <button class="btn-izin btn-masuk" id="btnMasuk" onclick="kembaliMasuk()">
-        <span class="btn-icon">↩</span>
-        <span class="btn-label">KEMBALI MASUK</span>
-        <span class="btn-sub">Klik saat kembali ke kantor</span>
-      </button>
-    </div>
-
-    <!-- Status -->
-    <div class="card-status" id="cardStatus">
-      <span class="status-icon" id="statusIcon">✔</span>
-      <div class="status-text">
-        <small>STATUS SAAT INI</small>
-        <strong id="statusLabel">Sudah Kembali ke Office</strong>
+    <div class="lcard">
+      <h2>Selamat Datang 👋</h2>
+      <p class="lsub">Masuk dengan User ID dan password Anda</p>
+      <div class="emsg" id="loginErr">User ID atau password tidak valid.</div>
+      <div class="field">
+        <label>User ID</label>
+        <input id="loginId" type="text" placeholder="Contoh: CS001" autocomplete="username"
+          onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="fw">
+          <input id="loginPw" type="password" placeholder="Masukkan password"
+            autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+          <button class="eye" type="button" onclick="toggleEye('loginPw',this)">👁</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="doLogin()">Masuk →</button>
+      <div style="text-align:center;margin-top:.88rem">
+        <button class="lnk" onclick="goForgot()">Lupa password?</button>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Sisa Izin -->
-    <div class="card-izin">
-      <div class="izin-header">
-        <span>📋 Sisa Izin Hari Ini</span>
-        <span id="sisaLabel">1 / 4</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill" id="progressBar" style="width: 25%"></div>
-      </div>
-      <div class="izin-footer">
-        <span>✅ Terpakai: <strong id="terpakai">3</strong></span>
-        <span>📅 Kuota: <strong id="kuota">4 / hari</strong></span>
+<!-- ══════════ FORGOT ══════════ -->
+<div class="screen" id="screen-forgot">
+  <div class="awrap">
+    <button class="backbtn" onclick="goScreen('screen-login')">← Kembali ke Login</button>
+    <div class="acard">
+      <h2>🔐 Lupa Password</h2>
+      <p class="asub">Masukkan User ID Anda untuk mencari akun, kemudian buat password baru.</p>
+      <div class="field"><label>User ID</label><input id="fgId" type="text" placeholder="Contoh: CS001"/></div>
+      <button class="btn-primary" onclick="doForgotSearch()">Cari Akun →</button>
+      <div class="ibox" id="fgHint" style="display:none"></div>
+      <div id="fgForm" style="display:none;margin-top:.88rem">
+        <div class="field">
+          <label>Password Baru</label>
+          <div class="fw">
+            <input id="fgPw1" type="password" placeholder="Min. 6 karakter" oninput="checkStr('fgPw1','fgStr')"/>
+            <button class="eye" type="button" onclick="toggleEye('fgPw1',this)">👁</button>
+          </div>
+          <div class="sbar"><div class="sfill" id="fgStr"></div></div>
+        </div>
+        <div class="field"><label>Konfirmasi Password</label><input id="fgPw2" type="password" placeholder="Ulangi password baru"/></div>
+        <button class="btn-primary" onclick="doForgotReset()">Simpan Password →</button>
       </div>
     </div>
+  </div>
+</div>
 
-  </main>
+<!-- ══════════ DASHBOARD ══════════ -->
+<div class="screen" id="screen-dash">
 
-  <script src="assets/js/script.js"></script>
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tbl">
+      <button class="hambtn" onclick="toggleSB()">☰</button>
+      <div class="tb-brand"><em>LAPAK</em>99</div>
+      <div class="tb-sep"></div>
+      <div class="tb-user">
+        <span class="tb-name" id="tbName">—</span>
+        <span class="tb-role" id="tbRole">—</span>
+      </div>
+    </div>
+    <div class="tbr">
+      <button class="tbbtn" onclick="goPanel('set-pw')">🔑 <span class="tbx">Ganti Password</span></button>
+      <button class="tbbtn logout" onclick="confirmLogout()">⏏ <span class="tbx">Logout</span></button>
+    </div>
+  </div>
+
+  <div class="dlayout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sbsec">
+        <div class="sblbl">Menu Utama</div>
+        <div class="sbi active" id="sb-dash"          onclick="goPanel('dash')"><span class="sbic">🏠</span> Dashboard</div>
+        <div class="sbi"        id="sb-riwayat"        onclick="goPanel('riwayat')"><span class="sbic">📜</span> Riwayat Absensi</div>
+        <div class="sbi"        id="sb-monit"          onclick="goPanel('monit')"          style="display:none"><span class="sbic">📊</span> Monitor Staff <span class="sbbadge" id="outBadge">0</span></div>
+        <div class="sbi"        id="sb-staff"          onclick="goPanel('staff')"          style="display:none"><span class="sbic">👥</span> Data Staff <span class="sbbadge" id="staffBadge">0</span></div>
+        <div class="sbi"        id="sb-history-admin"  onclick="goPanel('history-admin')"  style="display:none"><span class="sbic">🗂️</span> History Absen</div>
+      </div>
+      <div class="sbsec">
+        <div class="sblbl">Pengaturan</div>
+        <div class="sbgh" id="sbGH" onclick="toggleSBG()">
+          <div class="sbgt"><span class="sbic">⚙️</span> Setting</div>
+          <span class="sbarr">▶</span>
+        </div>
+        <div class="sbgb" id="sbGB">
+          <div class="sbsub" id="sb-set-pw"   onclick="goPanel('set-pw')"><span class="sbsi">🔑</span> Ubah Password</div>
+          <div class="sbsub" id="sb-set-name" onclick="goPanel('set-name')"><span class="sbsi">✏️</span> Ganti Nama</div>
+          <div class="sbsub" id="sb-set-prof" onclick="goPanel('set-prof')"><span class="sbsi">🖼️</span> Foto Profil</div>
+          <div class="sbsub" id="sb-set-add"  onclick="goPanel('set-add')"><span class="sbsi">➕</span> Tambah Staff</div>
+        </div>
+      </div>
+      <div class="sbfoot">
+        <button class="sbout" onclick="confirmLogout()"><span>⏏</span> Logout</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-area">
+
+      <!-- ══ PANEL: DASHBOARD ══ -->
+      <div class="panel active" id="panel-dash">
+        <div class="ph">
+          <div class="pt">Dashboard</div>
+          <div class="ps" id="greetLine">Selamat datang!</div>
+        </div>
+
+        <!-- Avatar + Digital Clock -->
+        <div class="avcard">
+          <div class="avrow">
+            <div class="avbub" id="dashAva">—</div>
+            <div class="avinfo">
+              <div class="avname" id="dashName">—</div>
+              <div class="avbadge" id="dashBadge">—</div>
+              <div class="avdate" id="dashDate">—</div>
+            </div>
+          </div>
+          <div class="clkwrap">
+            <div class="clksegs">
+              <div class="cseg"><div class="cval"><span id="dh1">0</span><span id="dh2">0</span></div><div class="clbl">JAM</div></div>
+              <div class="csep">:</div>
+              <div class="cseg"><div class="cval"><span id="dm1">0</span><span id="dm2">0</span></div><div class="clbl">MENIT</div></div>
+              <div class="csep">:</div>
+              <div class="cseg"><div class="cval"><span id="ds1">0</span><span id="ds2">0</span></div><div class="clbl">DETIK</div></div>
+            </div>
+            <div class="clkright">
+              <div class="clkday"  id="clkDay">—</div>
+              <div class="clkdate" id="clkDate">—</div>
+              <div class="livedot"><span class="ld"></span>LIVE</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Circular Countdown (hidden until izin keluar) -->
+        <div class="ccwrap st-ok" id="ccWrap">
+          <div class="ccleft">
+            <div class="ccring">
+              <svg class="ccsvg" viewBox="0 0 106 106">
+                <circle class="cctrack" cx="53" cy="53" r="46"/>
+                <circle class="ccfill" id="ccArc" cx="53" cy="53" r="46"
+                        stroke-dasharray="289.0" stroke-dashoffset="0"/>
+              </svg>
+              <div class="ccctr">
+                <div class="cctm" id="ccTm">15:00</div>
+                <div class="cctmlbl">sisa</div>
+              </div>
+            </div>
+            <div class="ccstlbl" id="ccSt">BATAS IZIN</div>
+          </div>
+          <div class="ccright">
+            <div class="cctitle" id="ccTitle">⏳ BATAS WAKTU IZIN</div>
+            <div class="ccmsg"   id="ccMsg">Kamu memiliki 15 menit untuk keluar kantor. Segera kembali sebelum waktu habis!</div>
+            <div class="ccwho"   id="ccWho"></div>
+          </div>
+        </div>
+
+        <!-- Telat -->
+        <div class="telatcard" id="telatCard">
+          <div class="telathead">🚨 Melebihi Batas Waktu Izin</div>
+          <div id="telatList"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="statrow">
+          <div class="statcard"><div class="si">📋</div><div class="sv" id="stT">0</div><div class="sl">Terpakai</div></div>
+          <div class="statcard sc-g"><div class="si">⏳</div><div class="sv" id="stS">4</div><div class="sl">Sisa Kuota</div></div>
+          <div class="statcard sc-j"><div class="si">✅</div><div class="sv" id="stK">4</div><div class="sl">Kuota/Hari</div></div>
+        </div>
+
+        <!-- Action -->
+        <div class="actrow">
+          <button class="abtn abk" id="btnK" onclick="aksKeluar()">
+            <span class="aico">↪</span><span class="albl">IZIN KELUAR</span><span class="asub">Tap untuk keluar</span>
+          </button>
+          <button class="abtn abm disabled" id="btnM" onclick="aksMasuk()">
+            <span class="aico">↩</span><span class="albl">KEMBALI MASUK</span><span class="asub">Tap saat tiba</span>
+          </button>
+        </div>
+
+        <!-- Status -->
+        <div class="stcard st-in" id="stCard">
+          <div class="stdot" id="stDot">✔</div>
+          <div class="stinfo">
+            <small>STATUS SAAT INI</small>
+            <strong id="stLbl">Berada di Kantor</strong>
+          </div>
+          <div class="sttime">
+            <span id="stTlbl">Diperbarui</span>
+            <span id="stTm">—</span>
+          </div>
+        </div>
+
+        <!-- Quota -->
+        <div class="qcard">
+          <div class="qhead"><span>📊 Sisa Izin Hari Ini</span><strong id="qLbl">4 / 4</strong></div>
+          <div class="qtrack"><div class="qfill" id="qFill" style="width:100%"></div></div>
+          <div class="qfoot"><span>Terpakai: <b id="qT">0</b></span><span>Kuota: <b id="qK">4/hari</b></span></div>
+        </div>
+
+        <!-- ★ RIWAYAT HARI INI — di atas setting ★ -->
+        <div class="hcard">
+          <div class="hhead">
+            <span>📜 Riwayat Hari Ini</span>
+            <span id="hCnt" style="font-size:.64rem;color:var(--t3);font-weight:700"></span>
+          </div>
+          <div class="hlist" id="hList"><div class="hempty">Belum ada aktivitas</div></div>
+        </div>
+
+        <!-- Live Keluar Bottom -->
+        <div class="lkcard">
+          <div class="lkhead"><span class="lkpulse"></span>Sedang Di Luar Kantor</div>
+          <div class="lklist" id="lkList"><div class="lkempty">Tidak ada yang di luar ✅</div></div>
+        </div>
+      </div><!-- /panel-dash -->
+
+      <!-- ══ PANEL: RIWAYAT ══ -->
+      <div class="panel" id="panel-riwayat">
+        <div class="ph"><div class="pt">📜 Riwayat Absensi</div><div class="ps">Catatan absensi Anda hari ini</div></div>
+        <div class="hcard"><div class="hlist" id="riwList"><div class="hempty">Belum ada riwayat</div></div></div>
+      </div>
+
+      <!-- ══ PANEL: MONITOR (Admin) ══ -->
+      <div class="panel" id="panel-monit">
+        <div class="ph"><div class="pt">📊 Monitor Staff</div><div class="ps">Status real-time semua karyawan</div></div>
+        <div class="hcard"><div id="monitList"></div></div>
+      </div>
+
+      <!-- ══ PANEL: DATA STAFF (Admin) ══ -->
+      <div class="panel" id="panel-staff">
+        <div class="ph"><div class="pt">👥 Data Staff</div><div class="ps">Kelola karyawan terdaftar — klik Edit untuk ubah data</div></div>
+        <div class="stblwrap">
+          <table>
+            <thead>
+              <tr><th>User ID</th><th>Nama</th><th>Role</th><th>Kuota</th><th>Status</th><th>Aksi</th></tr>
+            </thead>
+            <tbody id="staffTbl"></tbody>
+          </table>
+        </div>
+        <button class="btn-primary" style="max-width:188px;margin-top:.45rem" onclick="goPanel('set-add')">+ Tambah Staff</button>
+      </div>
+
+      <!-- ══ PANEL: HISTORY ADMIN ══ -->
+      <div class="panel" id="panel-history-admin">
+        <div class="ph"><div class="pt">🗂️ History Absen Semua Staff</div><div class="ps">Riwayat lengkap absensi seluruh karyawan hari ini</div></div>
+        <div class="expbar">
+          <div style="font-size:.78rem;color:var(--t2);font-weight:600" id="histInfo">Memuat…</div>
+          <button class="btnexp" onclick="exportAllData()">⬇ Export All Data (CSV)</button>
+        </div>
+        <div class="hcard"><div id="histAdminList"></div></div>
+      </div>
+
+      <!-- ══ PANEL: UBAH PASSWORD ══ -->
+      <div class="panel" id="panel-set-pw">
+        <div class="ph"><div class="pt">🔑 Ubah Password</div></div>
+        <div class="scard">
+          <div class="emsg" id="cpErr"></div><div class="omsg" id="cpOk"></div>
+          <div class="field"><label>Password Lama</label><div class="fw"><input id="cpOld" type="password" placeholder="Password saat ini"/><button class="eye" type="button" onclick="toggleEye('cpOld',this)">👁</button></div></div>
+          <div class="field"><label>Password Baru</label><div class="fw"><input id="cpNew" type="password" placeholder="Min. 6 karakter" oninput="checkStr('cpNew','cpStr')"/><button class="eye" type="button" onclick="toggleEye('cpNew',this)">👁</button></div><div class="sbar"><div class="sfill" id="cpStr"></div></div></div>
+          <div class="field"><label>Konfirmasi</label><input id="cpCfm" type="password" placeholder="Ulangi password baru"/></div>
+          <button class="btn-primary" onclick="doChangePw()">Simpan Password →</button>
+        </div>
+      </div>
+
+      <!-- ══ PANEL: GANTI NAMA ══ -->
+      <div class="panel" id="panel-set-name">
+        <div class="ph"><div class="pt">✏️ Ganti Nama</div></div>
+        <div class="scard">
+          <div class="omsg" id="cnOk"></div>
+          <div class="field"><label>Nama Saat Ini</label><input id="cnCur" type="text" disabled style="opacity:.42"/></div>
+          <div class="field"><label>Nama Baru</label><input id="cnNew" type="text" placeholder="Nama lengkap baru"/></div>
+          <div class="field"><label>Role / Jabatan</label><input id="cnRole" type="text" placeholder="CS, HRD, Admin…"/></div>
+          <button class="btn-primary" onclick="doChangeName()">Simpan →</button>
+        </div>
+      </div>
+
+      <!-- ══ PANEL: FOTO PROFIL ══ -->
+      <div class="panel" id="panel-set-prof">
+        <div class="ph"><div class="pt">🖼️ Foto Profil</div></div>
+        <div class="scard">
+          <div class="omsg" id="pfOk"></div>
+          <div class="auparea" onclick="document.getElementById('pfFile').click()">
+            <div class="aupprev" id="pfPrev"><img id="pfImg" src="" alt="" style="display:none"/><span id="pfInit">—</span></div>
+            <div class="auplbl">Klik untuk pilih foto</div>
+            <div class="auphint">JPG, PNG · maks 2MB</div>
+            <input type="file" id="pfFile" class="fhidden" accept="image/*" onchange="handlePhoto(this)"/>
+          </div>
+          <div class="field"><label>No. HP / WA</label><input id="pfPh" type="tel" placeholder="08xxxxxxxxxx"/></div>
+          <div class="field"><label>Departemen</label><input id="pfDept" type="text" placeholder="Customer Service, IT…"/></div>
+          <div class="field"><label>Email Kantor</label><input id="pfEmail" type="email" placeholder="nama@perusahaan.com"/></div>
+          <div class="field"><label>Bio</label><input id="pfBio" type="text" placeholder="Tulis sesuatu…"/></div>
+          <button class="btn-primary" onclick="doSaveProf()">Simpan Profil →</button>
+        </div>
+      </div>
+
+      <!-- ══ PANEL: TAMBAH STAFF ══ -->
+      <div class="panel" id="panel-set-add">
+        <div class="ph"><div class="pt">➕ Tambah Staff</div></div>
+        <div class="scard">
+          <div class="emsg" id="asErr"></div><div class="omsg" id="asOk"></div>
+          <div class="field"><label>User ID Baru</label><input id="asId" type="text" placeholder="Contoh: CS002"/><div class="fhint">Tidak bisa diubah setelah dibuat.</div></div>
+          <div class="field"><label>Nama Lengkap</label><input id="asNm" type="text" placeholder="Nama lengkap karyawan"/></div>
+          <div class="field"><label>Role</label>
+            <select id="asRole">
+              <option value="">-- Pilih --</option>
+              <option value="CS">CS</option><option value="HRD">HRD</option>
+              <option value="Marketing">Marketing</option><option value="Admin">Admin</option>
+              <option value="IT">IT</option><option value="Finance">Finance</option>
+              <option value="Manager">Manager</option><option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="field"><label>Kuota Izin / Hari</label>
+            <select id="asKuota">
+              <option value="2">2x</option><option value="4" selected>4x</option>
+              <option value="6">6x</option><option value="8">8x</option>
+            </select>
+          </div>
+          <div class="field"><label>Password Awal</label><div class="fw"><input id="asPw" type="password" placeholder="Min. 6 karakter" oninput="checkStr('asPw','asStr')"/><button class="eye" type="button" onclick="toggleEye('asPw',this)">👁</button></div><div class="sbar"><div class="sfill" id="asStr"></div></div></div>
+          <button class="btn-primary" onclick="doAddStaff()">Tambahkan Staff →</button>
+          <hr class="sdiv"/>
+          <button class="btn-ghost" onclick="goPanel('staff')">← Lihat Semua Staff</button>
+        </div>
+      </div>
+
+    </div><!-- /main-area -->
+  </div><!-- /dlayout -->
+</div><!-- /screen-dash -->
+
+<!-- EDIT STAFF MODAL -->
+<div class="emodwrap" id="emodWrap">
+  <div class="emod">
+    <div class="emodtop">
+      <div class="emodtitle">✏️ Edit Data Staff</div>
+      <button class="emodclose" onclick="closeEmod()">✕</button>
+    </div>
+    <div class="emsg" id="emErr"></div>
+    <input type="hidden" id="emUid"/>
+    <div class="field"><label>User ID</label><input id="emId" type="text" disabled style="opacity:.42;font-family:var(--mono)"/></div>
+    <div class="field"><label>Nama Lengkap</label><input id="emNama" type="text"/></div>
+    <div class="field"><label>Role</label>
+      <select id="emRole">
+        <option value="CS">CS</option><option value="HRD">HRD</option>
+        <option value="Marketing">Marketing</option><option value="Admin">Admin</option>
+        <option value="IT">IT</option><option value="Finance">Finance</option>
+        <option value="Manager">Manager</option><option value="Lainnya">Lainnya</option>
+      </select>
+    </div>
+    <div class="field"><label>Kuota Izin / Hari</label>
+      <select id="emKuota">
+        <option value="2">2x</option><option value="4">4x</option>
+        <option value="6">6x</option><option value="8">8x</option>
+      </select>
+    </div>
+    <div class="field"><label>Reset Password (opsional)</label><div class="fw"><input id="emPw" type="password" placeholder="Kosongkan jika tidak diubah"/><button class="eye" type="button" onclick="toggleEye('emPw',this)">👁</button></div></div>
+    <div style="display:flex;gap:.55rem;margin-top:.45rem">
+      <button class="btn-ghost" onclick="closeEmod()">Batal</button>
+      <button class="btn-primary" onclick="doEditStaff()">Simpan Perubahan →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="movl" id="movl">
+  <div class="mbox">
+    <div class="mtitle" id="mTitle">Konfirmasi</div>
+    <div class="mmsg"   id="mMsg">—</div>
+    <div class="macts">
+      <button class="btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="mok" id="mOk">Ya</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// ══════════════════════════════════════════
+//  DATA USERS
+// ══════════════════════════════════════════
+let USERS = {
+  "CS001": { nama:"RIKI ANDIKA NAINGGOLAN", role:"CS",       kuota:4, pw:btoa("cs001")  },
+  "HRD01": { nama:"SARI DEWI KUSUMA",       role:"HRD",      kuota:6, pw:btoa("hrd01")  },
+  "MKT02": { nama:"BUDI SANTOSO",           role:"Marketing", kuota:4, pw:btoa("mkt02") },
+  "ADM01": { nama:"ADMIN SISTEM",           role:"Admin",    kuota:8, pw:btoa("admin1") },
+};
+const BASE_IDS = ["CS001","HRD01","MKT02","ADM01"];
+
+function loadExtra() {
+  try { const r = ls("l99_extra"); if (r) Object.assign(USERS, JSON.parse(r)); } catch(e) {}
+}
+function saveExtra() {
+  const ex = {};
+  Object.keys(USERS).forEach(k => { if (!BASE_IDS.includes(k)) ex[k] = USERS[k]; });
+  lss("l99_extra", JSON.stringify(ex));
+}
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let CU  = null; // current user
+let S   = { terpakai:0, sedangDiluar:false, waktuKeluar:null, waktuKeluarMs:null, history:[] };
+let TELAT = [];
+
+const BATAS_MS = 15 * 60 * 1000;
+const CIRC     = 2 * Math.PI * 46; // r=46
+let   _cdInt   = null;
+
+// ══════════════════════════════════════════
+//  LOCAL STORAGE HELPERS
+// ══════════════════════════════════════════
+function ls(k)    { try { return localStorage.getItem(k); }    catch(e) { return null; } }
+function lss(k,v) { try { localStorage.setItem(k, v); }        catch(e) {} }
+function lsd(k)   { try { localStorage.removeItem(k); }        catch(e) {} }
+
+// ══════════════════════════════════════════
+//  AUTO-CLEANUP (2 months)
+// ══════════════════════════════════════════
+function autoClean() {
+  const now       = Date.now();
+  const WEEK      = 7 * 24 * 3600 * 1000;
+  const TWO_MONTH = 60 * 24 * 3600 * 1000;
+  const last      = parseInt(ls("l99_clean") || "0");
+  if (now - last < WEEK) return;
+  lss("l99_clean", String(now));
+  const cutoff = now - TWO_MONTH;
+  try {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+    keys.forEach(k => {
+      if (!k) return;
+      // clean absensi state older than 2 months
+      if (k.startsWith("l99_s_")) {
+        const raw = ls(k);
+        if (raw) {
+          const d = JSON.parse(raw);
+          const t = new Date(d.tanggal || 0).getTime();
+          if (t && t < cutoff) lsd(k);
+        }
+      }
+      // clean telat markers
+      if (k.startsWith("l99_tk_")) {
+        const ts = parseInt((k.split("_").pop()) || "0");
+        if (ts && ts < cutoff) lsd(k);
+      }
+    });
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════════
+//  SESSION — no logout on refresh
+// ══════════════════════════════════════════
+function saveSession() {
+  if (!CU) return;
+  lss("l99_ses", JSON.stringify({ id: CU.id, ts: Date.now() }));
+}
+function loadSession() {
+  const raw = ls("l99_ses");
+  if (!raw) return false;
+  try {
+    const d = JSON.parse(raw);
+    if (Date.now() - d.ts > 12 * 3600 * 1000) { lsd("l99_ses"); return false; }
+    loadExtra();
+    const u = USERS[d.id];
+    if (!u) return false;
+    CU = { id: d.id, ...u };
+    const sn = ls("name_" + d.id), sr = ls("role_" + d.id);
+    if (sn) CU.nama = sn;
+    if (sr) CU.role = sr;
+    loadState();
+    loadTelat();
+    renderDash();
+    goScreen("screen-dash");
+    showAdminMenus();
+    if (S.sedangDiluar && S.waktuKeluarMs) startCD();
+    return true;
+  } catch(e) { return false; }
+}
+
+// ══════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════
+const $ = id => document.getElementById(id);
+function pad(n) { return String(n).padStart(2, "0"); }
+function nowStr() { const n = new Date(); return pad(n.getHours()) + ":" + pad(n.getMinutes()); }
+function todayStr() { return new Date().toDateString(); }
+function initials(name) { return (name || "").split(" ").slice(0, 2).map(w => w[0]).join(""); }
+function fmtDur(ms) { const m = Math.floor(ms/60000), s = Math.floor((ms%60000)/1000); return m > 0 ? m+"m "+s+"s" : s+"s"; }
+
+function toast(msg, type) {
+  type = type || "info";
+  const icons = { success:"✅", error:"❌", info:"🔔", warn:"⚠️" };
+  const t = document.createElement("div");
+  t.className = "toast " + type;
+  t.innerHTML = "<span>" + (icons[type] || "•") + "</span><span>" + msg + "</span>";
+  $("twrap").appendChild(t);
+  setTimeout(() => { t.style.opacity = "0"; }, 2800);
+  setTimeout(() => { if (t.parentNode) t.parentNode.removeChild(t); }, 3300);
+}
+
+function goScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
+function toggleEye(id, btn) {
+  const el = $(id);
+  el.type = el.type === "password" ? "text" : "password";
+  btn.textContent = el.type === "password" ? "👁" : "🙈";
+}
+function checkStr(iid, bid) {
+  const v = $(iid).value, b = $(bid);
+  let s = 0;
+  if (v.length >= 6)           s++;
+  if (v.length >= 10)          s++;
+  if (/[A-Z]/.test(v))        s++;
+  if (/[0-9]/.test(v))        s++;
+  if (/[^A-Za-z0-9]/.test(v)) s++;
+  b.style.width      = (s / 5 * 100) + "%";
+  b.style.background = s <= 1 ? "#FF4D6D" : s <= 2 ? "#F4A700" : s <= 3 ? "#E09000" : "#00C98B";
+}
+
+// ══════════════════════════════════════════
+//  SIDEBAR
+// ══════════════════════════════════════════
+function toggleSB() { $("sidebar").classList.toggle("open"); $("sbovl").classList.toggle("open"); }
+function closeSB()  { $("sidebar").classList.remove("open"); $("sbovl").classList.remove("open"); }
+function toggleSBG(){ $("sbGH").classList.toggle("open"); $("sbGB").classList.toggle("open"); }
+
+function showAdminMenus() {
+  if (!CU) return;
+  const isA = CU.role === "Admin";
+  ["sb-monit","sb-staff","sb-history-admin"].forEach(id => {
+    const el = $(id);
+    if (el) el.style.display = isA ? "flex" : "none";
+  });
+}
+
+// ══════════════════════════════════════════
+//  PANEL NAVIGATION
+// ══════════════════════════════════════════
+function goPanel(name) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  const pe = $("panel-" + name);
+  if (pe) pe.classList.add("active");
+
+  document.querySelectorAll(".sbi,.sbsub").forEach(el => el.classList.remove("active"));
+  const t = $("sb-" + name);
+  if (t) t.classList.add("active");
+
+  if (name.startsWith("set-")) {
+    $("sbGH").classList.add("open");
+    $("sbGB").classList.add("open");
+  }
+  // pre-fill
+  if (name === "set-name") {
+    $("cnCur").value  = CU.nama;
+    $("cnNew").value  = "";
+    $("cnRole").value = CU.role;
+    $("cnOk").classList.remove("show");
+  }
+  if (name === "set-prof")       loadProfForm();
+  if (name === "staff")          renderStaffTable();
+  if (name === "monit")          renderMonit();
+  if (name === "riwayat")        renderRiwayat();
+  if (name === "history-admin")  renderHistoryAdmin();
+  closeSB();
+  window.scrollTo(0, 0);
+}
+
+// ══════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════
+function doLogin() {
+  loadExtra();
+  const id  = $("loginId").value.trim().toUpperCase();
+  const pw  = $("loginPw").value;
+  const err = $("loginErr");
+  const u   = USERS[id];
+  const spw = ls("pw_" + id);
+  const vpw = spw ? spw : (u ? u.pw : null);
+  if (!u || btoa(pw) !== vpw) {
+    err.classList.add("show");
+    setTimeout(() => err.classList.remove("show"), 3000);
+    return;
+  }
+  err.classList.remove("show");
+  CU = { id, ...u };
+  const sn = ls("name_" + id), sr = ls("role_" + id);
+  if (sn) CU.nama = sn;
+  if (sr) CU.role = sr;
+  loadState();
+  loadTelat();
+  saveSession();
+  autoClean();
+  renderDash();
+  goScreen("screen-dash");
+  showAdminMenus();
+  toast("Selamat datang, " + CU.nama.split(" ")[0] + "! 👋", "success");
+  if (S.sedangDiluar && S.waktuKeluarMs) startCD();
+}
+
+// ══════════════════════════════════════════
+//  FORGOT PASSWORD
+// ══════════════════════════════════════════
+function goForgot() {
+  $("fgId").value = "";
+  $("fgHint").style.display = "none";
+  $("fgForm").style.display = "none";
+  goScreen("screen-forgot");
+}
+function doForgotSearch() {
+  loadExtra();
+  const id = $("fgId").value.trim().toUpperCase();
+  const u  = USERS[id];
+  const h  = $("fgHint"), f = $("fgForm");
+  if (!u) {
+    h.innerHTML   = "❌ User ID <strong>" + id + "</strong> tidak ditemukan.";
+    h.style.display = "block";
+    f.style.display = "none";
+    return;
+  }
+  const nm = ls("name_" + id) || u.nama;
+  h.innerHTML   = "✅ Akun: <strong>" + nm + "</strong> (" + (ls("role_"+id)||u.role) + ")";
+  h.style.display = "block";
+  f.style.display = "block";
+  $("fgPw1").value = "";
+  $("fgPw2").value = "";
+  $("fgStr").style.width = "0";
+}
+function doForgotReset() {
+  const id = $("fgId").value.trim().toUpperCase();
+  const p1 = $("fgPw1").value, p2 = $("fgPw2").value;
+  if (p1.length < 6) { toast("Min. 6 karakter", "error"); return; }
+  if (p1 !== p2)     { toast("Konfirmasi tidak cocok", "error"); return; }
+  lss("pw_" + id, btoa(p1));
+  toast("Password berhasil direset!", "success");
+  $("fgForm").style.display = "none";
+  setTimeout(() => goScreen("screen-login"), 1400);
+}
+
+// ══════════════════════════════════════════
+//  LOGOUT
+// ══════════════════════════════════════════
+function confirmLogout() {
+  openModal("Konfirmasi Logout", "Yakin ingin keluar dari sistem?", () => {
+    stopCD();
+    lsd("l99_ses");
+    CU = null;
+    $("loginId").value = "";
+    $("loginPw").value = "";
+    goScreen("screen-login");
+    toast("Berhasil logout", "info");
+  });
+}
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+function sk(uid) { return "l99_s_" + uid; }
+function loadState() {
+  const raw = ls(sk(CU.id));
+  if (raw) {
+    const d = JSON.parse(raw);
+    if (d.tanggal === todayStr()) {
+      S = {
+        terpakai:      d.terpakai      || 0,
+        sedangDiluar:  d.sedangDiluar  || false,
+        waktuKeluar:   d.waktuKeluar   || null,
+        waktuKeluarMs: d.waktuKeluarMs || null,
+        history:       d.history       || [],
+      };
+      return;
+    }
+  }
+  S = { terpakai:0, sedangDiluar:false, waktuKeluar:null, waktuKeluarMs:null, history:[] };
+  saveState();
+}
+function saveState() {
+  lss(sk(CU.id), JSON.stringify({ tanggal: todayStr(), ...S }));
+}
+function loadTelat() {
+  const r = ls("l99_telat_" + CU.id + "_" + todayStr());
+  TELAT = r ? JSON.parse(r) : [];
+}
+function saveTelat() {
+  lss("l99_telat_" + CU.id + "_" + todayStr(), JSON.stringify(TELAT));
+}
+
+// ══════════════════════════════════════════
+//  CIRCULAR COUNTDOWN
+// ══════════════════════════════════════════
+function startCD() {
+  stopCD();
+  $("ccWrap").classList.add("show");
+  _cdInt = setInterval(tickCD, 500);
+  tickCD();
+}
+function stopCD() {
+  if (_cdInt) { clearInterval(_cdInt); _cdInt = null; }
+  $("ccWrap").classList.remove("show");
+}
+function setCC(stateClass) {
+  const w = $("ccWrap");
+  w.classList.remove("st-ok", "st-warn", "st-over");
+  w.classList.add(stateClass);
+}
+function tickCD() {
+  if (!S.sedangDiluar) { stopCD(); return; }
+  const rem = BATAS_MS - (Date.now() - S.waktuKeluarMs);
+  const arc = $("ccArc");
+  const tm  = $("ccTm");
+  const st  = $("ccSt");
+  const tit = $("ccTitle");
+  const msg = $("ccMsg");
+  const who = $("ccWho");
+  if (rem > 0) {
+    const mm = Math.floor(rem / 60000), ss = Math.floor((rem % 60000) / 1000);
+    tm.textContent = pad(mm) + ":" + pad(ss);
+    arc.style.strokeDashoffset = String(CIRC * (1 - rem / BATAS_MS));
+    if (rem < 5 * 60 * 1000) {
+      setCC("st-warn");
+      st.textContent  = "HAMPIR HABIS";
+      tit.textContent = "⚠️ HAMPIR HABIS!";
+      msg.textContent = "Kurang dari 5 menit! Segera kembali ke kantor!";
+    } else {
+      setCC("st-ok");
+      st.textContent  = "BATAS IZIN";
+      tit.textContent = "⏳ BATAS WAKTU IZIN";
+      msg.textContent = "Kamu punya 15 menit untuk keluar. Segera kembali!";
+    }
+    who.textContent = "Keluar pukul " + S.waktuKeluar;
+  } else {
+    const over = Math.abs(rem);
+    const mm = Math.floor(over / 60000), ss = Math.floor((over % 60000) / 1000);
+    tm.textContent = "+" + pad(mm) + ":" + pad(ss);
+    arc.style.strokeDashoffset = "0";
+    setCC("st-over");
+    st.textContent  = "TERLAMBAT";
+    tit.textContent = "🚨 BATAS WAKTU TERLAMPAUI!";
+    msg.textContent = "Segera kembali ke kantor sekarang!";
+    who.textContent = CU.nama.split(" ")[0] + " melebihi batas izin!";
+    markTelat(over);
+  }
+  renderLiveKeluar();
+}
+function markTelat(overMs) {
+  const key = "l99_tk_" + CU.id + "_" + S.waktuKeluarMs;
+  if (ls(key)) return;
+  lss(key, "1");
+  const dur = fmtDur(overMs);
+  if (!TELAT.find(t => t.keluar === S.waktuKeluar)) {
+    TELAT.push({ uid: CU.id, nama: CU.nama, keluar: S.waktuKeluar, durasi: dur, overMs });
+    saveTelat();
+    renderTelatCard();
+    renderHistory();
+  }
+}
+function renderTelatCard() {
+  const card = $("telatCard"), list = $("telatList");
+  const mine = TELAT.filter(t => t.uid === CU.id);
+  if (!mine.length) { card.classList.remove("show"); return; }
+  card.classList.add("show");
+  list.innerHTML = mine.map(t =>
+    '<div class="telatitem">' +
+    '<div class="telatav">' + initials(t.nama) + '</div>' +
+    '<div style="flex:1;min-width:0"><div class="telatnm">' + t.nama + '</div>' +
+    '<div class="telatsb">Keluar pukul ' + t.keluar + '</div></div>' +
+    '<div class="telatdur">+' + t.durasi + '</div></div>'
+  ).join("");
+}
+
+// ══════════════════════════════════════════
+//  LIVE KELUAR (bottom panel — all users)
+// ══════════════════════════════════════════
+function renderLiveKeluar() {
+  const list = $("lkList");
+  const now  = Date.now();
+  const out  = [];
+  Object.keys(USERS).forEach(uid => {
+    const r = ls(sk(uid));
+    if (!r) return;
+    try {
+      const d = JSON.parse(r);
+      if (d.tanggal === todayStr() && d.sedangDiluar && d.waktuKeluarMs) {
+        const rem = BATAS_MS - (now - d.waktuKeluarMs);
+        out.push({ uid, nama: ls("name_"+uid) || USERS[uid].nama, keluar: d.waktuKeluar, rem });
+      }
+    } catch(e) {}
+  });
+  const badge = $("outBadge");
+  if (badge) badge.textContent = out.length;
+  if (!out.length) {
+    list.innerHTML = '<div class="lkempty">Tidak ada yang di luar saat ini ✅</div>';
+    return;
+  }
+  list.innerHTML = out.map(o => {
+    const over = o.rem < 0;
+    const cls  = over ? "over" : (o.rem < 5*60*1000 ? "warn" : "ok");
+    let timer;
+    if (over) {
+      const m = Math.floor(-o.rem/60000), s = Math.floor((-o.rem%60000)/1000);
+      timer = "+" + pad(m) + ":" + pad(s) + " ⚠";
+    } else {
+      const m = Math.floor(o.rem/60000), s = Math.floor((o.rem%60000)/1000);
+      timer = pad(m) + ":" + pad(s);
+    }
+    return '<div class="lkitem">' +
+      '<div class="lkav">' + initials(o.nama) + '</div>' +
+      '<div class="lkinfo"><div class="lknm">' + o.nama + '</div>' +
+      '<div class="lksb">Keluar pukul ' + o.keluar + '</div></div>' +
+      '<div class="lktimer ' + cls + '">' + timer + '</div></div>';
+  }).join("");
+}
+
+// ══════════════════════════════════════════
+//  RENDER DASHBOARD
+// ══════════════════════════════════════════
+const HARI  = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+const BLN   = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const BLNS  = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+
+function renderDash() {
+  $("tbName").textContent   = CU.nama;
+  $("tbRole").textContent   = CU.role + " · " + CU.id;
+  $("dashAva").textContent  = initials(CU.nama);
+  $("dashName").textContent = CU.nama;
+  $("dashBadge").textContent = CU.role + " · " + CU.id;
+  $("greetLine").textContent = "Selamat datang, " + CU.nama.split(" ")[0] + "!";
+  updateUI();
+  renderTelatCard();
+  renderLiveKeluar();
+  if (!window._clkStarted) { window._clkStarted = true; tickClock(); }
+  if (!window._lkInt)       window._lkInt = setInterval(renderLiveKeluar, 10000);
+}
+
+function setDig(id, v) {
+  const el = $(id);
+  if (!el || el.textContent === v) return;
+  el.style.transform = "translateY(-5px)";
+  el.style.opacity   = ".15";
+  setTimeout(() => {
+    el.textContent   = v;
+    el.style.transform = "";
+    el.style.opacity   = "1";
+  }, 110);
+}
+function tickClock() {
+  const n  = new Date();
+  const hh = pad(n.getHours()), mm = pad(n.getMinutes()), ss = pad(n.getSeconds());
+  setDig("dh1", hh[0]); setDig("dh2", hh[1]);
+  setDig("dm1", mm[0]); setDig("dm2", mm[1]);
+  setDig("ds1", ss[0]); setDig("ds2", ss[1]);
+  const day  = $("clkDay");
+  const date = $("clkDate");
+  const av   = $("dashDate");
+  if (day)  day.textContent  = HARI[n.getDay()];
+  if (date) date.textContent = n.getDate() + " " + BLNS[n.getMonth()] + " " + n.getFullYear();
+  if (av)   av.textContent   = HARI[n.getDay()] + ", " + n.getDate() + " " + BLN[n.getMonth()] + " " + n.getFullYear();
+  setTimeout(tickClock, 1000);
+}
+
+function updateUI() {
+  const ku  = CU.kuota;
+  const si  = Math.max(0, ku - S.terpakai);
+  const pct = (si / ku) * 100;
+  $("stT").textContent = S.terpakai;
+  $("stS").textContent = si;
+  $("stK").textContent = ku;
+  const f = $("qFill");
+  f.style.width      = pct + "%";
+  f.style.background = si <= 1 ? "var(--rose)" : si <= 2 ? "var(--gold)" : "linear-gradient(90deg,var(--gold),var(--gold2))";
+  $("qLbl").textContent = si + " / " + ku;
+  $("qT").textContent   = S.terpakai;
+  $("qK").textContent   = ku + "/hari";
+
+  const sc  = $("stCard"), sd = $("stDot"), sl = $("stLbl"), st = $("stTm"), stl = $("stTlbl");
+  if (S.sedangDiluar) {
+    sc.className    = "stcard st-out";
+    sd.textContent  = "↪";
+    sl.textContent  = "Sedang Di Luar Kantor";
+    stl.textContent = "Keluar pukul";
+    st.textContent  = S.waktuKeluar || "—";
+  } else {
+    sc.className    = "stcard st-in";
+    sd.textContent  = "✔";
+    sl.textContent  = "Berada di Kantor";
+    stl.textContent = "Diperbarui";
+    st.textContent  = nowStr();
+  }
+  const bk = $("btnK"), bm = $("btnM");
+  if (S.sedangDiluar) {
+    bk.classList.add("disabled");
+    bm.classList.remove("disabled");
+    bm.classList.add("ready");
+  } else {
+    bk.classList.remove("disabled");
+    bm.classList.remove("ready");
+    bm.classList.add("disabled");
+  }
+  renderHistory();
+}
+
+function renderHistory() {
+  const hl = $("hList");
+  if (!S.history.length) {
+    hl.innerHTML = '<div class="hempty">Belum ada aktivitas</div>';
+    $("hCnt").textContent = "";
+    return;
+  }
+  $("hCnt").textContent = S.history.length + " aktivitas";
+  hl.innerHTML = [...S.history].reverse().map(h => {
+    const late = h.type === "keluar" && TELAT.find(t => t.uid === CU.id && t.keluar === h.time);
+    const cls  = late ? "hitem hlate" : "hitem";
+    const dur  = late ? '<span class="hdur">+' + late.durasi + ' ⚠</span>' : "";
+    const lbl  = h.type === "keluar" ? "↪ Izin Keluar" : "↩ Kembali ke Kantor";
+    return '<div class="' + cls + '">' +
+      '<div class="hdot ' + h.type + '"></div>' +
+      '<span class="htxt">' + lbl + '</span>' +
+      dur +
+      '<span class="htm">' + h.time + '</span></div>';
+  }).join("");
+}
+
+function renderRiwayat() {
+  const rl = $("riwList");
+  if (!S.history.length) { rl.innerHTML = '<div class="hempty">Belum ada riwayat</div>'; return; }
+  rl.innerHTML = [...S.history].reverse().map(h =>
+    '<div class="hitem"><div class="hdot ' + h.type + '"></div>' +
+    '<span class="htxt">' + (h.type === "keluar" ? "↪ Izin Keluar" : "↩ Kembali ke Kantor") + '</span>' +
+    '<span class="htm">' + h.time + '</span></div>'
+  ).join("");
+}
+
+// ══════════════════════════════════════════
+//  AKSI — AUTO (no confirm popup)
+// ══════════════════════════════════════════
+function aksKeluar() {
+  if (S.sedangDiluar)          { toast("Kamu sedang di luar! Kembali masuk dulu.", "warn"); return; }
+  if (S.terpakai >= CU.kuota) { toast("Kuota izin hari ini sudah habis!", "error"); return; }
+  const t = nowStr();
+  S.terpakai++;
+  S.sedangDiluar  = true;
+  S.waktuKeluar   = t;
+  S.waktuKeluarMs = Date.now();
+  S.history.push({ type: "keluar", time: t });
+  saveState();
+  updateUI();
+  startCD();
+  saveSession();
+  toast("✅ Izin keluar tercatat pukul " + t, "success");
+}
+function aksMasuk() {
+  if (!S.sedangDiluar) { toast("Kamu belum tercatat keluar.", "info"); return; }
+  const t = nowStr();
+  S.sedangDiluar = false;
+  S.history.push({ type: "masuk", time: t });
+  saveState();
+  updateUI();
+  stopCD();
+  saveSession();
+  renderLiveKeluar();
+  toast("✅ Kembali ke kantor pukul " + t, "success");
+}
+
+// ══════════════════════════════════════════
+//  ADMIN: MONITOR
+// ══════════════════════════════════════════
+function renderMonit() {
+  const el  = $("monitList");
+  const now = Date.now();
+  let html  = "";
+  Object.keys(USERS).forEach(uid => {
+    const u  = USERS[uid];
+    const nm = ls("name_" + uid) || u.nama;
+    const r  = ls(sk(uid));
+    let stHtml = '<span style="color:var(--t3);font-size:.72rem">Belum login hari ini</span>';
+    if (r) {
+      try {
+        const d = JSON.parse(r);
+        if (d.tanggal === todayStr()) {
+          if (d.sedangDiluar && d.waktuKeluarMs) {
+            const rem  = BATAS_MS - (now - d.waktuKeluarMs);
+            const over = rem < 0;
+            const col  = over ? "var(--rose)" : rem < 5*60*1000 ? "var(--gold)" : "var(--jade)";
+            const abs  = Math.abs(rem);
+            const mm   = Math.floor(abs/60000), ss = Math.floor((abs%60000)/1000);
+            const label = over ? ("+"+pad(mm)+":"+pad(ss)+" telat") : ("sisa "+pad(mm)+":"+pad(ss));
+            stHtml = '<span class="lst"><span class="ldots out"></span><span style="color:'+col+'">Di Luar ('+label+')</span></span>';
+          } else {
+            stHtml = '<span class="lst"><span class="ldots in"></span><span style="color:var(--jade)">Di Kantor</span></span>';
+          }
+        }
+      } catch(e) {}
+    }
+    html += '<div class="hitem" style="margin-bottom:.32rem">' +
+      '<div class="avbub" style="width:26px;height:26px;font-size:.6rem;flex-shrink:0">' + initials(nm) + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+      '<div style="font-size:.78rem;font-weight:700">' + nm + '</div>' +
+      '<div style="font-size:.67rem;color:var(--t2);font-weight:500">' + u.role + ' · ' + uid + '</div></div>' +
+      stHtml + '</div>';
+  });
+  el.innerHTML = html || '<div class="hempty">Tidak ada data</div>';
+}
+
+// ══════════════════════════════════════════
+//  ADMIN: STAFF TABLE
+// ══════════════════════════════════════════
+function renderStaffTable() {
+  const sb = $("staffBadge");
+  if (sb) sb.textContent = Object.keys(USERS).length;
+  const tb  = $("staffTbl");
+  const now = Date.now();
+  const rc  = r => r === "Admin" ? "admin" : r === "HRD" ? "hrd" : "";
+
+  tb.innerHTML = Object.entries(USERS).map(([uid, u]) => {
+    const nm   = ls("name_" + uid) || u.nama;
+    const role = ls("role_" + uid) || u.role;
+    const isMe = uid === (CU && CU.id);
+    let stHtml = '<span style="color:var(--t3);font-size:.7rem">—</span>';
+    const r    = ls(sk(uid));
+    if (r) {
+      try {
+        const d = JSON.parse(r);
+        if (d.tanggal === todayStr()) {
+          stHtml = d.sedangDiluar
+            ? '<span class="lst"><span class="ldots out"></span>Di Luar</span>'
+            : '<span class="lst"><span class="ldots in"></span>Di Kantor</span>';
+        }
+      } catch(e) {}
+    }
+    const aksi = isMe
+      ? '<span style="color:var(--t3);font-size:.68rem">—</span>'
+      : '<span style="display:flex;gap:.32rem">' +
+        '<button class="bsm bedit" onclick="openEmod(\'' + uid + '\')">Edit</button>' +
+        '<button class="bsm bdel"  onclick="delStaff(\'' + uid + '\')">Hapus</button></span>';
+
+    return '<tr>' +
+      '<td><code style="font-family:var(--mono);font-size:.7rem;color:var(--gold)">' + uid + '</code></td>' +
+      '<td>' + nm + (isMe ? ' <span style="font-size:.62rem;color:var(--t3);font-weight:600">(Anda)</span>' : '') + '</td>' +
+      '<td><span class="tbadge ' + rc(role) + '">' + role + '</span></td>' +
+      '<td style="font-weight:700">' + u.kuota + 'x</td>' +
+      '<td>' + stHtml + '</td>' +
+      '<td>' + aksi + '</td></tr>';
+  }).join("");
+}
+
+// ══════════════════════════════════════════
+//  EDIT STAFF MODAL
+// ══════════════════════════════════════════
+function openEmod(uid) {
+  const u = USERS[uid];
+  if (!u) return;
+  $("emUid").value   = uid;
+  $("emId").value    = uid;
+  $("emNama").value  = ls("name_" + uid) || u.nama;
+  $("emRole").value  = ls("role_" + uid) || u.role;
+  $("emKuota").value = String(u.kuota);
+  $("emPw").value    = "";
+  $("emErr").classList.remove("show");
+  $("emodWrap").classList.add("open");
+}
+function closeEmod() { $("emodWrap").classList.remove("open"); }
+function doEditStaff() {
+  const uid   = $("emUid").value;
+  const nm    = $("emNama").value.trim().toUpperCase();
+  const role  = $("emRole").value;
+  const kuota = parseInt($("emKuota").value);
+  const pw    = $("emPw").value;
+  const err   = $("emErr");
+  err.classList.remove("show");
+  if (!nm || !role) { err.textContent = "Nama dan role wajib diisi."; err.classList.add("show"); return; }
+  if (pw && pw.length < 6) { err.textContent = "Password min. 6 karakter."; err.classList.add("show"); return; }
+  lss("name_" + uid, nm);
+  lss("role_" + uid, role);
+  USERS[uid].nama  = nm;
+  USERS[uid].role  = role;
+  USERS[uid].kuota = kuota;
+  if (pw) lss("pw_" + uid, btoa(pw));
+  saveExtra();
+  // if editing self — update UI
+  if (CU && uid === CU.id) {
+    CU.nama  = nm; CU.role  = role; CU.kuota = kuota;
+    $("tbName").textContent  = nm;
+    $("tbRole").textContent  = role + " · " + uid;
+    $("dashAva").textContent = initials(nm);
+    $("dashName").textContent = nm;
+    $("dashBadge").textContent = role + " · " + uid;
+  }
+  closeEmod();
+  renderStaffTable();
+  toast("Data " + uid + " berhasil diperbarui!", "success");
+}
+$("emodWrap").addEventListener("click", function(e) { if (e.target === this) closeEmod(); });
+
+function delStaff(id) {
+  if (CU && id === CU.id) { toast("Tidak bisa hapus akun sendiri", "error"); return; }
+  openModal("Hapus Staff", "Yakin hapus akun <strong>" + id + "</strong>? Data akan hilang permanen.", () => {
+    delete USERS[id];
+    saveExtra();
+    renderStaffTable();
+    toast("Staff " + id + " dihapus", "success");
+  });
+}
+
+// ══════════════════════════════════════════
+//  ADMIN: HISTORY ALL STAFF
+// ══════════════════════════════════════════
+function renderHistoryAdmin() {
+  const el   = $("histAdminList");
+  const info = $("histInfo");
+  const n    = new Date();
+  if (info) info.textContent = "Data absensi hari ini · " + n.getDate() + " " + BLN[n.getMonth()] + " " + n.getFullYear();
+
+  let html = "", total = 0;
+  Object.keys(USERS).forEach(uid => {
+    const nm   = ls("name_" + uid) || USERS[uid].nama;
+    const role = ls("role_" + uid) || USERS[uid].role;
+    const r    = ls(sk(uid));
+    if (!r) return;
+    try {
+      const d = JSON.parse(r);
+      if (d.tanggal !== todayStr() || !d.history || !d.history.length) return;
+      html += '<div style="margin-bottom:.55rem">' +
+        '<div style="font-size:.68rem;font-weight:800;color:var(--t2);letter-spacing:.07em;text-transform:uppercase;' +
+        'padding:.3rem .6rem;background:var(--bg5);border-radius:var(--rx);margin-bottom:.32rem">' +
+        nm + ' <span style="color:var(--t3)">· ' + uid + ' · ' + role + '</span></div>';
+      d.history.forEach(h => {
+        const lbl = h.type === "keluar" ? "↪ Izin Keluar" : "↩ Kembali ke Kantor";
+        html += '<div class="hitem" style="margin-bottom:.26rem">' +
+          '<div class="hdot ' + h.type + '"></div>' +
+          '<span class="htxt">' + lbl + '</span>' +
+          '<span class="htm">' + h.time + '</span></div>';
+        total++;
+      });
+      html += '</div>';
+    } catch(e) {}
+  });
+
+  if (!html) {
+    el.innerHTML = '<div class="hempty">Belum ada data absensi hari ini</div>';
+  } else {
+    el.innerHTML =
+      '<div style="font-size:.7rem;color:var(--t3);font-weight:600;margin-bottom:.62rem">' +
+      total + ' aktivitas dari ' + Object.keys(USERS).length + ' staff</div>' + html;
+  }
+}
+
+// ══════════════════════════════════════════
+//  EXPORT CSV
+// ══════════════════════════════════════════
+function exportAllData() {
+  let csv  = "User ID,Nama,Role,Tipe,Waktu,Tanggal\n";
+  let rows = 0;
+  Object.keys(USERS).forEach(uid => {
+    const nm   = ls("name_" + uid) || USERS[uid].nama;
+    const role = ls("role_" + uid) || USERS[uid].role;
+    const r    = ls(sk(uid));
+    if (!r) return;
+    try {
+      const d = JSON.parse(r);
+      if (!d.history) return;
+      d.history.forEach(h => {
+        csv += '"' + uid + '","' + nm + '","' + role + '","' + h.type + '","' + h.time + '","' + (d.tanggal||"") + '"\n';
+        rows++;
+      });
+    } catch(e) {}
+  });
+  if (!rows) { toast("Tidak ada data untuk diekspor", "warn"); return; }
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const a    = document.createElement("a");
+  a.href     = URL.createObjectURL(blob);
+  a.download = "lapak99_absensi_" + new Date().toISOString().slice(0, 10) + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  toast("Exported " + rows + " baris data ✅", "success");
+}
+
+// ══════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════
+function doChangePw() {
+  const old  = $("cpOld").value;
+  const nw   = $("cpNew").value;
+  const cf   = $("cpCfm").value;
+  const stored = ls("pw_" + CU.id) || CU.pw;
+  const err  = $("cpErr"), ok = $("cpOk");
+  err.classList.remove("show"); ok.classList.remove("show");
+  if (btoa(old) !== stored)  { err.textContent = "Password lama salah.";          err.classList.add("show"); return; }
+  if (nw.length < 6)         { err.textContent = "Min. 6 karakter.";              err.classList.add("show"); return; }
+  if (nw !== cf)             { err.textContent = "Konfirmasi tidak cocok.";        err.classList.add("show"); return; }
+  lss("pw_" + CU.id, btoa(nw));
+  ok.textContent = "✅ Password berhasil diubah!";
+  ok.classList.add("show");
+  $("cpOld").value = ""; $("cpNew").value = ""; $("cpCfm").value = "";
+  $("cpStr").style.width = "0";
+  toast("Password diubah!", "success");
+}
+
+function doChangeName() {
+  const nn = $("cnNew").value.trim().toUpperCase();
+  const nr = $("cnRole").value.trim();
+  if (!nn) { toast("Nama tidak boleh kosong", "error"); return; }
+  lss("name_" + CU.id, nn);
+  lss("role_" + CU.id, nr);
+  CU.nama = nn; CU.role = nr;
+  USERS[CU.id].nama = nn; USERS[CU.id].role = nr;
+  $("tbName").textContent    = nn;
+  $("tbRole").textContent    = nr + " · " + CU.id;
+  $("dashAva").textContent   = initials(nn);
+  $("dashName").textContent  = nn;
+  $("dashBadge").textContent = nr + " · " + CU.id;
+  $("cnCur").value           = nn;
+  const ok = $("cnOk");
+  ok.textContent = "✅ Nama berhasil diperbarui!";
+  ok.classList.add("show");
+  toast("Nama diubah!", "success");
+}
+
+function handlePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { toast("Max 2MB", "error"); return; }
+  const r = new FileReader();
+  r.onload = e => {
+    $("pfImg").src = e.target.result;
+    $("pfImg").style.display = "block";
+    $("pfInit").style.display = "none";
+    lss("photo_" + CU.id, e.target.result);
+    toast("Foto dipilih", "success");
+  };
+  r.readAsDataURL(file);
+}
+
+function loadProfForm() {
+  const ph = ls("photo_" + CU.id);
+  if (ph) {
+    $("pfImg").src = ph;
+    $("pfImg").style.display = "block";
+    $("pfInit").style.display = "none";
+  } else {
+    $("pfImg").style.display = "none";
+    $("pfInit").style.display = "block";
+    $("pfInit").textContent = initials(CU.nama);
+  }
+  $("pfPh").value    = ls("phone_" + CU.id) || "";
+  $("pfDept").value  = ls("dept_"  + CU.id) || "";
+  $("pfEmail").value = ls("email_" + CU.id) || "";
+  $("pfBio").value   = ls("bio_"   + CU.id) || "";
+  $("pfOk").classList.remove("show");
+}
+
+function doSaveProf() {
+  lss("phone_" + CU.id, $("pfPh").value.trim());
+  lss("dept_"  + CU.id, $("pfDept").value.trim());
+  lss("email_" + CU.id, $("pfEmail").value.trim());
+  lss("bio_"   + CU.id, $("pfBio").value.trim());
+  const ok = $("pfOk");
+  ok.textContent = "✅ Profil tersimpan!";
+  ok.classList.add("show");
+  toast("Profil disimpan!", "success");
+}
+
+function doAddStaff() {
+  const id    = $("asId").value.trim().toUpperCase();
+  const nm    = $("asNm").value.trim().toUpperCase();
+  const role  = $("asRole").value;
+  const kuota = parseInt($("asKuota").value);
+  const pw    = $("asPw").value;
+  const err   = $("asErr"), ok = $("asOk");
+  err.classList.remove("show"); ok.classList.remove("show");
+  if (!id || !nm || !role || !pw) { err.textContent = "Semua field wajib diisi."; err.classList.add("show"); return; }
+  if (USERS[id])                  { err.textContent = "User ID " + id + " sudah ada."; err.classList.add("show"); return; }
+  if (pw.length < 6)              { err.textContent = "Password min. 6 karakter."; err.classList.add("show"); return; }
+  USERS[id] = { nama: nm, role, kuota, pw: btoa(pw) };
+  saveExtra();
+  ok.textContent = "✅ Staff " + nm + " (" + id + ") ditambahkan!";
+  ok.classList.add("show");
+  $("asId").value = ""; $("asNm").value = ""; $("asRole").value = ""; $("asPw").value = "";
+  $("asStr").style.width = "0";
+  const sb = $("staffBadge");
+  if (sb) sb.textContent = Object.keys(USERS).length;
+  toast("Staff " + id + " ditambahkan!", "success");
+}
+
+// ══════════════════════════════════════════
+//  CONFIRM MODAL
+// ══════════════════════════════════════════
+let _mCb = null;
+function openModal(title, msg, cb) {
+  $("mTitle").textContent = title;
+  $("mMsg").innerHTML = msg;
+  _mCb = cb;
+  $("mOk").onclick = () => { closeModal(); if (_mCb) _mCb(); };
+  $("movl").classList.add("open");
+}
+function closeModal() { $("movl").classList.remove("open"); }
+$("movl").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeModal(); closeEmod(); }
+});
+
+// digit transition
+(function() {
+  const s = document.createElement("style");
+  s.textContent = ".cval span{transition:transform .11s ease,opacity .11s ease}";
+  document.head.appendChild(s);
+})();
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+loadExtra();
+autoClean();
+// Try restore session — if fails, stay on login
+if (!loadSession()) {
+  // already on login screen by default
+}
+</script>
 </body>
 </html>

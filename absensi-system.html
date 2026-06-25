@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SMB GROUP — Absensi</title>
+<title>LAPAK99 — Absensi</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Orbitron:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -542,11 +542,11 @@ tr:hover td{background:rgba(255,255,255,.012)}
   <div class="lwrap">
     <div class="logo-area">
       <div class="logo-icon">⏱</div>
-      <h1><em>SMB GROUP</em>168</h1>
+      <h1><em>LAPAK</em>99</h1>
       <p>Sistem Informasi Absensi Karyawan</p>
     </div>
     <div class="lcard">
-      <h2>Selamat Datang </h2>
+      <h2>Selamat Datang 👋</h2>
       <p class="lsub">Masuk dengan User ID dan password Anda</p>
       <div class="emsg" id="loginErr">User ID atau password tidak valid.</div>
       <div class="field">
@@ -575,7 +575,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
   <div class="awrap">
     <button class="backbtn" onclick="goScreen('screen-login')">← Kembali ke Login</button>
     <div class="acard">
-      <h2> Lupa Password</h2>
+      <h2>🔐 Lupa Password</h2>
       <p class="asub">Masukkan User ID Anda untuk mencari akun, kemudian buat password baru.</p>
       <div class="field"><label>User ID</label><input id="fgId" type="text" placeholder="Contoh: CS001"/></div>
       <button class="btn-primary" onclick="doForgotSearch()">Cari Akun →</button>
@@ -603,7 +603,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
   <div class="topbar">
     <div class="tbl">
       <button class="hambtn" onclick="toggleSB()">☰</button>
-      <div class="tb-brand"><em>SMB GROUP</em>168</div>
+      <div class="tb-brand"><em>LAPAK</em>99</div>
       <div class="tb-sep"></div>
       <div class="tb-user">
         <span class="tb-name" id="tbName">—</span>
@@ -611,7 +611,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
       </div>
     </div>
     <div class="tbr">
-      <button class="tbbtn" onclick="goPanel('set-pw')"> <span class="tbx">Ganti Password</span></button>
+      <button class="tbbtn" onclick="goPanel('set-pw')">🔑 <span class="tbx">Ganti Password</span></button>
       <button class="tbbtn logout" onclick="confirmLogout()">⏏ <span class="tbx">Logout</span></button>
     </div>
   </div>
@@ -621,11 +621,11 @@ tr:hover td{background:rgba(255,255,255,.012)}
     <aside class="sidebar" id="sidebar">
       <div class="sbsec">
         <div class="sblbl">Menu Utama</div>
-        <div class="sbi active" id="sb-dash"          onclick="goPanel('dash')"><span class="sbic"></span> Dashboard</div>
-        <div class="sbi"        id="sb-riwayat"        onclick="goPanel('riwayat')"><span class="sbic"></span> Riwayat Absensi</div>
-        <div class="sbi"        id="sb-monit"          onclick="goPanel('monit')"          style="display:none"><span class="sbic"></span> Monitor Staff <span class="sbbadge" id="outBadge">0</span></div>
-        <div class="sbi"        id="sb-staff"          onclick="goPanel('staff')"          style="display:none"><span class="sbic"></span> Data Staff <span class="sbbadge" id="staffBadge">0</span></div>
-        <div class="sbi"        id="sb-history-admin"  onclick="goPanel('history-admin')"  style="display:none"><span class="sbic"></span> History Absen</div>
+        <div class="sbi active" id="sb-dash"          onclick="goPanel('dash')"><span class="sbic">🏠</span> Dashboard</div>
+        <div class="sbi"        id="sb-riwayat"        onclick="goPanel('riwayat')"><span class="sbic">📜</span> Riwayat Absensi</div>
+        <div class="sbi"        id="sb-monit"          onclick="goPanel('monit')"          style="display:none"><span class="sbic">📊</span> Monitor Staff <span class="sbbadge" id="outBadge">0</span></div>
+        <div class="sbi"        id="sb-staff"          onclick="goPanel('staff')"          style="display:none"><span class="sbic">👥</span> Data Staff <span class="sbbadge" id="staffBadge">0</span></div>
+        <div class="sbi"        id="sb-history-admin"  onclick="goPanel('history-admin')"  style="display:none"><span class="sbic">🗂️</span> History Absen</div>
       </div>
       <div class="sbsec">
         <div class="sblbl">Pengaturan</div>
@@ -634,10 +634,10 @@ tr:hover td{background:rgba(255,255,255,.012)}
           <span class="sbarr">▶</span>
         </div>
         <div class="sbgb" id="sbGB">
-          <div class="sbsub" id="sb-set-pw"   onclick="goPanel('set-pw')"><span class="sbsi"></span> Ubah Password</div>
-          <div class="sbsub" id="sb-set-name" onclick="goPanel('set-name')"><span class="sbsi"></span> Ganti Nama</div>
-          <div class="sbsub" id="sb-set-prof" onclick="goPanel('set-prof')"><span class="sbsi"></span> Foto Profil</div>
-          <div class="sbsub" id="sb-set-add"  onclick="goPanel('set-add')"><span class="sbsi"></span> Tambah Staff</div>
+          <div class="sbsub" id="sb-set-pw"   onclick="goPanel('set-pw')"><span class="sbsi">🔑</span> Ubah Password</div>
+          <div class="sbsub" id="sb-set-name" onclick="goPanel('set-name')"><span class="sbsi">✏️</span> Ganti Nama</div>
+          <div class="sbsub" id="sb-set-prof" onclick="goPanel('set-prof')"><span class="sbsi">🖼️</span> Foto Profil</div>
+          <div class="sbsub" id="sb-set-add"  onclick="goPanel('set-add')"><span class="sbsi">➕</span> Tambah Staff</div>
         </div>
       </div>
       <div class="sbfoot">
@@ -706,15 +706,15 @@ tr:hover td{background:rgba(255,255,255,.012)}
 
         <!-- Telat -->
         <div class="telatcard" id="telatCard">
-          <div class="telathead"> Melebihi Batas Waktu Izin</div>
+          <div class="telathead">🚨 Melebihi Batas Waktu Izin</div>
           <div id="telatList"></div>
         </div>
 
         <!-- Stats -->
         <div class="statrow">
-          <div class="statcard"><div class="si"></div><div class="sv" id="stT">0</div><div class="sl">Terpakai</div></div>
-          <div class="statcard sc-g"><div class="si"></div><div class="sv" id="stS">4</div><div class="sl">Sisa Kuota</div></div>
-          <div class="statcard sc-j"><div class="si"></div><div class="sv" id="stK">4</div><div class="sl">Kuota/Hari</div></div>
+          <div class="statcard"><div class="si">📋</div><div class="sv" id="stT">0</div><div class="sl">Terpakai</div></div>
+          <div class="statcard sc-g"><div class="si">⏳</div><div class="sv" id="stS">4</div><div class="sl">Sisa Kuota</div></div>
+          <div class="statcard sc-j"><div class="si">✅</div><div class="sv" id="stK">4</div><div class="sl">Kuota/Hari</div></div>
         </div>
 
         <!-- Action -->
@@ -742,7 +742,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
 
         <!-- Quota -->
         <div class="qcard">
-          <div class="qhead"><span> Sisa Izin Hari Ini</span><strong id="qLbl">4 / 4</strong></div>
+          <div class="qhead"><span>📊 Sisa Izin Hari Ini</span><strong id="qLbl">4 / 4</strong></div>
           <div class="qtrack"><div class="qfill" id="qFill" style="width:100%"></div></div>
           <div class="qfoot"><span>Terpakai: <b id="qT">0</b></span><span>Kuota: <b id="qK">4/hari</b></span></div>
         </div>
@@ -750,7 +750,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
         <!-- ★ RIWAYAT HARI INI — di atas setting ★ -->
         <div class="hcard">
           <div class="hhead">
-            <span> Riwayat Hari Ini</span>
+            <span>📜 Riwayat Hari Ini</span>
             <span id="hCnt" style="font-size:.64rem;color:var(--t3);font-weight:700"></span>
           </div>
           <div class="hlist" id="hList"><div class="hempty">Belum ada aktivitas</div></div>
@@ -759,25 +759,25 @@ tr:hover td{background:rgba(255,255,255,.012)}
         <!-- Live Keluar Bottom -->
         <div class="lkcard">
           <div class="lkhead"><span class="lkpulse"></span>Sedang Di Luar Kantor</div>
-          <div class="lklist" id="lkList"><div class="lkempty">Tidak ada yang di luar </div></div>
+          <div class="lklist" id="lkList"><div class="lkempty">Tidak ada yang di luar ✅</div></div>
         </div>
       </div><!-- /panel-dash -->
 
       <!-- ══ PANEL: RIWAYAT ══ -->
       <div class="panel" id="panel-riwayat">
-        <div class="ph"><div class="pt"> Riwayat Absensi</div><div class="ps">Catatan absensi Anda hari ini</div></div>
+        <div class="ph"><div class="pt">📜 Riwayat Absensi</div><div class="ps">Catatan absensi Anda hari ini</div></div>
         <div class="hcard"><div class="hlist" id="riwList"><div class="hempty">Belum ada riwayat</div></div></div>
       </div>
 
       <!-- ══ PANEL: MONITOR (Admin) ══ -->
       <div class="panel" id="panel-monit">
-        <div class="ph"><div class="pt"> Monitor Staff</div><div class="ps">Status real-time semua karyawan</div></div>
+        <div class="ph"><div class="pt">📊 Monitor Staff</div><div class="ps">Status real-time semua karyawan</div></div>
         <div class="hcard"><div id="monitList"></div></div>
       </div>
 
       <!-- ══ PANEL: DATA STAFF (Admin) ══ -->
       <div class="panel" id="panel-staff">
-        <div class="ph"><div class="pt"> Data Staff</div><div class="ps">Kelola karyawan terdaftar — klik Edit untuk ubah data</div></div>
+        <div class="ph"><div class="pt">👥 Data Staff</div><div class="ps">Kelola karyawan terdaftar — klik Edit untuk ubah data</div></div>
         <div class="stblwrap">
           <table>
             <thead>
@@ -791,7 +791,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
 
       <!-- ══ PANEL: HISTORY ADMIN ══ -->
       <div class="panel" id="panel-history-admin">
-        <div class="ph"><div class="pt"> History Absen Semua Staff</div><div class="ps">Riwayat lengkap absensi seluruh karyawan hari ini</div></div>
+        <div class="ph"><div class="pt">🗂️ History Absen Semua Staff</div><div class="ps">Riwayat lengkap absensi seluruh karyawan hari ini</div></div>
         <div class="expbar">
           <div style="font-size:.78rem;color:var(--t2);font-weight:600" id="histInfo">Memuat…</div>
           <button class="btnexp" onclick="exportAllData()">⬇ Export All Data (CSV)</button>
@@ -801,7 +801,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
 
       <!-- ══ PANEL: UBAH PASSWORD ══ -->
       <div class="panel" id="panel-set-pw">
-        <div class="ph"><div class="pt"> Ubah Password</div></div>
+        <div class="ph"><div class="pt">🔑 Ubah Password</div></div>
         <div class="scard">
           <div class="emsg" id="cpErr"></div><div class="omsg" id="cpOk"></div>
           <div class="field"><label>Password Lama</label><div class="fw"><input id="cpOld" type="password" placeholder="Password saat ini"/><button class="eye" type="button" onclick="toggleEye('cpOld',this)">👁</button></div></div>
@@ -813,7 +813,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
 
       <!-- ══ PANEL: GANTI NAMA ══ -->
       <div class="panel" id="panel-set-name">
-        <div class="ph"><div class="pt"> Ganti Nama</div></div>
+        <div class="ph"><div class="pt">✏️ Ganti Nama</div></div>
         <div class="scard">
           <div class="omsg" id="cnOk"></div>
           <div class="field"><label>Nama Saat Ini</label><input id="cnCur" type="text" disabled style="opacity:.42"/></div>
@@ -825,7 +825,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
 
       <!-- ══ PANEL: FOTO PROFIL ══ -->
       <div class="panel" id="panel-set-prof">
-        <div class="ph"><div class="pt"> Foto Profil</div></div>
+        <div class="ph"><div class="pt">🖼️ Foto Profil</div></div>
         <div class="scard">
           <div class="omsg" id="pfOk"></div>
           <div class="auparea" onclick="document.getElementById('pfFile').click()">
@@ -844,7 +844,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
 
       <!-- ══ PANEL: TAMBAH STAFF ══ -->
       <div class="panel" id="panel-set-add">
-        <div class="ph"><div class="pt"> Tambah Staff</div></div>
+        <div class="ph"><div class="pt">➕ Tambah Staff</div></div>
         <div class="scard">
           <div class="emsg" id="asErr"></div><div class="omsg" id="asOk"></div>
           <div class="field"><label>User ID Baru</label><input id="asId" type="text" placeholder="Contoh: CS002"/><div class="fhint">Tidak bisa diubah setelah dibuat.</div></div>
@@ -879,7 +879,7 @@ tr:hover td{background:rgba(255,255,255,.012)}
 <div class="emodwrap" id="emodWrap">
   <div class="emod">
     <div class="emodtop">
-      <div class="emodtitle"> Edit Data Staff</div>
+      <div class="emodtitle">✏️ Edit Data Staff</div>
       <button class="emodclose" onclick="closeEmod()">✕</button>
     </div>
     <div class="emsg" id="emErr"></div>
@@ -1269,7 +1269,7 @@ function tickCD() {
     if (rem < 5 * 60 * 1000) {
       setCC("st-warn");
       st.textContent  = "HAMPIR HABIS";
-      tit.textContent = "HAMPIR HABIS!";
+      tit.textContent = "⚠️ HAMPIR HABIS!";
       msg.textContent = "Kurang dari 5 menit! Segera kembali ke kantor!";
     } else {
       setCC("st-ok");
@@ -1285,7 +1285,7 @@ function tickCD() {
     arc.style.strokeDashoffset = "0";
     setCC("st-over");
     st.textContent  = "TERLAMBAT";
-    tit.textContent = "BATAS WAKTU TERLAMPAUI!";
+    tit.textContent = "🚨 BATAS WAKTU TERLAMPAUI!";
     msg.textContent = "Segera kembali ke kantor sekarang!";
     who.textContent = CU.nama.split(" ")[0] + " melebihi batas izin!";
     markTelat(over);
@@ -1718,7 +1718,7 @@ function exportAllData() {
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const a    = document.createElement("a");
   a.href     = URL.createObjectURL(blob);
-  a.download = "SMB GROUP_absensi_" + new Date().toISOString().slice(0, 10) + ".csv";
+  a.download = "lapak99_absensi_" + new Date().toISOString().slice(0, 10) + ".csv";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

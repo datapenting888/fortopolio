@@ -377,18 +377,62 @@ input,button,select{font-family:var(--sans)} button{cursor:pointer}
 .abm{background:linear-gradient(135deg,var(--bg5),var(--bg6));border:1.5px solid var(--b2);color:var(--t2)}
 .abm.ready{background:linear-gradient(135deg,#00C98B,#00A572);color:#fff;border-color:transparent;box-shadow:0 4px 20px rgba(0,201,139,.2)}
 
-/* ── STATUS CARD ── */
+/* ── TOPBAR ONLINE SIGNAL ── */
+.tb-signal{display:flex;flex-direction:column;align-items:center;gap:.1rem;margin-right:.2rem}
+.tb-sig-svg{width:22px;height:18px;overflow:visible;display:block}
+.tb-sig-dot{fill:var(--jade)}
+.tb-sig-b1,.tb-sig-b2,.tb-sig-b3{fill:none;stroke:var(--jade);stroke-width:2.2;stroke-linecap:round}
+.tb-sig-b1{animation:tbSig 1.6s ease-in-out 0s infinite}
+.tb-sig-b2{animation:tbSig 1.6s ease-in-out .2s infinite}
+.tb-sig-b3{animation:tbSig 1.6s ease-in-out .4s infinite}
+@keyframes tbSig{0%,100%{opacity:.18}50%{opacity:1}}
+.tb-sig-lbl{font-size:.5rem;font-weight:800;letter-spacing:.1em;color:var(--jade);line-height:1}
+/* when outside — turn gold */
+.tb-signal.out .tb-sig-dot{fill:var(--gold)}
+.tb-signal.out .tb-sig-b1,.tb-signal.out .tb-sig-b2,.tb-signal.out .tb-sig-b3{stroke:var(--gold)}
+.tb-signal.out .tb-sig-lbl{color:var(--gold)}
 .stcard{
-  display:flex;align-items:center;gap:.82rem;
-  border-radius:var(--r);padding:.82rem .98rem;margin-bottom:.95rem;
+  display:flex;align-items:center;gap:.85rem;
+  border-radius:var(--r);padding:.9rem 1.05rem;margin-bottom:.95rem;
   border:1.5px solid;transition:all .28s;position:relative;overflow:hidden;
 }
 .stcard::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.012),transparent);pointer-events:none}
 .st-in{background:linear-gradient(135deg,rgba(0,201,139,.07),var(--bg4));border-color:rgba(0,201,139,.25)}
 .st-out{background:linear-gradient(135deg,rgba(244,167,0,.07),var(--bg4));border-color:rgba(244,167,0,.25)}
-.stdot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;transition:background .28s;position:relative;z-index:1}
-.st-in .stdot{background:linear-gradient(135deg,#00C98B,#00A572);box-shadow:0 0 12px rgba(0,201,139,.28)}
-.st-out .stdot{background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 0 12px var(--goldg)}
+
+/* Online signal icon wrapper */
+.signal-wrap{flex-shrink:0;position:relative;z-index:1;width:54px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .3s,box-shadow .3s}
+.st-in  .signal-wrap{background:rgba(0,201,139,.12);box-shadow:0 0 18px rgba(0,201,139,.2)}
+.st-out .signal-wrap{background:rgba(244,167,0,.12);box-shadow:0 0 18px rgba(244,167,0,.2)}
+
+/* SVG signal bars — 4 arcs around dot */
+.signal-svg{width:36px;height:36px;overflow:visible}
+.sig-dot{fill:var(--jade);transition:fill .3s}
+.st-out .sig-dot{fill:var(--gold)}
+/* bars — each animated with delay so they ripple */
+.sig-bar{fill:none;stroke-linecap:round;stroke-width:2.8;transition:stroke .3s}
+.sig-b1{stroke:var(--jade);opacity:.95}
+.sig-b2{stroke:var(--jade);opacity:.85}
+.sig-b3{stroke:var(--jade);opacity:.7}
+.sig-b4{stroke:var(--jade);opacity:.5}
+.st-out .sig-b1,.st-out .sig-b2,.st-out .sig-b3,.st-out .sig-b4{stroke:var(--gold)}
+
+/* ripple animation — each bar scales/fades in sequence */
+@keyframes sigPulse{
+  0%,100%{opacity:.2;transform:scale(.85)}
+  50%{opacity:1;transform:scale(1)}
+}
+.sig-b1{animation:sigPulse 1.6s ease-in-out .0s infinite}
+.sig-b2{animation:sigPulse 1.6s ease-in-out .2s infinite}
+.sig-b3{animation:sigPulse 1.6s ease-in-out .4s infinite}
+.sig-b4{animation:sigPulse 1.6s ease-in-out .6s infinite}
+
+/* text below icon */
+.signal-lbl{font-size:.56rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-top:.22rem;text-align:center;line-height:1}
+.st-in  .signal-lbl{color:var(--jade)}
+.st-out .signal-lbl{color:var(--gold)}
+
+/* status text right side */
 .stinfo{flex:1;position:relative;z-index:1}
 .stinfo small{font-size:.6rem;color:var(--t2);text-transform:uppercase;letter-spacing:.09em;display:block;font-weight:700}
 .stinfo strong{font-size:.87rem;font-weight:800;display:block;margin-top:.09rem}
@@ -532,395 +576,21 @@ tr:hover td{background:rgba(255,255,255,.012)}
 }
 </style>
 </head>
-<body>
-
-<div class="twrap" id="twrap"></div>
-<div class="sbovl" id="sbovl" onclick="closeSB()"></div>
-
-<!-- ══════════ LOGIN ══════════ -->
-<div class="screen active" id="screen-login">
-  <div class="lwrap">
-    <div class="logo-area">
-      <div class="logo-icon">⏱</div>
-      <h1><em>LAPAK</em>99</h1>
-      <p>Sistem Informasi Absensi Karyawan</p>
-    </div>
-    <div class="lcard">
-      <h2>Selamat Datang 👋</h2>
-      <p class="lsub">Masuk dengan User ID dan password Anda</p>
-      <div class="emsg" id="loginErr">User ID atau password tidak valid.</div>
-      <div class="field">
-        <label>User ID</label>
-        <input id="loginId" type="text" placeholder="Contoh: CS001" autocomplete="username"
-          onkeydown="if(event.key==='Enter')doLogin()"/>
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <div class="fw">
-          <input id="loginPw" type="password" placeholder="Masukkan password"
-            autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
-          <button class="eye" type="button" onclick="toggleEye('loginPw',this)">👁</button>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="doLogin()">Masuk →</button>
-      <div style="text-align:center;margin-top:.88rem">
-        <button class="lnk" onclick="goForgot()">Lupa password?</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ FORGOT ══════════ -->
-<div class="screen" id="screen-forgot">
-  <div class="awrap">
-    <button class="backbtn" onclick="goScreen('screen-login')">← Kembali ke Login</button>
-    <div class="acard">
-      <h2>🔐 Lupa Password</h2>
-      <p class="asub">Masukkan User ID Anda untuk mencari akun, kemudian buat password baru.</p>
-      <div class="field"><label>User ID</label><input id="fgId" type="text" placeholder="Contoh: CS001"/></div>
-      <button class="btn-primary" onclick="doForgotSearch()">Cari Akun →</button>
-      <div class="ibox" id="fgHint" style="display:none"></div>
-      <div id="fgForm" style="display:none;margin-top:.88rem">
-        <div class="field">
-          <label>Password Baru</label>
-          <div class="fw">
-            <input id="fgPw1" type="password" placeholder="Min. 6 karakter" oninput="checkStr('fgPw1','fgStr')"/>
-            <button class="eye" type="button" onclick="toggleEye('fgPw1',this)">👁</button>
-          </div>
-          <div class="sbar"><div class="sfill" id="fgStr"></div></div>
-        </div>
-        <div class="field"><label>Konfirmasi Password</label><input id="fgPw2" type="password" placeholder="Ulangi password baru"/></div>
-        <button class="btn-primary" onclick="doForgotReset()">Simpan Password →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ DASHBOARD ══════════ -->
-<div class="screen" id="screen-dash">
-
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="tbl">
-      <button class="hambtn" onclick="toggleSB()">☰</button>
-      <div class="tb-brand"><em>LAPAK</em>99</div>
-      <div class="tb-sep"></div>
-      <div class="tb-user">
-        <span class="tb-name" id="tbName">—</span>
-        <span class="tb-role" id="tbRole">—</span>
-      </div>
-    </div>
-    <div class="tbr">
-      <button class="tbbtn" onclick="goPanel('set-pw')">🔑 <span class="tbx">Ganti Password</span></button>
-      <button class="tbbtn logout" onclick="confirmLogout()">⏏ <span class="tbx">Logout</span></button>
-    </div>
-  </div>
-
-  <div class="dlayout">
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sbsec">
-        <div class="sblbl">Menu Utama</div>
-        <div class="sbi active" id="sb-dash"          onclick="goPanel('dash')"><span class="sbic">🏠</span> Dashboard</div>
-        <div class="sbi"        id="sb-riwayat"        onclick="goPanel('riwayat')"><span class="sbic">📜</span> Riwayat Absensi</div>
-        <div class="sbi"        id="sb-monit"          onclick="goPanel('monit')"          style="display:none"><span class="sbic">📊</span> Monitor Staff <span class="sbbadge" id="outBadge">0</span></div>
-        <div class="sbi"        id="sb-staff"          onclick="goPanel('staff')"          style="display:none"><span class="sbic">👥</span> Data Staff <span class="sbbadge" id="staffBadge">0</span></div>
-        <div class="sbi"        id="sb-history-admin"  onclick="goPanel('history-admin')"  style="display:none"><span class="sbic">🗂️</span> History Absen</div>
-      </div>
-      <div class="sbsec">
-        <div class="sblbl">Pengaturan</div>
-        <div class="sbgh" id="sbGH" onclick="toggleSBG()">
-          <div class="sbgt"><span class="sbic">⚙️</span> Setting</div>
-          <span class="sbarr">▶</span>
-        </div>
-        <div class="sbgb" id="sbGB">
-          <div class="sbsub" id="sb-set-pw"   onclick="goPanel('set-pw')"><span class="sbsi">🔑</span> Ubah Password</div>
-          <div class="sbsub" id="sb-set-name" onclick="goPanel('set-name')"><span class="sbsi">✏️</span> Ganti Nama</div>
-          <div class="sbsub" id="sb-set-prof" onclick="goPanel('set-prof')"><span class="sbsi">🖼️</span> Foto Profil</div>
-          <div class="sbsub" id="sb-set-add"  onclick="goPanel('set-add')"><span class="sbsi">➕</span> Tambah Staff</div>
-        </div>
-      </div>
-      <div class="sbfoot">
-        <button class="sbout" onclick="confirmLogout()"><span>⏏</span> Logout</button>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <div class="main-area">
-
-      <!-- ══ PANEL: DASHBOARD ══ -->
-      <div class="panel active" id="panel-dash">
-        <div class="ph">
-          <div class="pt">Dashboard</div>
-          <div class="ps" id="greetLine">Selamat datang!</div>
-        </div>
-
-        <!-- Avatar + Digital Clock -->
-        <div class="avcard">
-          <div class="avrow">
-            <div class="avbub" id="dashAva">—</div>
-            <div class="avinfo">
-              <div class="avname" id="dashName">—</div>
-              <div class="avbadge" id="dashBadge">—</div>
-              <div class="avdate" id="dashDate">—</div>
-            </div>
-          </div>
-          <div class="clkwrap">
-            <div class="clksegs">
-              <div class="cseg"><div class="cval"><span id="dh1">0</span><span id="dh2">0</span></div><div class="clbl">JAM</div></div>
-              <div class="csep">:</div>
-              <div class="cseg"><div class="cval"><span id="dm1">0</span><span id="dm2">0</span></div><div class="clbl">MENIT</div></div>
-              <div class="csep">:</div>
-              <div class="cseg"><div class="cval"><span id="ds1">0</span><span id="ds2">0</span></div><div class="clbl">DETIK</div></div>
-            </div>
-            <div class="clkright">
-              <div class="clkday"  id="clkDay">—</div>
-              <div class="clkdate" id="clkDate">—</div>
-              <div class="livedot"><span class="ld"></span>LIVE</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Circular Countdown (hidden until izin keluar) -->
-        <div class="ccwrap st-ok" id="ccWrap">
-          <div class="ccleft">
-            <div class="ccring">
-              <svg class="ccsvg" viewBox="0 0 106 106">
-                <circle class="cctrack" cx="53" cy="53" r="46"/>
-                <circle class="ccfill" id="ccArc" cx="53" cy="53" r="46"
-                        stroke-dasharray="289.0" stroke-dashoffset="0"/>
-              </svg>
-              <div class="ccctr">
-                <div class="cctm" id="ccTm">15:00</div>
-                <div class="cctmlbl">sisa</div>
-              </div>
-            </div>
-            <div class="ccstlbl" id="ccSt">BATAS IZIN</div>
-          </div>
-          <div class="ccright">
-            <div class="cctitle" id="ccTitle">⏳ BATAS WAKTU IZIN</div>
-            <div class="ccmsg"   id="ccMsg">Kamu memiliki 15 menit untuk keluar kantor. Segera kembali sebelum waktu habis!</div>
-            <div class="ccwho"   id="ccWho"></div>
-          </div>
-        </div>
-
-        <!-- Telat -->
-        <div class="telatcard" id="telatCard">
-          <div class="telathead">🚨 Melebihi Batas Waktu Izin</div>
-          <div id="telatList"></div>
-        </div>
-
-        <!-- Stats -->
-        <div class="statrow">
-          <div class="statcard"><div class="si">📋</div><div class="sv" id="stT">0</div><div class="sl">Terpakai</div></div>
-          <div class="statcard sc-g"><div class="si">⏳</div><div class="sv" id="stS">4</div><div class="sl">Sisa Kuota</div></div>
-          <div class="statcard sc-j"><div class="si">✅</div><div class="sv" id="stK">4</div><div class="sl">Kuota/Hari</div></div>
-        </div>
-
-        <!-- Action -->
-        <div class="actrow">
-          <button class="abtn abk" id="btnK" onclick="aksKeluar()">
-            <span class="aico">↪</span><span class="albl">IZIN KELUAR</span><span class="asub">Tap untuk keluar</span>
-          </button>
-          <button class="abtn abm disabled" id="btnM" onclick="aksMasuk()">
-            <span class="aico">↩</span><span class="albl">KEMBALI MASUK</span><span class="asub">Tap saat tiba</span>
-          </button>
-        </div>
-
-        <!-- Status -->
-        <div class="stcard st-in" id="stCard">
-          <div class="stdot" id="stDot">✔</div>
-          <div class="stinfo">
-            <small>STATUS SAAT INI</small>
-            <strong id="stLbl">Berada di Kantor</strong>
-          </div>
-          <div class="sttime">
-            <span id="stTlbl">Diperbarui</span>
-            <span id="stTm">—</span>
-          </div>
-        </div>
-
-        <!-- Quota -->
-        <div class="qcard">
-          <div class="qhead"><span>📊 Sisa Izin Hari Ini</span><strong id="qLbl">4 / 4</strong></div>
-          <div class="qtrack"><div class="qfill" id="qFill" style="width:100%"></div></div>
-          <div class="qfoot"><span>Terpakai: <b id="qT">0</b></span><span>Kuota: <b id="qK">4/hari</b></span></div>
-        </div>
-
-        <!-- ★ RIWAYAT HARI INI — di atas setting ★ -->
-        <div class="hcard">
-          <div class="hhead">
-            <span>📜 Riwayat Hari Ini</span>
-            <span id="hCnt" style="font-size:.64rem;color:var(--t3);font-weight:700"></span>
-          </div>
-          <div class="hlist" id="hList"><div class="hempty">Belum ada aktivitas</div></div>
-        </div>
-
-        <!-- Live Keluar Bottom -->
-        <div class="lkcard">
-          <div class="lkhead"><span class="lkpulse"></span>Sedang Di Luar Kantor</div>
-          <div class="lklist" id="lkList"><div class="lkempty">Tidak ada yang di luar ✅</div></div>
-        </div>
-      </div><!-- /panel-dash -->
-
-      <!-- ══ PANEL: RIWAYAT ══ -->
-      <div class="panel" id="panel-riwayat">
-        <div class="ph"><div class="pt">📜 Riwayat Absensi</div><div class="ps">Catatan absensi Anda hari ini</div></div>
-        <div class="hcard"><div class="hlist" id="riwList"><div class="hempty">Belum ada riwayat</div></div></div>
-      </div>
-
-      <!-- ══ PANEL: MONITOR (Admin) ══ -->
-      <div class="panel" id="panel-monit">
-        <div class="ph"><div class="pt">📊 Monitor Staff</div><div class="ps">Status real-time semua karyawan</div></div>
-        <div class="hcard"><div id="monitList"></div></div>
-      </div>
-
-      <!-- ══ PANEL: DATA STAFF (Admin) ══ -->
-      <div class="panel" id="panel-staff">
-        <div class="ph"><div class="pt">👥 Data Staff</div><div class="ps">Kelola karyawan terdaftar — klik Edit untuk ubah data</div></div>
-        <div class="stblwrap">
-          <table>
-            <thead>
-              <tr><th>User ID</th><th>Nama</th><th>Role</th><th>Kuota</th><th>Status</th><th>Aksi</th></tr>
-            </thead>
-            <tbody id="staffTbl"></tbody>
-          </table>
-        </div>
-        <button class="btn-primary" style="max-width:188px;margin-top:.45rem" onclick="goPanel('set-add')">+ Tambah Staff</button>
-      </div>
-
-      <!-- ══ PANEL: HISTORY ADMIN ══ -->
-      <div class="panel" id="panel-history-admin">
-        <div class="ph"><div class="pt">🗂️ History Absen Semua Staff</div><div class="ps">Riwayat lengkap absensi seluruh karyawan hari ini</div></div>
-        <div class="expbar">
-          <div style="font-size:.78rem;color:var(--t2);font-weight:600" id="histInfo">Memuat…</div>
-          <button class="btnexp" onclick="exportAllData()">⬇ Export All Data (CSV)</button>
-        </div>
-        <div class="hcard"><div id="histAdminList"></div></div>
-      </div>
-
-      <!-- ══ PANEL: UBAH PASSWORD ══ -->
-      <div class="panel" id="panel-set-pw">
-        <div class="ph"><div class="pt">🔑 Ubah Password</div></div>
-        <div class="scard">
-          <div class="emsg" id="cpErr"></div><div class="omsg" id="cpOk"></div>
-          <div class="field"><label>Password Lama</label><div class="fw"><input id="cpOld" type="password" placeholder="Password saat ini"/><button class="eye" type="button" onclick="toggleEye('cpOld',this)">👁</button></div></div>
-          <div class="field"><label>Password Baru</label><div class="fw"><input id="cpNew" type="password" placeholder="Min. 6 karakter" oninput="checkStr('cpNew','cpStr')"/><button class="eye" type="button" onclick="toggleEye('cpNew',this)">👁</button></div><div class="sbar"><div class="sfill" id="cpStr"></div></div></div>
-          <div class="field"><label>Konfirmasi</label><input id="cpCfm" type="password" placeholder="Ulangi password baru"/></div>
-          <button class="btn-primary" onclick="doChangePw()">Simpan Password →</button>
-        </div>
-      </div>
-
-      <!-- ══ PANEL: GANTI NAMA ══ -->
-      <div class="panel" id="panel-set-name">
-        <div class="ph"><div class="pt">✏️ Ganti Nama</div></div>
-        <div class="scard">
-          <div class="omsg" id="cnOk"></div>
-          <div class="field"><label>Nama Saat Ini</label><input id="cnCur" type="text" disabled style="opacity:.42"/></div>
-          <div class="field"><label>Nama Baru</label><input id="cnNew" type="text" placeholder="Nama lengkap baru"/></div>
-          <div class="field"><label>Role / Jabatan</label><input id="cnRole" type="text" placeholder="CS, HRD, Admin…"/></div>
-          <button class="btn-primary" onclick="doChangeName()">Simpan →</button>
-        </div>
-      </div>
-
-      <!-- ══ PANEL: FOTO PROFIL ══ -->
-      <div class="panel" id="panel-set-prof">
-        <div class="ph"><div class="pt">🖼️ Foto Profil</div></div>
-        <div class="scard">
-          <div class="omsg" id="pfOk"></div>
-          <div class="auparea" onclick="document.getElementById('pfFile').click()">
-            <div class="aupprev" id="pfPrev"><img id="pfImg" src="" alt="" style="display:none"/><span id="pfInit">—</span></div>
-            <div class="auplbl">Klik untuk pilih foto</div>
-            <div class="auphint">JPG, PNG · maks 2MB</div>
-            <input type="file" id="pfFile" class="fhidden" accept="image/*" onchange="handlePhoto(this)"/>
-          </div>
-          <div class="field"><label>No. HP / WA</label><input id="pfPh" type="tel" placeholder="08xxxxxxxxxx"/></div>
-          <div class="field"><label>Departemen</label><input id="pfDept" type="text" placeholder="Customer Service, IT…"/></div>
-          <div class="field"><label>Email Kantor</label><input id="pfEmail" type="email" placeholder="nama@perusahaan.com"/></div>
-          <div class="field"><label>Bio</label><input id="pfBio" type="text" placeholder="Tulis sesuatu…"/></div>
-          <button class="btn-primary" onclick="doSaveProf()">Simpan Profil →</button>
-        </div>
-      </div>
-
-      <!-- ══ PANEL: TAMBAH STAFF ══ -->
-      <div class="panel" id="panel-set-add">
-        <div class="ph"><div class="pt">➕ Tambah Staff</div></div>
-        <div class="scard">
-          <div class="emsg" id="asErr"></div><div class="omsg" id="asOk"></div>
-          <div class="field"><label>User ID Baru</label><input id="asId" type="text" placeholder="Contoh: CS002"/><div class="fhint">Tidak bisa diubah setelah dibuat.</div></div>
-          <div class="field"><label>Nama Lengkap</label><input id="asNm" type="text" placeholder="Nama lengkap karyawan"/></div>
-          <div class="field"><label>Role</label>
-            <select id="asRole">
-              <option value="">-- Pilih --</option>
-              <option value="CS">CS</option><option value="HRD">HRD</option>
-              <option value="Marketing">Marketing</option><option value="Admin">Admin</option>
-              <option value="IT">IT</option><option value="Finance">Finance</option>
-              <option value="Manager">Manager</option><option value="Lainnya">Lainnya</option>
-            </select>
-          </div>
-          <div class="field"><label>Kuota Izin / Hari</label>
-            <select id="asKuota">
-              <option value="2">2x</option><option value="4" selected>4x</option>
-              <option value="6">6x</option><option value="8">8x</option>
-            </select>
-          </div>
-          <div class="field"><label>Password Awal</label><div class="fw"><input id="asPw" type="password" placeholder="Min. 6 karakter" oninput="checkStr('asPw','asStr')"/><button class="eye" type="button" onclick="toggleEye('asPw',this)">👁</button></div><div class="sbar"><div class="sfill" id="asStr"></div></div></div>
-          <button class="btn-primary" onclick="doAddStaff()">Tambahkan Staff →</button>
-          <hr class="sdiv"/>
-          <button class="btn-ghost" onclick="goPanel('staff')">← Lihat Semua Staff</button>
-        </div>
-      </div>
-
-    </div><!-- /main-area -->
-  </div><!-- /dlayout -->
-</div><!-- /screen-dash -->
-
-<!-- EDIT STAFF MODAL -->
-<div class="emodwrap" id="emodWrap">
-  <div class="emod">
-    <div class="emodtop">
-      <div class="emodtitle">✏️ Edit Data Staff</div>
-      <button class="emodclose" onclick="closeEmod()">✕</button>
-    </div>
-    <div class="emsg" id="emErr"></div>
-    <input type="hidden" id="emUid"/>
-    <div class="field"><label>User ID</label><input id="emId" type="text" disabled style="opacity:.42;font-family:var(--mono)"/></div>
-    <div class="field"><label>Nama Lengkap</label><input id="emNama" type="text"/></div>
-    <div class="field"><label>Role</label>
-      <select id="emRole">
-        <option value="CS">CS</option><option value="HRD">HRD</option>
-        <option value="Marketing">Marketing</option><option value="Admin">Admin</option>
-        <option value="IT">IT</option><option value="Finance">Finance</option>
-        <option value="Manager">Manager</option><option value="Lainnya">Lainnya</option>
-      </select>
-    </div>
-    <div class="field"><label>Kuota Izin / Hari</label>
-      <select id="emKuota">
-        <option value="2">2x</option><option value="4">4x</option>
-        <option value="6">6x</option><option value="8">8x</option>
-      </select>
-    </div>
-    <div class="field"><label>Reset Password (opsional)</label><div class="fw"><input id="emPw" type="password" placeholder="Kosongkan jika tidak diubah"/><button class="eye" type="button" onclick="toggleEye('emPw',this)">👁</button></div></div>
-    <div style="display:flex;gap:.55rem;margin-top:.45rem">
-      <button class="btn-ghost" onclick="closeEmod()">Batal</button>
-      <button class="btn-primary" onclick="doEditStaff()">Simpan Perubahan →</button>
-    </div>
-  </div>
-</div>
-
-<!-- CONFIRM MODAL -->
-<div class="movl" id="movl">
-  <div class="mbox">
-    <div class="mtitle" id="mTitle">Konfirmasi</div>
-    <div class="mmsg"   id="mMsg">—</div>
-    <div class="macts">
-      <button class="btn-ghost" onclick="closeModal()">Batal</button>
-      <button class="mok" id="mOk">Ya</button>
-    </div>
-  </div>
-</div>
-
-<script>
+<body> <div class="twrap" id="twrap"></div>
+<div class="sbovl" id="sbovl" onclick="closeSB()"></div> <!-- ══════════ LOGIN ══════════ -->
+<div class="screen active" id="screen-login"> <div class="lwrap"> <div class="logo-area"> <div class="logo-icon">⏱</div> <h1><em>LAPAK</em>99</h1> <p>Sistem Informasi Absensi Karyawan</p> </div> <div class="lcard"> <h2>Selamat Datang </h2> <p class="lsub">Masuk dengan User ID dan password Anda</p> <div class="emsg" id="loginErr">User ID atau password tidak valid.</div> <div class="field"> <label>User ID</label> <input id="loginId" type="text" placeholder="Contoh: CS001" autocomplete="username"
+          onkeydown="if(event.key==='Enter')doLogin()"/> </div> <div class="field"> <label>Password</label> <div class="fw"> <input id="loginPw" type="password" placeholder="Masukkan password"
+            autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/> <button class="eye" type="button" onclick="toggleEye('loginPw',this)"></button> </div> </div> <button class="btn-primary" onclick="doLogin()">Masuk →</button> <div style="text-align:center;margin-top:.88rem"> <button class="lnk" onclick="goForgot()">Lupa password?</button> </div> </div> </div>
+</div> <!-- ══════════ FORGOT ══════════ -->
+<div class="screen" id="screen-forgot"> <div class="awrap"> <button class="backbtn" onclick="goScreen('screen-login')">← Kembali ke Login</button> <div class="acard"> <h2> Lupa Password</h2> <p class="asub">Masukkan User ID Anda untuk mencari akun, kemudian buat password baru.</p> <div class="field"><label>User ID</label><input id="fgId" type="text" placeholder="Contoh: CS001"/></div> <button class="btn-primary" onclick="doForgotSearch()">Cari Akun →</button> <div class="ibox" id="fgHint" style="display:none"></div> <div id="fgForm" style="display:none;margin-top:.88rem"> <div class="field"> <label>Password Baru</label> <div class="fw"> <input id="fgPw1" type="password" placeholder="Min. 6 karakter" oninput="checkStr('fgPw1','fgStr')"/> <button class="eye" type="button" onclick="toggleEye('fgPw1',this)"></button> </div> <div class="sbar"><div class="sfill" id="fgStr"></div></div> </div> <div class="field"><label>Konfirmasi Password</label><input id="fgPw2" type="password" placeholder="Ulangi password baru"/></div> <button class="btn-primary" onclick="doForgotReset()">Simpan Password →</button> </div> </div> </div>
+</div> <!-- ══════════ DASHBOARD ══════════ -->
+<div class="screen" id="screen-dash"> <!-- TOPBAR --> <div class="topbar"> <div class="tbl"> <button class="hambtn" onclick="toggleSB()"></button> <div class="tb-brand"><em>LAPAK</em>99</div> <div class="tb-sep"></div> <div class="tb-user"> <span class="tb-name" id="tbName">—</span> <span class="tb-role" id="tbRole">—</span> </div> </div> <div class="tbr"> <div class="tb-signal" id="tbSignal"> <svg class="tb-sig-svg" viewBox="0 0 22 18"> <circle class="tb-sig-dot" cx="11" cy="16.5" r="1.8"/> <path class="tb-sig-b1" d="M7.5 13.5 Q11 9.5 14.5 13.5"/> <path class="tb-sig-b2" d="M4.5 10.5 Q11 3.5 17.5 10.5"/> <path class="tb-sig-b3" d="M1.5 7.5 Q11 -2 20.5 7.5"/> </svg> <div class="tb-sig-lbl" id="tbSigLbl">ONLINE</div> </div> <button class="tbbtn" onclick="goPanel('set-pw')"><span class="tbx">Ganti Password</span></button> <button class="tbbtn logout" onclick="confirmLogout()"><span class="tbx">Logout</span></button> </div> </div> <div class="dlayout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar"> <div class="sbsec"> <div class="sblbl">Menu Utama</div> <div class="sbi active" id="sb-dash"          onclick="goPanel('dash')">Dashboard</div> <div class="sbi"        id="sb-riwayat"        onclick="goPanel('riwayat')">Riwayat Absensi</div> <div class="sbi"        id="sb-monit"          onclick="goPanel('monit')"          style="display:none">Monitor Staff <span class="sbbadge" id="outBadge">0</span></div> <div class="sbi"        id="sb-staff"          onclick="goPanel('staff')"          style="display:none">Data Staff <span class="sbbadge" id="staffBadge">0</span></div> <div class="sbi"        id="sb-history-admin"  onclick="goPanel('history-admin')"  style="display:none">History Absen</div> </div> <div class="sbsec"> <div class="sblbl">Pengaturan</div> <div class="sbgh" id="sbGH" onclick="toggleSBG()"> <div class="sbgt">Setting</div> <span class="sbarr">▶</span> </div> <div class="sbgb" id="sbGB"> <div class="sbsub" id="sb-set-pw"   onclick="goPanel('set-pw')">Ubah Password</div> <div class="sbsub" id="sb-set-name" onclick="goPanel('set-name')">Ganti Nama</div> <div class="sbsub" id="sb-set-prof" onclick="goPanel('set-prof')">Foto Profil</div> <div class="sbsub" id="sb-set-add"  onclick="goPanel('set-add')">Tambah Staff</div> </div> </div> <div class="sbfoot"> <button class="sbout" onclick="confirmLogout()">Logout</button> </div> </aside> <!-- MAIN --> <div class="main-area"> <!-- ══ PANEL: DASHBOARD ══ --> <div class="panel active" id="panel-dash"> <div class="ph"> <div class="pt">Dashboard</div> <div class="ps" id="greetLine">Selamat datang!</div> </div> <!-- Avatar + Digital Clock --> <div class="avcard"> <div class="avrow"> <div class="avbub" id="dashAva">—</div> <div class="avinfo"> <div class="avname" id="dashName">—</div> <div class="avbadge" id="dashBadge">—</div> <div class="avdate" id="dashDate">—</div> </div> </div> <div class="clkwrap"> <div class="clksegs"> <div class="cseg"><div class="cval"><span id="dh1">0</span><span id="dh2">0</span></div><div class="clbl">JAM</div></div> <div class="csep">:</div> <div class="cseg"><div class="cval"><span id="dm1">0</span><span id="dm2">0</span></div><div class="clbl">MENIT</div></div> <div class="csep">:</div> <div class="cseg"><div class="cval"><span id="ds1">0</span><span id="ds2">0</span></div><div class="clbl">DETIK</div></div> </div> <div class="clkright"> <div class="clkday"  id="clkDay">—</div> <div class="clkdate" id="clkDate">—</div> <div class="livedot"><span class="ld"></span>LIVE</div> </div> </div> </div> <!-- Circular Countdown (hidden until izin keluar) --> <div class="ccwrap st-ok" id="ccWrap"> <div class="ccleft"> <div class="ccring"> <svg class="ccsvg" viewBox="0 0 106 106"> <circle class="cctrack" cx="53" cy="53" r="46"/> <circle class="ccfill" id="ccArc" cx="53" cy="53" r="46"
+                        stroke-dasharray="289.0" stroke-dashoffset="0"/> </svg> <div class="ccctr"> <div class="cctm" id="ccTm">15:00</div> <div class="cctmlbl">sisa</div> </div> </div> <div class="ccstlbl" id="ccSt">BATAS IZIN</div> </div> <div class="ccright"> <div class="cctitle" id="ccTitle"> BATAS WAKTU IZIN</div> <div class="ccmsg"   id="ccMsg">Kamu memiliki 15 menit untuk keluar kantor. Segera kembali sebelum waktu habis!</div> <div class="ccwho"   id="ccWho"></div> </div> </div> <!-- Telat --> <div class="telatcard" id="telatCard"> <div class="telathead"> Melebihi Batas Waktu Izin</div> <div id="telatList"></div> </div> <!-- Stats --> <div class="statrow"> <div class="statcard"><div class="sv" id="stT">0</div><div class="sl">Terpakai</div></div> <div class="statcard sc-g"><div class="sv" id="stS">4</div><div class="sl">Sisa Kuota</div></div> <div class="statcard sc-j"><div class="sv" id="stK">4</div><div class="sl">Kuota/Hari</div></div> </div> <!-- Action --> <div class="actrow"> <button class="abtn abk" id="btnK" onclick="aksKeluar()"> <span class="aico">↪</span><span class="albl">IZIN KELUAR</span><span class="asub">Tap untuk keluar</span> </button> <button class="abtn abm disabled" id="btnM" onclick="aksMasuk()"> <span class="aico">↩</span><span class="albl">KEMBALI MASUK</span><span class="asub">Tap saat tiba</span> </button> </div> <!-- Quota --> <div class="qcard"> <div class="qhead"><span> Sisa Izin Hari Ini</span><strong id="qLbl">4 / 4</strong></div> <div class="qtrack"><div class="qfill" id="qFill" style="width:100%"></div></div> <div class="qfoot"><span>Terpakai: <b id="qT">0</b></span><span>Kuota: <b id="qK">4/hari</b></span></div> </div> <!--  RIWAYAT HARI INI — di atas setting  --> <div class="hcard"> <div class="hhead"> <span> Riwayat Hari Ini</span> <span id="hCnt" style="font-size:.64rem;color:var(--t3);font-weight:700"></span> </div> <div class="hlist" id="hList"><div class="hempty">Belum ada aktivitas</div></div> </div> <!-- Live Keluar Bottom --> <div class="lkcard"> <div class="lkhead"><span class="lkpulse"></span>Sedang Di Luar Kantor</div> <div class="lklist" id="lkList"><div class="lkempty">Tidak ada yang di luar </div></div> </div> </div><!-- /panel-dash --> <!-- ══ PANEL: RIWAYAT ══ --> <div class="panel" id="panel-riwayat"> <div class="ph"><div class="pt">Riwayat Absensi</div><div class="ps">Catatan lengkap absensi dan pelanggaran batas waktu hari ini</div></div> <!-- Summary stats --> <div class="statrow" style="margin-bottom:.95rem"> <div class="statcard"><div class="sv" id="riwStatIzin">0</div><div class="sl">Total Izin</div></div> <div class="statcard sc-g"><div class="sv" id="riwStatMasuk">0</div><div class="sl">Kembali Tepat</div></div> <div class="statcard" style="--acc:var(--rose)"><div class="sv" id="riwStatTelat" style="color:var(--rose)">0</div><div class="sl">Melebihi Batas</div></div> </div> <!-- Aktivitas section --> <div class="hcard" style="margin-bottom:.85rem"> <div class="hhead"><span>Aktivitas Hari Ini</span><span id="riwActCnt" style="font-size:.64rem;color:var(--t3);font-weight:700"></span></div> <div class="hlist" id="riwList"><div class="hempty">Belum ada riwayat</div></div> </div> <!-- Pelanggaran / Telat section --> <div class="hcard" id="riwLateSection"> <div class="hhead" style="color:var(--rose)">Pelanggaran Batas Waktu <span id="riwLateCnt" style="font-size:.64rem;font-weight:700;margin-left:.4rem"></span></div> <div id="riwLateList"><div class="hempty">Tidak ada pelanggaran hari ini</div></div> </div> </div> <!-- ══ PANEL: MONITOR (Admin) ══ --> <div class="panel" id="panel-monit"> <div class="ph"><div class="pt">Monitor Staff</div><div class="ps">Status real-time semua karyawan</div></div> <div class="hcard"><div id="monitList"></div></div> </div> <!-- ══ PANEL: DATA STAFF (Admin) ══ --> <div class="panel" id="panel-staff"> <div class="ph"><div class="pt">Data Staff</div><div class="ps">Kelola karyawan terdaftar — klik Edit untuk ubah data</div></div> <div class="stblwrap"> <table> <thead> <tr><th>User ID</th><th>Nama</th><th>Role</th><th>Kuota</th><th>Status</th><th>Aksi</th></tr> </thead> <tbody id="staffTbl"></tbody> </table> </div> <button class="btn-primary" style="max-width:188px;margin-top:.45rem" onclick="goPanel('set-add')">+ Tambah Staff</button> </div> <!-- ══ PANEL: HISTORY ADMIN ══ --> <div class="panel" id="panel-history-admin"> <div class="ph"><div class="pt">History Absen Semua Staff</div><div class="ps">Riwayat lengkap absensi seluruh karyawan hari ini</div></div> <div class="expbar"> <div style="font-size:.78rem;color:var(--t2);font-weight:600" id="histInfo">Memuat…</div> <button class="btnexp" onclick="exportAllData()">⬇ Export All Data (CSV)</button> </div> <div class="hcard"><div id="histAdminList"></div></div> </div> <!-- ══ PANEL: UBAH PASSWORD ══ --> <div class="panel" id="panel-set-pw"> <div class="ph"><div class="pt">Ubah Password</div></div> <div class="scard"> <div class="emsg" id="cpErr"></div><div class="omsg" id="cpOk"></div> <div class="field"><label>Password Lama</label><div class="fw"><input id="cpOld" type="password" placeholder="Password saat ini"/><button class="eye" type="button" onclick="toggleEye('cpOld',this)"></button></div></div> <div class="field"><label>Password Baru</label><div class="fw"><input id="cpNew" type="password" placeholder="Min. 6 karakter" oninput="checkStr('cpNew','cpStr')"/><button class="eye" type="button" onclick="toggleEye('cpNew',this)"></button></div><div class="sbar"><div class="sfill" id="cpStr"></div></div></div> <div class="field"><label>Konfirmasi</label><input id="cpCfm" type="password" placeholder="Ulangi password baru"/></div> <button class="btn-primary" onclick="doChangePw()">Simpan Password →</button> </div> </div> <!-- ══ PANEL: GANTI NAMA ══ --> <div class="panel" id="panel-set-name"> <div class="ph"><div class="pt">Ganti Nama</div></div> <div class="scard"> <div class="omsg" id="cnOk"></div> <div class="field"><label>Nama Saat Ini</label><input id="cnCur" type="text" disabled style="opacity:.42"/></div> <div class="field"><label>Nama Baru</label><input id="cnNew" type="text" placeholder="Nama lengkap baru"/></div> <div class="field"><label>Role / Jabatan</label><input id="cnRole" type="text" placeholder="CS, HRD, Admin…"/></div> <button class="btn-primary" onclick="doChangeName()">Simpan →</button> </div> </div> <!-- ══ PANEL: FOTO PROFIL ══ --> <div class="panel" id="panel-set-prof"> <div class="ph"><div class="pt">Foto Profil</div></div> <div class="scard"> <div class="omsg" id="pfOk"></div> <div class="auparea" onclick="document.getElementById('pfFile').click()"> <div class="aupprev" id="pfPrev"><img id="pfImg" src="" alt="" style="display:none"/><span id="pfInit">—</span></div> <div class="auplbl">Klik untuk pilih foto</div> <div class="auphint">JPG, PNG · maks 2MB</div> <input type="file" id="pfFile" class="fhidden" accept="image/*" onchange="handlePhoto(this)"/> </div> <div class="field"><label>No. HP / WA</label><input id="pfPh" type="tel" placeholder="08xxxxxxxxxx"/></div> <div class="field"><label>Departemen</label><input id="pfDept" type="text" placeholder="Customer Service, IT…"/></div> <div class="field"><label>Email Kantor</label><input id="pfEmail" type="email" placeholder="nama@perusahaan.com"/></div> <div class="field"><label>Bio</label><input id="pfBio" type="text" placeholder="Tulis sesuatu…"/></div> <button class="btn-primary" onclick="doSaveProf()">Simpan Profil →</button> </div> </div> <!-- ══ PANEL: TAMBAH STAFF ══ --> <div class="panel" id="panel-set-add"> <div class="ph"><div class="pt">Tambah Staff</div></div> <div class="scard"> <div class="emsg" id="asErr"></div><div class="omsg" id="asOk"></div> <div class="field"><label>User ID Baru</label><input id="asId" type="text" placeholder="Contoh: CS002"/><div class="fhint">Tidak bisa diubah setelah dibuat.</div></div> <div class="field"><label>Nama Lengkap</label><input id="asNm" type="text" placeholder="Nama lengkap karyawan"/></div> <div class="field"><label>Role</label> <select id="asRole"> <option value="">-- Pilih --</option> <option value="CS">CS</option><option value="HRD">HRD</option> <option value="Marketing">Marketing</option><option value="Admin">Admin</option> <option value="IT">IT</option><option value="Finance">Finance</option> <option value="Manager">Manager</option><option value="Lainnya">Lainnya</option> </select> </div> <div class="field"><label>Kuota Izin / Hari</label> <select id="asKuota"> <option value="2">2x</option><option value="4" selected>4x</option> <option value="6">6x</option><option value="8">8x</option> </select> </div> <div class="field"><label>Password Awal</label><div class="fw"><input id="asPw" type="password" placeholder="Min. 6 karakter" oninput="checkStr('asPw','asStr')"/><button class="eye" type="button" onclick="toggleEye('asPw',this)"></button></div><div class="sbar"><div class="sfill" id="asStr"></div></div></div> <button class="btn-primary" onclick="doAddStaff()">Tambahkan Staff →</button> <hr class="sdiv"/> <button class="btn-ghost" onclick="goPanel('staff')">← Lihat Semua Staff</button> </div> </div> </div><!-- /main-area --> </div><!-- /dlayout -->
+</div><!-- /screen-dash --> <!-- EDIT STAFF MODAL -->
+<div class="emodwrap" id="emodWrap"> <div class="emod"> <div class="emodtop"> <div class="emodtitle"> Edit Data Staff</div> <button class="emodclose" onclick="closeEmod()"></button> </div> <div class="emsg" id="emErr"></div> <input type="hidden" id="emUid"/> <div class="field"> <label>User ID Baru <span style="color:var(--t3);font-weight:500;font-size:.62rem;text-transform:none;letter-spacing:0">(kosongkan jika tidak diubah)</span></label> <input id="emId" type="text" placeholder="User ID saat ini" style="font-family:var(--mono);text-transform:uppercase"/> </div> <div class="field"><label>Nama Lengkap</label><input id="emNama" type="text"/></div> <div class="field"><label>Role</label> <select id="emRole"> <option value="CS">CS</option><option value="HRD">HRD</option> <option value="Marketing">Marketing</option><option value="Admin">Admin</option> <option value="IT">IT</option><option value="Finance">Finance</option> <option value="Manager">Manager</option><option value="Lainnya">Lainnya</option> </select> </div> <div class="field"><label>Kuota Izin / Hari</label> <select id="emKuota"> <option value="2">2x</option><option value="4">4x</option> <option value="6">6x</option><option value="8">8x</option> </select> </div> <div class="field"><label>Reset Password (opsional)</label><div class="fw"><input id="emPw" type="password" placeholder="Kosongkan jika tidak diubah"/><button class="eye" type="button" onclick="toggleEye('emPw',this)"></button></div></div> <div style="display:flex;gap:.55rem;margin-top:.45rem"> <button class="btn-ghost" onclick="closeEmod()">Batal</button> <button class="btn-primary" onclick="doEditStaff()">Simpan Perubahan →</button> </div> </div>
+</div> <!-- CONFIRM MODAL -->
+<div class="movl" id="movl"> <div class="mbox"> <div class="mtitle" id="mTitle">Konfirmasi</div> <div class="mmsg"   id="mMsg">—</div> <div class="macts"> <button class="btn-ghost" onclick="closeModal()">Batal</button> <button class="mok" id="mOk">Ya</button> </div> </div>
+</div> <script>
 "use strict";
 
 // ══════════════════════════════════════════
@@ -1037,7 +707,7 @@ function fmtDur(ms) { const m = Math.floor(ms/60000), s = Math.floor((ms%60000)/
 
 function toast(msg, type) {
   type = type || "info";
-  const icons = { success:"✅", error:"❌", info:"🔔", warn:"⚠️" };
+  const icons = { success:"", error:"", info:"", warn:"" };
   const t = document.createElement("div");
   t.className = "toast " + type;
   t.innerHTML = "<span>" + (icons[type] || "•") + "</span><span>" + msg + "</span>";
@@ -1054,7 +724,7 @@ function goScreen(id) {
 function toggleEye(id, btn) {
   const el = $(id);
   el.type = el.type === "password" ? "text" : "password";
-  btn.textContent = el.type === "password" ? "👁" : "🙈";
+  btn.textContent = el.type === "password" ? "" : "";
 }
 function checkStr(iid, bid) {
   const v = $(iid).value, b = $(bid);
@@ -1144,7 +814,7 @@ function doLogin() {
   renderDash();
   goScreen("screen-dash");
   showAdminMenus();
-  toast("Selamat datang, " + CU.nama.split(" ")[0] + "! 👋", "success");
+  toast("Selamat datang, " + CU.nama.split(" ")[0] + "! ", "success");
   if (S.sedangDiluar && S.waktuKeluarMs) startCD();
 }
 
@@ -1163,13 +833,13 @@ function doForgotSearch() {
   const u  = USERS[id];
   const h  = $("fgHint"), f = $("fgForm");
   if (!u) {
-    h.innerHTML   = "❌ User ID <strong>" + id + "</strong> tidak ditemukan.";
+    h.innerHTML   = " User ID <strong>" + id + "</strong> tidak ditemukan.";
     h.style.display = "block";
     f.style.display = "none";
     return;
   }
   const nm = ls("name_" + id) || u.nama;
-  h.innerHTML   = "✅ Akun: <strong>" + nm + "</strong> (" + (ls("role_"+id)||u.role) + ")";
+  h.innerHTML   = " Akun: <strong>" + nm + "</strong> (" + (ls("role_"+id)||u.role) + ")";
   h.style.display = "block";
   f.style.display = "block";
   $("fgPw1").value = "";
@@ -1269,12 +939,12 @@ function tickCD() {
     if (rem < 5 * 60 * 1000) {
       setCC("st-warn");
       st.textContent  = "HAMPIR HABIS";
-      tit.textContent = "⚠️ HAMPIR HABIS!";
+      tit.textContent = " HAMPIR HABIS!";
       msg.textContent = "Kurang dari 5 menit! Segera kembali ke kantor!";
     } else {
       setCC("st-ok");
       st.textContent  = "BATAS IZIN";
-      tit.textContent = "⏳ BATAS WAKTU IZIN";
+      tit.textContent = " BATAS WAKTU IZIN";
       msg.textContent = "Kamu punya 15 menit untuk keluar. Segera kembali!";
     }
     who.textContent = "Keluar pukul " + S.waktuKeluar;
@@ -1285,7 +955,7 @@ function tickCD() {
     arc.style.strokeDashoffset = "0";
     setCC("st-over");
     st.textContent  = "TERLAMBAT";
-    tit.textContent = "🚨 BATAS WAKTU TERLAMPAUI!";
+    tit.textContent = " BATAS WAKTU TERLAMPAUI!";
     msg.textContent = "Segera kembali ke kantor sekarang!";
     who.textContent = CU.nama.split(" ")[0] + " melebihi batas izin!";
     markTelat(over);
@@ -1309,8 +979,7 @@ function renderTelatCard() {
   const mine = TELAT.filter(t => t.uid === CU.id);
   if (!mine.length) { card.classList.remove("show"); return; }
   card.classList.add("show");
-  list.innerHTML = mine.map(t =>
-    '<div class="telatitem">' +
+  list.innerHTML = mine.map(t => '<div class="telatitem">' +
     '<div class="telatav">' + initials(t.nama) + '</div>' +
     '<div style="flex:1;min-width:0"><div class="telatnm">' + t.nama + '</div>' +
     '<div class="telatsb">Keluar pukul ' + t.keluar + '</div></div>' +
@@ -1339,7 +1008,7 @@ function renderLiveKeluar() {
   const badge = $("outBadge");
   if (badge) badge.textContent = out.length;
   if (!out.length) {
-    list.innerHTML = '<div class="lkempty">Tidak ada yang di luar saat ini ✅</div>';
+    list.innerHTML = '<div class="lkempty">Tidak ada yang di luar saat ini </div>';
     return;
   }
   list.innerHTML = out.map(o => {
@@ -1348,7 +1017,7 @@ function renderLiveKeluar() {
     let timer;
     if (over) {
       const m = Math.floor(-o.rem/60000), s = Math.floor((-o.rem%60000)/1000);
-      timer = "+" + pad(m) + ":" + pad(s) + " ⚠";
+      timer = "+" + pad(m) + ":" + pad(s) + " ";
     } else {
       const m = Math.floor(o.rem/60000), s = Math.floor((o.rem%60000)/1000);
       timer = pad(m) + ":" + pad(s);
@@ -1422,19 +1091,15 @@ function updateUI() {
   $("qT").textContent   = S.terpakai;
   $("qK").textContent   = ku + "/hari";
 
-  const sc  = $("stCard"), sd = $("stDot"), sl = $("stLbl"), st = $("stTm"), stl = $("stTlbl");
+  // Update topbar signal
+  const tbSig = $("tbSignal");
+  const tbSigLbl = $("tbSigLbl");
   if (S.sedangDiluar) {
-    sc.className    = "stcard st-out";
-    sd.textContent  = "↪";
-    sl.textContent  = "Sedang Di Luar Kantor";
-    stl.textContent = "Keluar pukul";
-    st.textContent  = S.waktuKeluar || "—";
+    if (tbSig) tbSig.className = "tb-signal out";
+    if (tbSigLbl) tbSigLbl.textContent = "KELUAR";
   } else {
-    sc.className    = "stcard st-in";
-    sd.textContent  = "✔";
-    sl.textContent  = "Berada di Kantor";
-    stl.textContent = "Diperbarui";
-    st.textContent  = nowStr();
+    if (tbSig) tbSig.className = "tb-signal";
+    if (tbSigLbl) tbSigLbl.textContent = "ONLINE";
   }
   const bk = $("btnK"), bm = $("btnM");
   if (S.sedangDiluar) {
@@ -1460,7 +1125,7 @@ function renderHistory() {
   hl.innerHTML = [...S.history].reverse().map(h => {
     const late = h.type === "keluar" && TELAT.find(t => t.uid === CU.id && t.keluar === h.time);
     const cls  = late ? "hitem hlate" : "hitem";
-    const dur  = late ? '<span class="hdur">+' + late.durasi + ' ⚠</span>' : "";
+    const dur  = late ? '<span class="hdur">+' + late.durasi + ' </span>' : "";
     const lbl  = h.type === "keluar" ? "↪ Izin Keluar" : "↩ Kembali ke Kantor";
     return '<div class="' + cls + '">' +
       '<div class="hdot ' + h.type + '"></div>' +
@@ -1473,8 +1138,7 @@ function renderHistory() {
 function renderRiwayat() {
   const rl = $("riwList");
   if (!S.history.length) { rl.innerHTML = '<div class="hempty">Belum ada riwayat</div>'; return; }
-  rl.innerHTML = [...S.history].reverse().map(h =>
-    '<div class="hitem"><div class="hdot ' + h.type + '"></div>' +
+  rl.innerHTML = [...S.history].reverse().map(h => '<div class="hitem"><div class="hdot ' + h.type + '"></div>' +
     '<span class="htxt">' + (h.type === "keluar" ? "↪ Izin Keluar" : "↩ Kembali ke Kantor") + '</span>' +
     '<span class="htm">' + h.time + '</span></div>'
   ).join("");
@@ -1496,7 +1160,7 @@ function aksKeluar() {
   updateUI();
   startCD();
   saveSession();
-  toast("✅ Izin keluar tercatat pukul " + t, "success");
+  toast(" Izin keluar tercatat pukul " + t, "success");
 }
 function aksMasuk() {
   if (!S.sedangDiluar) { toast("Kamu belum tercatat keluar.", "info"); return; }
@@ -1508,7 +1172,7 @@ function aksMasuk() {
   stopCD();
   saveSession();
   renderLiveKeluar();
-  toast("✅ Kembali ke kantor pukul " + t, "success");
+  toast(" Kembali ke kantor pukul " + t, "success");
 }
 
 // ══════════════════════════════════════════
@@ -1610,34 +1274,68 @@ function openEmod(uid) {
 }
 function closeEmod() { $("emodWrap").classList.remove("open"); }
 function doEditStaff() {
-  const uid   = $("emUid").value;
-  const nm    = $("emNama").value.trim().toUpperCase();
-  const role  = $("emRole").value;
-  const kuota = parseInt($("emKuota").value);
-  const pw    = $("emPw").value;
-  const err   = $("emErr");
+  const oldUid = $("emUid").value;
+  const newUid = $("emId").value.trim().toUpperCase() || oldUid;
+  const nm     = $("emNama").value.trim().toUpperCase();
+  const role   = $("emRole").value;
+  const kuota  = parseInt($("emKuota").value);
+  const pw     = $("emPw").value;
+  const err    = $("emErr");
   err.classList.remove("show");
+
   if (!nm || !role) { err.textContent = "Nama dan role wajib diisi."; err.classList.add("show"); return; }
   if (pw && pw.length < 6) { err.textContent = "Password min. 6 karakter."; err.classList.add("show"); return; }
-  lss("name_" + uid, nm);
-  lss("role_" + uid, role);
-  USERS[uid].nama  = nm;
-  USERS[uid].role  = role;
-  USERS[uid].kuota = kuota;
-  if (pw) lss("pw_" + uid, btoa(pw));
+  // Validate new User ID — no duplicate unless same as old
+  if (newUid !== oldUid && USERS[newUid]) {
+    err.textContent = "User ID " + newUid + " sudah digunakan oleh staff lain.";
+    err.classList.add("show"); return;
+  }
+
+  // If User ID changed — migrate data
+  if (newUid !== oldUid) {
+    // Copy user object to new ID
+    USERS[newUid] = { ...USERS[oldUid], nama: nm, role, kuota };
+    // Migrate localStorage keys
+    ["name_","role_","pw_","photo_","phone_","dept_","email_","bio_"].forEach(prefix => {
+      const v = ls(prefix + oldUid);
+      if (v) { lss(prefix + newUid, v); lsd(prefix + oldUid); }
+    });
+    // Migrate state
+    const stateRaw = ls(sk(oldUid));
+    if (stateRaw) { lss(sk(newUid), stateRaw); lsd(sk(oldUid)); }
+    // Delete old user
+    delete USERS[oldUid];
+    // If editing self, update CU
+    if (CU && oldUid === CU.id) {
+      CU.id = newUid; CU.nama = nm; CU.role = role; CU.kuota = kuota;
+      lss("l99_ses", JSON.stringify({ id: newUid, ts: Date.now() }));
+    }
+  } else {
+    USERS[oldUid].nama  = nm;
+    USERS[oldUid].role  = role;
+    USERS[oldUid].kuota = kuota;
+    // If editing self — update CU
+    if (CU && oldUid === CU.id) {
+      CU.nama = nm; CU.role = role; CU.kuota = kuota;
+    }
+  }
+
+  lss("name_" + newUid, nm);
+  lss("role_" + newUid, role);
+  if (pw) lss("pw_" + newUid, btoa(pw));
   saveExtra();
-  // if editing self — update UI
-  if (CU && uid === CU.id) {
-    CU.nama  = nm; CU.role  = role; CU.kuota = kuota;
-    $("tbName").textContent  = nm;
-    $("tbRole").textContent  = role + " · " + uid;
-    $("dashAva").textContent = initials(nm);
-    $("dashName").textContent = nm;
-    $("dashBadge").textContent = role + " · " + uid;
+
+  // Refresh topbar + dashboard if editing self
+  if (CU && (oldUid === CU.id || newUid === CU.id)) {
+    $("tbName").textContent    = CU.nama;
+    $("tbRole").textContent    = CU.role + " · " + CU.id;
+    $("dashAva").textContent   = initials(CU.nama);
+    $("dashName").textContent  = CU.nama;
+    $("dashBadge").textContent = CU.role + " · " + CU.id;
   }
   closeEmod();
   renderStaffTable();
-  toast("Data " + uid + " berhasil diperbarui!", "success");
+  toast("Data " + newUid + " berhasil diperbarui!", "success");
 }
 $("emodWrap").addEventListener("click", function(e) { if (e.target === this) closeEmod(); });
 
@@ -1723,7 +1421,7 @@ function exportAllData() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
-  toast("Exported " + rows + " baris data ✅", "success");
+  toast("Exported " + rows + " baris data ", "success");
 }
 
 // ══════════════════════════════════════════
@@ -1740,7 +1438,7 @@ function doChangePw() {
   if (nw.length < 6)         { err.textContent = "Min. 6 karakter.";              err.classList.add("show"); return; }
   if (nw !== cf)             { err.textContent = "Konfirmasi tidak cocok.";        err.classList.add("show"); return; }
   lss("pw_" + CU.id, btoa(nw));
-  ok.textContent = "✅ Password berhasil diubah!";
+  ok.textContent = " Password berhasil diubah!";
   ok.classList.add("show");
   $("cpOld").value = ""; $("cpNew").value = ""; $("cpCfm").value = "";
   $("cpStr").style.width = "0";
@@ -1762,7 +1460,7 @@ function doChangeName() {
   $("dashBadge").textContent = nr + " · " + CU.id;
   $("cnCur").value           = nn;
   const ok = $("cnOk");
-  ok.textContent = "✅ Nama berhasil diperbarui!";
+  ok.textContent = " Nama berhasil diperbarui!";
   ok.classList.add("show");
   toast("Nama diubah!", "success");
 }
@@ -1806,7 +1504,7 @@ function doSaveProf() {
   lss("email_" + CU.id, $("pfEmail").value.trim());
   lss("bio_"   + CU.id, $("pfBio").value.trim());
   const ok = $("pfOk");
-  ok.textContent = "✅ Profil tersimpan!";
+  ok.textContent = " Profil tersimpan!";
   ok.classList.add("show");
   toast("Profil disimpan!", "success");
 }
@@ -1824,7 +1522,7 @@ function doAddStaff() {
   if (pw.length < 6)              { err.textContent = "Password min. 6 karakter."; err.classList.add("show"); return; }
   USERS[id] = { nama: nm, role, kuota, pw: btoa(pw) };
   saveExtra();
-  ok.textContent = "✅ Staff " + nm + " (" + id + ") ditambahkan!";
+  ok.textContent = " Staff " + nm + " (" + id + ") ditambahkan!";
   ok.classList.add("show");
   $("asId").value = ""; $("asNm").value = ""; $("asRole").value = ""; $("asPw").value = "";
   $("asStr").style.width = "0";

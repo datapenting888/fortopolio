@@ -882,7 +882,7 @@ function renderStaffTable(){
     if(r){try{var d=JSON.parse(r);if(d.tanggal===todayStr()){stHtml=d.sedangDiluar?'<span class="lst"><span class="ldots out"><\/span>Di Luar<\/span>':'<span class="lst"><span class="ldots in"><\/span>Di Kantor<\/span>';}}catch(e){}}
     var aksi;
     if(isMe){
-      aksi='<span style="color:var(--t3);font-size:.68rem">—<\/span>';
+      aksi='<span style="color:var(--t3);font-size:.68rem">-<\/span>';
     } else {
       aksi='<span style="display:flex;gap:.3rem">'
         +'<button class="bsm bedit" data-uid="'+uid+'" onclick="openEmod(this.dataset.uid)">Edit<\/button>'

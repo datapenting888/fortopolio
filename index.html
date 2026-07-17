@@ -2310,7 +2310,7 @@ function renderDash() {
   updateTbAvatar();
   updateUI(); renderTelatCard(); renderLiveKeluar(); renderLateBoard();
   if (!window._clkOn) { window._clkOn = true; tickClock(); }
-  if (!window._lkInt) window._lkInt = setInterval(renderLiveKeluar, 10000);
+  if (!window._lkInt) window._lkInt = setInterval(function() { renderLiveKeluar(); renderLateBoard(); }, 10000);
 }
 function updateTbAvatar() {
   var img = g("tbAvatarImg"), init = g("tbAvatarInit");

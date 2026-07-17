@@ -27,9 +27,9 @@
   --gradient-primary-hover: linear-gradient(135deg, #6d28d9 0%, #be185d 100%);
   
   /* Functional Colors */
-  --grn: #10b981;
-  --grn-glow: rgba(16, 185, 129, 0.25);
-  --gradient-success: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+  --grn: #DBF500;
+  --grn-glow: rgba(219, 245, 0, 0.25);
+  --gradient-success: linear-gradient(135deg, #DBF500 0%, #A8C400 100%);
   
   --red: #f43f5e;
   --red-glow: rgba(244, 63, 94, 0.25);
@@ -210,8 +210,8 @@ input, button, select {
 }
 .msg-err.show { display: block; }
 .msg-ok {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(219, 245, 0, 0.08);
+  border: 1px solid rgba(219, 245, 0, 0.2);
   border-left: 4px solid var(--grn);
   border-radius: 10px;
   padding: 0.7rem 1rem;
@@ -620,6 +620,40 @@ input, button, select {
 .ps { font-size: 0.85rem; color: var(--t2); margin-top: 0.25rem; font-weight: 500; }
 .pcnt { padding: 0 2rem 2rem; max-width: 800px; }
 
+/* ======= DASHBOARD TOP GRID (left: personal cards, right: staff late board) ======= */
+.dash-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 34%);
+  gap: 1.2rem;
+  margin: 1.5rem 2rem 1.2rem;
+  align-items: start;
+}
+.dash-col-left { display: flex; flex-direction: column; gap: 1.2rem; min-width: 0; }
+.dash-col-left .hero-card,
+.dash-col-left .cc-wrap,
+.dash-col-left .telat-card { margin: 0; }
+.dash-col-right { min-width: 0; }
+.lb-card { margin: 0; }
+.lb-row {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-av {
+  flex-shrink: 0;
+  min-width: 18px;
+  font-size: 0.85rem; font-weight: 800; color: var(--t2);
+  font-family: 'JetBrains Mono', monospace;
+}
+.lb-info { flex: 1; min-width: 0; }
+.lb-nm { font-size: 0.85rem; font-weight: 700; color: var(--t1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-sb { font-size: 0.7rem; color: var(--t2); font-weight: 500; margin-top: 0.1rem; }
+.lb-dur {
+  font-size: 0.75rem; font-weight: 800; color: var(--red); flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+}
+
 /* ======= HERO DASHBOARD CARD ======= */
 .hero-card {
   margin: 1.5rem 2rem 1.2rem;
@@ -720,6 +754,11 @@ input, button, select {
 .cc-warn .cc-fill { stroke: var(--yel); }
 .cc-warn .cc-time, .cc-warn .cc-stlbl, .cc-warn .cc-title, .cc-warn .cc-who { color: var(--yel); }
 
+.cc-danger .cc-fill { stroke: var(--red); }
+.cc-danger .cc-svg { animation: ccRingBlink 0.6s step-end infinite; }
+.cc-danger .cc-time, .cc-danger .cc-stlbl, .cc-danger .cc-title, .cc-danger .cc-who { color: var(--red); }
+@keyframes ccRingBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
 .cc-over .cc-fill { stroke: var(--red); }
 .cc-over .cc-time { color: var(--red); animation: blink 0.55s step-end infinite; }
 .cc-over .cc-stlbl, .cc-over .cc-title, .cc-over .cc-who { color: var(--red); }
@@ -813,12 +852,12 @@ input, button, select {
 /* Masuk ready state gradient */
 .abt-m.ready {
   background: var(--gradient-success);
-  color: #fff;
+  color: #1a1f0a;
   border-color: transparent;
   box-shadow: 0 10px 25px var(--grn-glow);
 }
 .abt-m.ready:hover:not(.disabled) {
-  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 12px 30px rgba(219, 245, 0, 0.4);
 }
 
 /* ======= DATA CARDS ======= */
@@ -1018,7 +1057,7 @@ input, button, select {
 }
 .rw-stitle.warn { color: var(--red); }
 .rw-badge { background: var(--red); color: #fff; font-size: 0.62rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 99px; }
-.rw-ok-badge { background: var(--grn); color: #fff; font-size: 0.62rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 99px; }
+.rw-ok-badge { background: var(--grn); color: #1a1f0a; font-size: 0.62rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 99px; }
 
 .late-row {
   display: flex;
@@ -1143,6 +1182,23 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
 .ldot-in { background: var(--grn); box-shadow: 0 0 6px var(--grn); }
 .ldot-out { background: var(--accent-light); box-shadow: 0 0 6px var(--accent-light); animation: pulseMin 1.5s infinite; }
 @keyframes pulseMin { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } }
+
+.online-badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(219, 245, 0, 0.1);
+  border: 1px solid rgba(219, 245, 0, 0.25);
+}
+.online-badge .ob-txt { color: var(--grn); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.03em; }
+.online-badge .ob-wifi { width: 15px; height: 15px; flex-shrink: 0; overflow: visible; }
+.online-badge .ob-wifi .ob-arc { transform-origin: 12px 18px; animation: obPulse 1.4s ease-in-out infinite; }
+.online-badge .ob-wifi .ob-arc1 { animation-delay: 0s; }
+.online-badge .ob-wifi .ob-arc2 { animation-delay: 0.2s; }
+.online-badge .ob-wifi .ob-arc3 { animation-delay: 0.4s; }
+.online-badge .ob-wifi .ob-dot { animation: obDot 1.4s ease-in-out infinite; }
+@keyframes obPulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes obDot { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
 /* ======= EXPORT ACTIONS ======= */
 .exp-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; flex-wrap: wrap; gap: 0.8rem; }
@@ -1280,6 +1336,13 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
     margin-left: 1.2rem;
     margin-right: 1.2rem;
   }
+  .dash-grid {
+    grid-template-columns: 1fr;
+    margin-left: 1.2rem;
+    margin-right: 1.2rem;
+    margin-top: 1.2rem;
+  }
+  .dash-col-left .hero-card, .dash-col-left .cc-wrap, .dash-col-left .telat-card { margin: 0; }
   .ph { padding: 1.4rem 1.2rem 0.8rem; }
   .pcnt { padding: 0 1.2rem 1.2rem; }
   .scard-wrap { padding: 0 1.2rem 1.2rem; }
@@ -1441,37 +1504,50 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
 
       <!-- PANEL DASHBOARD -->
       <div class="panel active" id="panel-dash">
-        <div class="hero-card">
-          <div class="hero-name" id="heroName">-</div>
-          <div class="hero-badge" id="heroBadge">-</div>
-          <div class="hero-clock" id="heroClock">00.00.00</div>
-          <div class="hero-date" id="heroDate">-</div>
-        </div>
+        <div class="dash-grid">
+          <div class="dash-col-left">
+            <div class="hero-card">
+              <div class="hero-name" id="heroName">-</div>
+              <div class="hero-badge" id="heroBadge">-</div>
+              <div class="hero-clock" id="heroClock">00.00.00</div>
+              <div class="hero-date" id="heroDate">-</div>
+            </div>
 
-        <div class="cc-wrap cc-ok" id="ccWrap">
-          <div class="cc-left">
-            <div class="cc-ring">
-              <svg class="cc-svg" viewBox="0 0 100 100">
-                <circle class="cc-track" cx="50" cy="50" r="43"/>
-                <circle class="cc-fill" id="ccArc" cx="50" cy="50" r="43" stroke-dasharray="270.2" stroke-dashoffset="0"/>
-              </svg>
-              <div class="cc-center">
-                <div class="cc-time" id="ccTime">20:00</div>
-                <div class="cc-sublbl" id="ccSubLbl">sisa</div>
+            <div class="cc-wrap cc-ok" id="ccWrap">
+              <div class="cc-left">
+                <div class="cc-ring">
+                  <svg class="cc-svg" viewBox="0 0 100 100">
+                    <circle class="cc-track" cx="50" cy="50" r="43"/>
+                    <circle class="cc-fill" id="ccArc" cx="50" cy="50" r="43" stroke-dasharray="270.2" stroke-dashoffset="0"/>
+                  </svg>
+                  <div class="cc-center">
+                    <div class="cc-time" id="ccTime">20:00</div>
+                    <div class="cc-sublbl" id="ccSubLbl">sisa</div>
+                  </div>
+                </div>
+                <div class="cc-stlbl" id="ccSt">BATAS IZIN</div>
+              </div>
+              <div class="cc-right">
+                <div class="cc-title" id="ccTitle">BATAS WAKTU IZIN</div>
+                <div class="cc-msg" id="ccMsg">Kamu punya 20 menit untuk keluar kantor.</div>
+                <div class="cc-who" id="ccWho"></div>
               </div>
             </div>
-            <div class="cc-stlbl" id="ccSt">BATAS IZIN</div>
-          </div>
-          <div class="cc-right">
-            <div class="cc-title" id="ccTitle">BATAS WAKTU IZIN</div>
-            <div class="cc-msg" id="ccMsg">Kamu punya 20 menit untuk keluar kantor.</div>
-            <div class="cc-who" id="ccWho"></div>
-          </div>
-        </div>
 
-        <div class="telat-card" id="telatCard">
-          <div class="telat-head">Melebihi Batas Waktu Izin</div>
-          <div id="telatList"></div>
+            <div class="telat-card" id="telatCard">
+              <div class="telat-head">Melebihi Batas Waktu Izin</div>
+              <div id="telatList"></div>
+            </div>
+          </div>
+
+          <div class="dash-col-right">
+            <div class="card lb-card">
+              <div class="card-head">
+                <span>Staf Terlambat</span>
+              </div>
+              <div id="lbList"></div>
+            </div>
+          </div>
         </div>
 
         <div class="act-row">
@@ -1487,8 +1563,8 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
 
         <div class="srow">
           <div class="scard"><div class="sv" id="stT">0</div><div class="sl">Terpakai</div></div>
-          <div class="scard"><div class="sv" id="stS">-</div><div class="sl">Sisa Kuota</div></div>
-          <div class="scard sc-g"><div class="sv" id="stK">4</div><div class="sl">Kuota/Hari</div></div>
+          <div class="scard sc-g"><div class="sv" id="stS">-</div><div class="sl">Sisa Kuota</div></div>
+          <div class="scard sc-r"><div class="sv" id="stK">0</div><div class="sl">Terlambat</div></div>
         </div>
 
         <div class="card">
@@ -2057,7 +2133,7 @@ function stopCD() {
 }
 function setCC(cls) {
   var w = g("ccWrap");
-  w.classList.remove("cc-ok", "cc-warn", "cc-over");
+  w.classList.remove("cc-ok", "cc-warn", "cc-danger", "cc-over");
   w.classList.add(cls);
 }
 function tickCD() {
@@ -2069,7 +2145,10 @@ function tickCD() {
     setText("ccTime", pad(mm) + ":" + pad(ss));
     setText("ccSubLbl", "sisa");
     arcEl.style.strokeDashoffset = String(CIRC * (1 - rem / BATAS_MS));
-    if (rem < 5 * 60 * 1000) {
+    if (rem < 3 * 60 * 1000) {
+      setCC("cc-danger"); setText("ccSt", "SEGERA HABIS");
+      setText("ccTitle", "WAKTU HAMPIR HABIS!"); setText("ccMsg", "Kurang dari 3 menit! Segera kembali ke kantor!");
+    } else if (rem < 5 * 60 * 1000) {
       setCC("cc-warn"); setText("ccSt", "HAMPIR HABIS");
       setText("ccTitle", "HAMPIR HABIS!"); setText("ccMsg", "Kurang dari 5 menit! Segera kembali!");
     } else {
@@ -2111,6 +2190,8 @@ function markTelat(overMs) {
   
   saveTelat();
   renderTelatCard();
+  renderLateBoard();
+  updateUI();
 }
 
 // =========================================
@@ -2139,6 +2220,41 @@ function renderTelatCard() {
     var sb = mkEl("div", "telat-sb", "Keluar pukul " + t.keluar);
     var dur = mkEl("div", "telat-dur", "+" + t.durasi);
     info.appendChild(nm); info.appendChild(sb);
+    row.appendChild(av); row.appendChild(info); row.appendChild(dur);
+    list.appendChild(row);
+  }
+}
+
+function renderLateBoard() {
+  var list = g("lbList");
+  if (!list) return;
+  var all = [];
+  for (var uid in USERS) {
+    var nm = lsGet("name_"+uid) || USERS[uid].nama;
+    var raw = lsGet("l99_telat_"+uid+"_"+todayStr());
+    if (!raw) continue;
+    try {
+      var arr = JSON.parse(raw);
+      for (var i = 0; i < arr.length; i++) {
+        var t = arr[i];
+        all.push({ nama: t.nama || nm, keluar: t.keluar, durasi: t.durasi, overMs: t.overMs || 0 });
+      }
+    } catch(e) {}
+  }
+  all.sort(function(a,b) { return b.overMs - a.overMs; });
+  list.innerHTML = "";
+  if (!all.length) {
+    list.appendChild(mkEl("div", "hempty", "Belum ada yang terlambat hari ini"));
+    return;
+  }
+  for (var i = 0; i < all.length; i++) {
+    var t = all[i];
+    var row = mkEl("div", "lb-row");
+    var av = mkEl("div", "lb-av", String(i + 1));
+    var info = mkEl("div", "lb-info");
+    var nm2 = mkEl("div", "lb-nm", t.nama);
+    info.appendChild(nm2);
+    var dur = mkEl("div", "lb-dur", "+" + t.durasi);
     row.appendChild(av); row.appendChild(info); row.appendChild(dur);
     list.appendChild(row);
   }
@@ -2192,7 +2308,7 @@ function renderDash() {
   setText("tbName", CU.nama); setText("tbRole", CU.role + " . " + CU.id);
   setText("heroName", CU.nama); setText("heroBadge", CU.id);
   updateTbAvatar();
-  updateUI(); renderTelatCard(); renderLiveKeluar();
+  updateUI(); renderTelatCard(); renderLiveKeluar(); renderLateBoard();
   if (!window._clkOn) { window._clkOn = true; tickClock(); }
   if (!window._lkInt) window._lkInt = setInterval(renderLiveKeluar, 10000);
 }
@@ -2214,7 +2330,8 @@ function tickClock() {
 
 function updateUI() {
   var ku = CU.kuota, si = Math.max(0, ku - S.terpakai), pct = (si / ku) * 100;
-  setText("stT", String(S.terpakai)); setText("stS", String(si)); setText("stK", String(ku));
+  var telatCount = TELAT.filter(function(t) { return t.uid === CU.id; }).length;
+  setText("stT", String(S.terpakai)); setText("stS", String(si)); setText("stK", String(telatCount));
   var f = g("qFill");
   if (f) {
     f.style.width = pct + "%";
@@ -2347,6 +2464,37 @@ function renderRiwayat() {
 // =========================================
 // ADMIN: MONITOR
 // =========================================
+function buildOnlineBadge() {
+  var badge = mkEl("span", "online-badge");
+  var svgNS = "http://www.w3.org/2000/svg";
+  var svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("class", "ob-wifi");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("fill", "none");
+  var arcDefs = [
+    ["ob-arc ob-arc3", "M1 12.3C7 6.6 17 6.6 23 12.3"],
+    ["ob-arc ob-arc2", "M4 15.5C8.5 11 15.5 11 20 15.5"],
+    ["ob-arc ob-arc1", "M7 18.5C10 15.8 14 15.8 17 18.5"]
+  ];
+  for (var i = 0; i < arcDefs.length; i++) {
+    var arc = document.createElementNS(svgNS, "path");
+    arc.setAttribute("class", arcDefs[i][0]);
+    arc.setAttribute("d", arcDefs[i][1]);
+    arc.setAttribute("stroke", "var(--grn)");
+    arc.setAttribute("stroke-width", "2");
+    arc.setAttribute("stroke-linecap", "round");
+    svg.appendChild(arc);
+  }
+  var dot = document.createElementNS(svgNS, "circle");
+  dot.setAttribute("class", "ob-dot");
+  dot.setAttribute("cx", "12"); dot.setAttribute("cy", "20.5"); dot.setAttribute("r", "1.6");
+  dot.setAttribute("fill", "var(--grn)");
+  svg.appendChild(dot);
+  var txt = mkEl("span", "ob-txt", "ONLINE");
+  badge.appendChild(svg); badge.appendChild(txt);
+  return badge;
+}
+
 function renderMonit() {
   var el = g("monitList"); if (!el) return;
   el.innerHTML = "";
@@ -2366,6 +2514,9 @@ function renderMonit() {
       try {
         var d = JSON.parse(r);
         if (d.tanggal === todayStr()) {
+          stEl.textContent = "";
+          stEl.className = "";
+          stEl.style.cssText = "";
           if (d.sedangDiluar && d.waktuKeluarMs) {
             var rem = BATAS_MS - (now - d.waktuKeluarMs), over = rem < 0;
             var abs = Math.abs(rem), mm = Math.floor(abs/60000), ss = Math.floor((abs%60000)/1000);
@@ -2374,9 +2525,7 @@ function renderMonit() {
             var dot = mkEl("span", "ldot-s ldot-out"); stEl.appendChild(dot);
             var txt = mkEl("span", "", "Di Luar (" + lbl + ")"); txt.style.color = over?"var(--red)":"var(--accent-light)"; stEl.appendChild(txt);
           } else {
-            stEl.className = "lst";
-            var dot = mkEl("span", "ldot-s ldot-in"); stEl.appendChild(dot);
-            var txt = mkEl("span", "", "Di Kantor"); txt.style.color = "var(--grn)"; stEl.appendChild(txt);
+            stEl.appendChild(buildOnlineBadge());
           }
         }
       } catch(e) {}

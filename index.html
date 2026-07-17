@@ -11,6 +11,11 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
+/* Fluid base font-size: every rem-based text across the app scales
+   smoothly with viewport width, so text isn't left looking too small
+   on large/full screens. Stays at 16px on small/mobile screens. */
+html { font-size: clamp(16px, 0.6vw + 13px, 19px); }
+
 /* ======= THEME COLORS & VARIABLES ======= */
 :root {
   --bg-base: #080C14;
@@ -331,8 +336,8 @@ input, button, select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
-  height: 64px;
+  padding: 0 1.8rem;
+  height: 76px;
   background: rgba(8, 12, 20, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -343,16 +348,16 @@ input, button, select {
   flex-shrink: 0;
 }
 .tb-left { display: flex; align-items: center; gap: 1rem; }
-.tb-brand { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.01em; color: #fff; }
+.tb-brand { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.01em; color: #fff; }
 .tb-brand span {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.tb-sep { width: 1px; height: 24px; background: var(--border); }
+.tb-sep { width: 1px; height: 28px; background: var(--border); }
 .tb-user { display: flex; flex-direction: column; }
-.tb-name { font-size: 0.85rem; font-weight: 700; color: var(--t0); line-height: 1.25; }
-.tb-role { font-size: 0.68rem; color: var(--t2); letter-spacing: 0.05em; font-weight: 600; text-transform: uppercase; }
+.tb-name { font-size: 0.95rem; font-weight: 700; color: var(--t0); line-height: 1.25; }
+.tb-role { font-size: 0.74rem; color: var(--t2); letter-spacing: 0.05em; font-weight: 600; text-transform: uppercase; }
 
 .tb-right { display: flex; align-items: center; gap: 0.75rem; }
 
@@ -361,21 +366,21 @@ input, button, select {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  gap: 0.18rem;
   margin-right: 0.5rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
-  padding: 0.3rem 0.6rem;
-  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9px;
 }
-.tb-signal svg { width: 18px; height: 13px; display: block; overflow: visible; }
+.tb-signal svg { width: 22px; height: 16px; display: block; overflow: visible; }
 .tsig-dot { transition: fill 0.3s; }
 .tsig-b1, .tsig-b2, .tsig-b3 { fill: none; stroke-width: 2; stroke-linecap: round; transition: stroke 0.3s; }
 .tsig-b1 { animation: tsig 1.6s ease-in-out 0s infinite; }
 .tsig-b2 { animation: tsig 1.6s ease-in-out 0.22s infinite; }
 .tsig-b3 { animation: tsig 1.6s ease-in-out 0.44s infinite; }
 @keyframes tsig { 0%,100% { opacity: 0.2 } 50% { opacity: 1 } }
-.sig-lbl { font-size: 0.52rem; font-weight: 800; letter-spacing: 0.08em; line-height: 1; text-transform: uppercase; }
+.sig-lbl { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.08em; line-height: 1; text-transform: uppercase; }
 
 .sig-online .tsig-dot { fill: var(--grn); }
 .sig-online .tsig-b1, .sig-online .tsig-b2, .sig-online .tsig-b3 { stroke: var(--grn); }
@@ -387,12 +392,12 @@ input, button, select {
 
 /* Topbar Buttons */
 .tbbtn {
-  height: 36px;
-  padding: 0 0.9rem;
-  border-radius: 10px;
+  height: 42px;
+  padding: 0 1.1rem;
+  border-radius: 11px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 700;
   color: var(--t2);
   display: flex;
@@ -418,8 +423,8 @@ input, button, select {
   transform: translateY(-1px);
 }
 .tb-avatar {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--gradient-primary);
   border: 2px solid transparent;
@@ -439,7 +444,7 @@ input, button, select {
 }
 .tb-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .tb-avatar span {
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   font-weight: 800;
   color: #fff;
 }
@@ -634,6 +639,13 @@ input, button, select {
 .dash-col-left .telat-card { margin: 0; }
 .dash-col-right { min-width: 0; }
 .lb-card { margin: 0; }
+.lb-list-wrap {
+  max-height: 340px;
+  overflow-y: auto;
+}
+.lb-list-wrap::-webkit-scrollbar { width: 6px; }
+.lb-list-wrap::-webkit-scrollbar-track { background: transparent; }
+.lb-list-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 .lb-row {
   display: flex; align-items: center; gap: 0.7rem;
   padding: 0.6rem 0;
@@ -1545,7 +1557,7 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
               <div class="card-head">
                 <span>Staf Terlambat</span>
               </div>
-              <div id="lbList"></div>
+              <div class="lb-list-wrap" id="lbList"></div>
             </div>
           </div>
         </div>

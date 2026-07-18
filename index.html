@@ -201,6 +201,10 @@ input, button, select {
 .bedit:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
 .bdel { background: rgba(244, 63, 94, 0.1); color: var(--red); border-color: rgba(244, 63, 94, 0.15); }
 .bdel:hover { background: var(--red); color: #fff; transform: translateY(-1px); }
+.bacc-off { background: rgba(219, 245, 0, 0.08); color: var(--grn); border-color: rgba(219, 245, 0, 0.2); }
+.bacc-off:hover { background: var(--grn); color: #1a1f0a; transform: translateY(-1px); }
+.bacc-on { background: rgba(255,255,255,0.03); color: var(--t2); border-color: var(--border); }
+.bacc-on:hover { background: rgba(244, 63, 94, 0.1); color: var(--red); border-color: rgba(244, 63, 94, 0.2); transform: translateY(-1px); }
 
 .msg-err {
   background: rgba(244, 63, 94, 0.08);
@@ -272,7 +276,7 @@ input, button, select {
     radial-gradient(circle at 90% 10%, rgba(219, 39, 119, 0.15) 0%, transparent 40%),
     var(--bg-base);
 }
-.lwrap { width: 100%; max-width: 420px; padding: 1.5rem; }
+.lwrap { width: 100%; max-width: clamp(420px, 15vw + 350px, 560px); padding: 1.5rem; }
 .logo-area { text-align: center; margin-bottom: 2.2rem; }
 .logo-area h1 {
   font-size: 1.85rem;
@@ -297,10 +301,10 @@ input, button, select {
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border);
   border-radius: 24px;
-  padding: 2.2rem;
+  padding: clamp(2.2rem, 1vw + 1.9rem, 2.9rem);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.lcard h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.3rem; color: var(--t0); }
+.lcard h2 { font-size: clamp(1.2rem, 0.4vw + 1.05rem, 1.4rem); font-weight: 800; margin-bottom: 0.3rem; color: var(--t0); }
 .lcard .lsub { color: var(--t2); font-size: 0.85rem; margin-bottom: 1.6rem; font-weight: 500; }
 
 /* ======= FORGOT PASSWORD SCREEN ======= */
@@ -624,6 +628,8 @@ input, button, select {
 .pt { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--t0); }
 .ps { font-size: 0.85rem; color: var(--t2); margin-top: 0.25rem; font-weight: 500; }
 .pcnt { padding: 0 2rem 2rem; max-width: 800px; }
+#panel-riwayat .pcnt { max-width: 1180px; }
+#panel-staff .pcnt { max-width: 1160px; }
 
 /* ======= DASHBOARD TOP GRID (left: personal cards, right: staff late board) ======= */
 .dash-grid {
@@ -1055,6 +1061,49 @@ input, button, select {
 .rw-grn { --rbc: var(--grn); --rnc: var(--grn); }
 .rw-red { --rbc: var(--red); --rnc: var(--red); }
 
+/* ======= RIWAYAT: GROUPED-BY-STAFF TABLE ======= */
+.rwg {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+.rwg-head {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.95rem 1.2rem;
+  cursor: pointer; user-select: none;
+}
+.rwg-head:hover { background: rgba(255,255,255,0.02); }
+.rwg-chev { width: 15px; height: 15px; flex-shrink: 0; color: var(--t2); transition: transform 0.2s; }
+.rwg-head.open .rwg-chev { transform: rotate(90deg); }
+.rwg-nm { font-weight: 800; font-size: 0.9rem; color: var(--t1); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rwg-late-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.66rem; font-weight: 800; color: var(--red);
+  background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 0.22rem 0.55rem; border-radius: 99px; white-space: nowrap; flex-shrink: 0;
+}
+.rwg-count { font-size: 1.05rem; font-weight: 800; color: var(--t2); flex-shrink: 0; }
+.rwg-body { max-height: 0; overflow: hidden; border-top: 0 solid var(--border); transition: max-height 0.25s ease; }
+.rwg-body.open { max-height: 2000px; border-top-width: 1px; }
+.rwg-scroll { overflow-x: auto; }
+.rwg-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; white-space: nowrap; }
+.rwg-table th {
+  text-align: left; padding: 0.6rem 1.1rem; color: var(--t2);
+  font-size: 0.66rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.rwg-table td { padding: 0.75rem 1.1rem; color: var(--t1); border-bottom: 1px solid var(--border); }
+.rwg-table tr:last-child td { border-bottom: none; }
+.rwg-status {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.68rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: 99px;
+}
+.rwg-status-ok { background: rgba(219, 245, 0, 0.08); color: var(--grn); border: 1px solid rgba(219, 245, 0, 0.25); }
+.rwg-status-late { background: rgba(239, 68, 68, 0.08); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.25); }
+.rwg-seq { color: var(--t2); font-weight: 800; }
+
 .rw-sec { margin-bottom: 1.4rem; }
 .rw-stitle {
   font-size: 0.75rem;
@@ -1169,8 +1218,8 @@ input, button, select {
 }
 table { width: 100%; border-collapse: collapse; min-width: 500px; }
 thead { background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid var(--border); }
-th { padding: 0.85rem 1.1rem; font-size: 0.7rem; font-weight: 800; color: var(--t2); text-align: left; letter-spacing: 0.08em; text-transform: uppercase; }
-td { padding: 0.85rem 1.1rem; font-size: 0.82rem; color: var(--t1); border-top: 1px solid var(--border); }
+th { padding: 0.85rem 1.1rem; font-size: 0.7rem; font-weight: 800; color: var(--t2); text-align: left; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+td { padding: 0.85rem 1.1rem; font-size: 0.82rem; color: var(--t1); border-top: 1px solid var(--border); white-space: nowrap; }
 tr:hover td { background: rgba(255, 255, 255, 0.015); }
 
 /* Badges for table */
@@ -1214,6 +1263,27 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
 
 /* ======= EXPORT ACTIONS ======= */
 .exp-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; flex-wrap: wrap; gap: 0.8rem; }
+
+.hist-period {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  gap: 0.7rem; margin-bottom: 1rem;
+}
+.hist-presets { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.hp-btn {
+  font-family: inherit; font-size: 0.74rem; font-weight: 700; color: var(--t2);
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  padding: 0.45rem 0.85rem; border-radius: 99px; cursor: pointer; transition: var(--transition);
+  white-space: nowrap;
+}
+.hp-btn:hover { color: var(--t1); border-color: var(--accent-light); }
+.hp-btn.active { background: var(--gradient-primary); color: #fff; border-color: transparent; }
+.hist-range { display: flex; align-items: center; gap: 0.5rem; color: var(--t2); font-size: 0.8rem; }
+.hist-range input[type="date"] {
+  font-family: inherit; color-scheme: dark;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--t1);
+  padding: 0.45rem 0.6rem; border-radius: 9px; font-size: 0.78rem; font-weight: 600;
+}
+.hist-range input[type="date"]:focus { outline: none; border-color: var(--accent-light); }
 .btn-exp {
   padding: 0.6rem 1.1rem;
   border-radius: 10px;
@@ -1263,6 +1333,17 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 }
 .modal-ovl.open .modal-box { transform: translateY(0) scale(1); }
+
+.akm-opt {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.6rem;
+  background: rgba(255,255,255,0.02);
+}
+.akm-check { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.88rem; font-weight: 700; color: var(--t1); }
+.akm-check input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--grn); cursor: pointer; flex-shrink: 0; }
+.akm-desc { font-size: 0.72rem; color: var(--t3); margin-top: 0.25rem; margin-left: 1.65rem; font-weight: 500; }
 .modal-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--t0); }
 .modal-msg { font-size: 0.85rem; color: var(--t2); margin-bottom: 1.4rem; line-height: 1.6; font-weight: 500; }
 .modal-acts { display: flex; gap: 0.75rem; }
@@ -1477,11 +1558,11 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
         </div>
         <div class="sbi hidden" id="sb-monit">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          Monitor Staff <span class="sbbadge" id="outBadge">0</span>
+          Monitor Staff
         </div>
         <div class="sbi hidden" id="sb-staff">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          Data Staff <span class="sbbadge" id="staffBadge">0</span>
+          Data Staff
         </div>
         <div class="sbi hidden" id="sb-hist-admin">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -1545,17 +1626,12 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
                 <div class="cc-who" id="ccWho"></div>
               </div>
             </div>
-
-            <div class="telat-card" id="telatCard">
-              <div class="telat-head">Melebihi Batas Waktu Izin</div>
-              <div id="telatList"></div>
-            </div>
           </div>
 
           <div class="dash-col-right">
             <div class="card lb-card">
               <div class="card-head">
-                <span>Staf Terlambat</span>
+                <span>Staf Melebihi Batas Waktu Izin</span>
               </div>
               <div class="lb-list-wrap" id="lbList"></div>
             </div>
@@ -1579,12 +1655,6 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
           <div class="scard sc-r"><div class="sv" id="stK">0</div><div class="sl">Terlambat</div></div>
         </div>
 
-        <div class="card">
-          <div class="q-row"><span>Sisa Izin Hari Ini</span><strong id="qLbl">4 / 4</strong></div>
-          <div class="q-track"><div class="q-fill" id="qFill" style="width:100%"></div></div>
-          <div class="q-foot"><span>Terpakai: <b id="qT">0</b></span><span>Kuota: <b id="qK">4/hari</b></span></div>
-        </div>
-
         <div class="lk-card">
           <div class="lk-head"><span class="lk-dot"></span>Sedang Di Luar Kantor</div>
           <div class="lk-list" id="lkList"></div>
@@ -1600,14 +1670,7 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
             <div class="rw-box rw-grn"><div class="rw-num" id="rSumTepat">0</div><div class="rw-lbl">Tepat Waktu</div></div>
             <div class="rw-box rw-red"><div class="rw-num" id="rSumTelat">0</div><div class="rw-lbl">Melebihi Batas</div></div>
           </div>
-          <div class="rw-sec">
-            <div class="rw-stitle">Aktivitas Hari Ini <span class="rw-ok-badge hidden" id="rActBadge">0</span></div>
-            <div class="hlist" id="rActList"></div>
-          </div>
-          <div class="rw-sec">
-            <div class="rw-stitle warn">Pelanggaran Batas Waktu <span class="rw-badge hidden" id="rTelBadge">0</span></div>
-            <div id="rTelList"></div>
-          </div>
+          <div id="rwGroups"></div>
         </div>
       </div>
 
@@ -1622,7 +1685,7 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
         <div class="ph"><div class="pt">Data Staff</div><div class="ps">Kelola karyawan - klik Edit untuk ubah data</div></div>
         <div class="pcnt">
           <div class="tbl-wrap">
-            <table><thead><tr><th>User ID</th><th>Nama</th><th>Role</th><th>Kuota</th><th>Status</th><th>Aksi</th></tr></thead>
+            <table><thead><tr><th>User ID</th><th>Nama</th><th>Jabatan</th><th>Kuota</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody id="staffTbl"></tbody></table>
           </div>
           <button class="btn-primary" id="btnGoAddStaff" style="max-width:180px">Tambah Staff</button>
@@ -1631,8 +1694,22 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
 
       <!-- PANEL HISTORY ADMIN -->
       <div class="panel" id="panel-hist-admin">
-        <div class="ph"><div class="pt">History Absen Semua Staff</div><div class="ps">Riwayat lengkap seluruh karyawan hari ini</div></div>
+        <div class="ph"><div class="pt">History Absen Semua Staff</div><div class="ps">Riwayat lengkap seluruh karyawan sesuai periode</div></div>
         <div class="pcnt">
+          <div class="hist-period">
+            <div class="hist-presets">
+              <button class="hp-btn active" id="hpToday" data-preset="today">Hari Ini</button>
+              <button class="hp-btn" id="hpWeek" data-preset="week">Minggu Ini</button>
+              <button class="hp-btn" id="hpMonth" data-preset="month">Bulan Ini</button>
+              <button class="hp-btn" id="hpLastWeek" data-preset="lastweek">Minggu Lalu</button>
+              <button class="hp-btn" id="hpLastMonth" data-preset="lastmonth">Bulan Lalu</button>
+            </div>
+            <div class="hist-range">
+              <input type="date" id="histStart">
+              <span>&rarr;</span>
+              <input type="date" id="histEnd">
+            </div>
+          </div>
           <div class="exp-bar">
             <div id="histInfo" style="font-size:.82rem;color:var(--t2);font-weight:600">Memuat...</div>
             <button class="btn-exp" id="btnExport">Export CSV</button>
@@ -1661,7 +1738,14 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
           <div class="msg-ok" id="cnOk"></div>
           <div class="field"><label>Nama Saat Ini</label><input id="cnCur" type="text" disabled style="opacity:.42"/></div>
           <div class="field"><label>Nama Baru</label><input id="cnNew" type="text" placeholder="Nama lengkap baru"/></div>
-          <div class="field"><label>Role / Jabatan</label><input id="cnRole" type="text" placeholder="CS, HRD, Admin..."/></div>
+          <div class="field"><label>Jabatan</label>
+            <select id="cnRole">
+              <option value="CS">CS</option>
+              <option value="CS Line">CS Line</option>
+              <option value="Kasir">Kasir</option>
+              <option value="Kapten">Kapten</option>
+            </select>
+          </div>
           <button class="btn-primary" id="btnChangeName">Simpan</button>
         </div></div>
       </div>
@@ -1693,20 +1777,18 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
           <div class="msg-ok" id="asOk"></div>
           <div class="field"><label>User ID Baru</label><input id="asId" type="text" placeholder="Contoh: CS002"/><div class="fhint">Tidak bisa diubah setelah dibuat.</div></div>
           <div class="field"><label>Nama Lengkap</label><input id="asNm" type="text" placeholder="Nama lengkap karyawan"/></div>
-          <div class="field"><label>Role</label>
+          <div class="field"><label>Jabatan</label>
             <select id="asRole">
               <option value="">-- Pilih --</option>
-              <option value="CS">CS</option><option value="HRD">HRD</option>
-              <option value="Marketing">Marketing</option><option value="Admin">Admin</option>
-              <option value="IT">IT</option><option value="Finance">Finance</option>
-              <option value="Manager">Manager</option><option value="Kasir">Kasir</option>
-              <option value="Lainnya">Lainnya</option>
+              <option value="CS">CS</option>
+              <option value="CS Line">CS Line</option>
+              <option value="Kasir">Kasir</option>
+              <option value="Kapten">Kapten</option>
             </select>
           </div>
           <div class="field"><label>Kuota Izin / Hari</label>
             <select id="asKuota">
-              <option value="2">2x</option><option value="4" selected>4x</option>
-              <option value="6">6x</option><option value="8">8x</option>
+              <option value="4" selected>4x</option><option value="5">5x</option>
             </select>
           </div>
           <div class="field"><label>Password Awal</label><div class="fw"><input id="asPw" type="password" placeholder="Min. 6 karakter"/><button class="eye-btn" id="eyeAs">Lihat</button></div><div class="sbar"><div class="sfill" id="asStr"></div></div></div>
@@ -1731,25 +1813,50 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
     <input type="hidden" id="emUid"/>
     <div class="field"><label>User ID (kosongkan jika tidak diubah)</label><input id="emId" type="text" style="font-family:monospace;text-transform:uppercase"/></div>
     <div class="field"><label>Nama Lengkap</label><input id="emNama" type="text"/></div>
-    <div class="field"><label>Role</label>
+    <div class="field"><label>Jabatan</label>
       <select id="emRole">
-        <option value="CS">CS</option><option value="HRD">HRD</option>
-        <option value="Marketing">Marketing</option><option value="Admin">Admin</option>
-        <option value="IT">IT</option><option value="Finance">Finance</option>
-        <option value="Manager">Manager</option><option value="Kasir">Kasir</option>
-        <option value="Lainnya">Lainnya</option>
+        <option value="CS">CS</option>
+        <option value="CS Line">CS Line</option>
+        <option value="Kasir">Kasir</option>
+        <option value="Kapten">Kapten</option>
       </select>
     </div>
     <div class="field"><label>Kuota Izin / Hari</label>
       <select id="emKuota">
-        <option value="2">2x</option><option value="4">4x</option>
-        <option value="6">6x</option><option value="8">8x</option>
+        <option value="4">4x</option><option value="5">5x</option>
       </select>
     </div>
     <div class="field"><label>Reset Password (kosongkan jika tidak ubah)</label><div class="fw"><input id="emPw" type="password" placeholder="Password baru"/><button class="eye-btn" id="eyeEm">Lihat</button></div></div>
     <div style="display:flex;gap:.52rem;margin-top:.45rem">
       <button class="btn-ghost" id="btnCancelEmod">Batal</button>
       <button class="btn-primary" id="btnSaveEmod">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ovl" id="akmOvl">
+  <div class="modal-box">
+    <div class="emod-top">
+      <div class="emod-title">Atur Akses Admin</div>
+      <button class="emod-close" id="btnCloseAkm">✕</button>
+    </div>
+    <div class="ps" id="akmWho" style="margin-bottom:1rem"></div>
+    <input type="hidden" id="akmUid"/>
+    <div class="akm-opt">
+      <label class="akm-check"><input type="checkbox" id="akmMonit"/><span>Monitor Staff</span></label>
+      <div class="akm-desc">Lihat status real-time semua karyawan</div>
+    </div>
+    <div class="akm-opt">
+      <label class="akm-check"><input type="checkbox" id="akmStaff"/><span>Data Staff</span></label>
+      <div class="akm-desc">Kelola data & akses karyawan lain</div>
+    </div>
+    <div class="akm-opt">
+      <label class="akm-check"><input type="checkbox" id="akmHist"/><span>History Absen</span></label>
+      <div class="akm-desc">Lihat & export riwayat absen semua staff</div>
+    </div>
+    <div style="display:flex;gap:.52rem;margin-top:1rem">
+      <button class="btn-ghost" id="btnCancelAkm">Batal</button>
+      <button class="btn-primary" id="btnSaveAkm">Simpan Akses</button>
     </div>
   </div>
 </div>
@@ -1791,8 +1898,8 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
 // =========================================
 var USERS = {
   "CS001": {nama:"RIKI ANDIKA NAINGGOLAN", role:"CS",       kuota:4, pw:btoa("cs001")  },
-  "HRD01": {nama:"SARI DEWI KUSUMA",       role:"HRD",      kuota:6, pw:btoa("hrd01")  },
-  "MKT02": {nama:"BUDI SANTOSO",           role:"Marketing", kuota:4, pw:btoa("mkt02") },
+  "HRD01": {nama:"SARI DEWI KUSUMA",       role:"Kapten",    kuota:6, pw:btoa("hrd01")  },
+  "MKT02": {nama:"BUDI SANTOSO",           role:"Kasir",     kuota:4, pw:btoa("mkt02") },
   "ADM01": {nama:"ADMIN SISTEM",           role:"Admin",    kuota:8, pw:btoa("admin1") }
 };
 var BASE_IDS = ["CS001","HRD01","MKT02","ADM01"];
@@ -1838,6 +1945,7 @@ function fbRemove(key) {
 }
 function refreshActivePanel() {
   if (!CU) return;
+  showAdminMenus();
   renderLiveKeluar();
   var active = null;
   for (var i = 0; i < panelNames.length; i++) {
@@ -1873,6 +1981,14 @@ function lsDel(k) { try { localStorage.removeItem(k); } catch(e) {} fbRemove(k);
 // =========================================
 // AUTO-CLEAN 2 BULAN
 // =========================================
+function migrateLegacyRoles() {
+  var map = { "HRD": "Kapten", "Marketing": "Kasir" };
+  for (var uid in USERS) {
+    var stored = lsGet("role_" + uid);
+    if (stored && map[stored]) lsSet("role_" + uid, map[stored]);
+    if (map[USERS[uid].role]) USERS[uid].role = map[USERS[uid].role];
+  }
+}
 function autoClean() {
   var now = Date.now();
   var WEEK = 7 * 24 * 3600 * 1000;
@@ -1929,7 +2045,7 @@ function tryRestoreSession() {
 // =========================================
 function g(id) { return document.getElementById(id); }
 function pad(n) { return String(n).padStart(2, "0"); }
-function nowStr() { var n = new Date(); return pad(n.getHours()) + ":" + pad(n.getMinutes()); }
+function nowStr() { var n = new Date(); return pad(n.getHours()) + ":" + pad(n.getMinutes()) + ":" + pad(n.getSeconds()); }
 function todayStr() { return new Date().toDateString(); }
 function initials(nm) {
   var parts = (nm || "").split(" ").slice(0, 2);
@@ -1980,13 +2096,26 @@ function toggleSB() { g("sidebar").classList.toggle("open"); g("sbOvl").classLis
 function closeSB() { g("sidebar").classList.remove("open"); g("sbOvl").classList.remove("open"); }
 function toggleSBG() { g("sbGH").classList.toggle("open"); g("sbGB").classList.toggle("open"); }
 
+function getStaffAccess(uid) {
+  var raw = lsGet("l99_access_" + uid);
+  if (!raw) return { monit:false, staff:false, hist:false };
+  var d = null;
+  try { d = JSON.parse(raw); } catch(e) { d = null; }
+  if (d && typeof d === "object") {
+    return { monit: !!d.monit, staff: !!d.staff, hist: !!d.hist };
+  }
+  // backward-compat: old flag was a plain "1"/"0" granting everything
+  var all = raw === "1";
+  return { monit: all, staff: all, hist: all };
+}
 function showAdminMenus() {
   if (!CU) return;
   var isA = CU.role === "Admin";
-  var adminItems = ["sb-monit", "sb-staff", "sb-hist-admin"];
-  for (var i = 0; i < adminItems.length; i++) {
-    var el = g(adminItems[i]);
-    if (el) { if (isA) el.classList.remove("hidden"); else el.classList.add("hidden"); }
+  var acc = isA ? { monit:true, staff:true, hist:true } : getStaffAccess(CU.id);
+  var map = { "sb-monit":"monit", "sb-staff":"staff", "sb-hist-admin":"hist" };
+  for (var id in map) {
+    var el = g(id);
+    if (el) { if (acc[map[id]]) el.classList.remove("hidden"); else el.classList.add("hidden"); }
   }
 }
 
@@ -2046,6 +2175,7 @@ function doLogin() {
   var sn = lsGet("name_" + id), sr = lsGet("role_" + id);
   if (sn) CU.nama = sn; if (sr) CU.role = sr;
   loadState(); loadTelat(); saveSession(); autoClean();
+  lsSet("l99_online_" + id, "1");
   renderDash();
   showScreen("screen-dash");
   showAdminMenus();
@@ -2092,6 +2222,7 @@ function doForgotReset() {
 function doLogout() {
   openConfirm("Konfirmasi Logout", "Yakin ingin keluar dari sistem?", function() {
     stopCD();
+    if (CU) lsSet("l99_online_" + CU.id, "0");
     lsDel("l99_ses");
     CU = null;
     g("loginId").value = ""; g("loginPw").value = "";
@@ -2121,6 +2252,7 @@ function saveState() {
   lsSet(sk(CU.id), JSON.stringify({ tanggal:todayStr(), terpakai:S.terpakai,
     sedangDiluar:S.sedangDiluar, waktuKeluar:S.waktuKeluar,
     waktuKeluarMs:S.waktuKeluarMs, history:S.history }));
+  lsSet("l99_hist_" + CU.id + "_" + todayStr(), JSON.stringify(S.history));
 }
 function loadTelat() {
   var r = lsGet("l99_telat_" + CU.id + "_" + todayStr());
@@ -2375,7 +2507,7 @@ function aksKeluar() {
   if (S.terpakai >= CU.kuota) { toast("Kuota izin hari ini sudah habis!", "error"); return; }
   var t = nowStr();
   S.terpakai++; S.sedangDiluar = true; S.waktuKeluar = t; S.waktuKeluarMs = Date.now();
-  S.history.push({ type:"keluar", time:t });
+  S.history.push({ type:"keluar", time:t, ms:Date.now() });
   saveState(); updateUI(); startCD(); saveSession();
   toast("Izin keluar tercatat pukul " + t, "success");
 }
@@ -2388,7 +2520,7 @@ function aksMasuk() {
     markTelat(finalOverMs);
   }
   S.sedangDiluar = false;
-  S.history.push({ type:"masuk", time:t });
+  S.history.push({ type:"masuk", time:t, ms:Date.now() });
   saveState(); updateUI(); stopCD(); saveSession(); renderLiveKeluar();
   toast("Kembali ke kantor pukul " + t, "success");
 }
@@ -2396,9 +2528,27 @@ function aksMasuk() {
 // =========================================
 // RIWAYAT PANEL
 // =========================================
+var rwOpenState = {};
+function timeToMs(hhmm) {
+  var p = hhmm.split(":"); var d = new Date();
+  d.setHours(parseInt(p[0],10)||0, parseInt(p[1],10)||0, parseInt(p[2],10)||0, 0);
+  return d.getTime();
+}
+function fmtDurHMS(ms) {
+  if (ms < 0) ms = 0;
+  var h = Math.floor(ms / 3600000);
+  var m = Math.floor((ms % 3600000) / 60000);
+  var s = Math.floor((ms % 60000) / 1000);
+  return pad(h) + ":" + pad(m) + ":" + pad(s);
+}
+function fmtTglShort() {
+  var p = todayStr().split(" ");
+  return p[2] + " " + p[1] + " " + p[3];
+}
 function renderRiwayat() {
   var totalIzin = 0, totalTelat = 0, totalTepat = 0;
-  var allActs = [], allTelat = [];
+  var allTelat = [];
+  var groups = [];
   for (var uid in USERS) {
     var nm = lsGet("name_"+uid)||USERS[uid].nama;
     var role = lsGet("role_"+uid)||USERS[uid].role;
@@ -2406,20 +2556,35 @@ function renderRiwayat() {
     var uTelat = [];
     if (telatRaw) { try { uTelat = JSON.parse(telatRaw); } catch(e) {} }
     for (var i = 0; i < uTelat.length; i++) allTelat.push(uTelat[i]);
-    var r = lsGet(sk(uid)); if (!r) continue;
-    try {
-      var d = JSON.parse(r);
-      if (d.tanggal !== todayStr() || !d.history) continue;
-      for (var i = 0; i < d.history.length; i++) {
-        var h = d.history[i];
-        if (h.type === "keluar") totalIzin++;
-        var late = null;
-        if (h.type === "keluar") {
-          for (var j = 0; j < uTelat.length; j++) { if (uTelat[j].keluar === h.time) { late = uTelat[j]; break; } }
+
+    var sessions = [];
+    var r = lsGet(sk(uid));
+    if (r) {
+      try {
+        var d = JSON.parse(r);
+        if (d.tanggal === todayStr() && d.history) {
+          var pendingKeluar = null;
+          for (var i = 0; i < d.history.length; i++) {
+            var h = d.history[i];
+            if (h.type === "keluar") { pendingKeluar = h; }
+            else if (h.type === "masuk" && pendingKeluar) {
+              totalIzin++;
+              var late = null;
+              for (var j = 0; j < uTelat.length; j++) { if (uTelat[j].keluar === pendingKeluar.time) { late = uTelat[j]; break; } }
+              var kMs = pendingKeluar.ms || timeToMs(pendingKeluar.time);
+              var mMs = h.ms || timeToMs(h.time);
+              var durMs = mMs - kMs; if (durMs < 0) durMs = 0;
+              sessions.push({ keluar: pendingKeluar.time, masuk: h.time, durMs: durMs, late: late });
+              pendingKeluar = null;
+            }
+          }
         }
-        allActs.push({ nm: nm, role: role, uid: uid, type: h.type, time: h.time, late: late });
-      }
-    } catch(e) {}
+      } catch(e) {}
+    }
+    if (sessions.length) {
+      for (var i = 0; i < sessions.length; i++) sessions[i].seq = i + 1;
+      groups.push({ uid: uid, nm: nm, role: role, sessions: sessions, telatCount: uTelat.length });
+    }
   }
   totalTelat = allTelat.length;
   totalTepat = totalIzin - totalTelat; if (totalTepat < 0) totalTepat = 0;
@@ -2427,49 +2592,87 @@ function renderRiwayat() {
   setText("rSumTepat", String(totalTepat));
   setText("rSumTelat", String(totalTelat));
 
-  allActs.sort(function(a,b) { return a.time < b.time ? 1 : (a.time > b.time ? -1 : 0); });
+  groups.sort(function(a,b) {
+    var at = a.sessions[a.sessions.length-1].keluar, bt = b.sessions[b.sessions.length-1].keluar;
+    return at < bt ? 1 : (at > bt ? -1 : 0);
+  });
 
-  // Aktivitas semua staff
-  var actEl = g("rActList"), badge = g("rActBadge"); if (!actEl) return;
-  actEl.innerHTML = "";
-  if (!allActs.length) {
-    actEl.appendChild(mkEl("div", "hempty", "Belum ada aktivitas hari ini"));
-    if (badge) badge.classList.add("hidden");
-  } else {
-    if (badge) { badge.textContent = String(allActs.length); badge.classList.remove("hidden"); }
-    for (var i = 0; i < allActs.length; i++) {
-      var h = allActs[i];
-      var row = mkEl("div", h.late ? "hitem hlate" : "hitem");
-      var dot = mkEl("div", "hdot " + (h.type === "keluar" ? "hdot-k" : "hdot-m"));
-      var txt = mkEl("span", "htxt", (h.type === "keluar" ? "Izin Keluar" : "Kembali ke Kantor") + " - " + h.nm + " (" + h.uid + ")");
-      row.appendChild(dot); row.appendChild(txt);
-      if (h.late) { var dur = mkEl("span", "hdur", "+" + h.late.durasi); row.appendChild(dur); }
-      var tm = mkEl("span", "htm", h.time);
-      row.appendChild(tm);
-      actEl.appendChild(row);
-    }
+  var wrap = g("rwGroups"); if (!wrap) return;
+  wrap.innerHTML = "";
+  if (!groups.length) {
+    wrap.appendChild(mkEl("div", "hempty", "Belum ada aktivitas hari ini"));
+    return;
   }
 
-  // Pelanggaran semua staff
-  var telEl = g("rTelList"), telBadge = g("rTelBadge"); if (!telEl) return;
-  telEl.innerHTML = "";
-  if (!allTelat.length) {
-    if (telBadge) telBadge.classList.add("hidden");
-    telEl.appendChild(mkEl("div", "hempty", "Tidak ada pelanggaran hari ini"));
-  } else {
-    if (telBadge) { telBadge.textContent = String(allTelat.length); telBadge.classList.remove("hidden"); }
-    for (var i = 0; i < allTelat.length; i++) {
-      var t = allTelat[i];
-      var row = mkEl("div", "late-row");
-      var av = mkEl("div", "late-av", initials(t.nama));
-      var info = mkEl("div", "late-info");
-      var nm = mkEl("div", "late-nm", t.nama);
-      var time = mkEl("div", "late-time", "Izin keluar pukul " + t.keluar);
-      var dur = mkEl("div", "late-dur-badge", "Keterlambatan: +" + t.durasi);
-      info.appendChild(nm); info.appendChild(time); info.appendChild(dur);
-      row.appendChild(av); row.appendChild(info);
-      telEl.appendChild(row);
-    }
+  for (var gi = 0; gi < groups.length; gi++) {
+    (function(grp) {
+      var isOpen = !!rwOpenState[grp.uid];
+      var card = mkEl("div", "rwg");
+      var head = mkEl("div", "rwg-head" + (isOpen ? " open" : ""));
+      var chevSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      chevSvg.setAttribute("class", "rwg-chev"); chevSvg.setAttribute("viewBox", "0 0 24 24");
+      chevSvg.setAttribute("fill", "none");
+      var chevPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      chevPath.setAttribute("d", "M9 18l6-6-6-6");
+      chevPath.setAttribute("stroke", "currentColor"); chevPath.setAttribute("stroke-width", "2.4");
+      chevPath.setAttribute("stroke-linecap", "round"); chevPath.setAttribute("stroke-linejoin", "round");
+      chevSvg.appendChild(chevPath);
+      var nmEl = mkEl("div", "rwg-nm", grp.nm);
+      var roleEl = mkEl("span", "tbadge" + (grp.role==="Admin"?" tbadge-admin":grp.role==="Kapten"?" tbadge-hrd":grp.role==="Kasir"?" tbadge-kasir":""), grp.role);
+      head.appendChild(chevSvg); head.appendChild(nmEl); head.appendChild(roleEl);
+      if (grp.telatCount > 0) head.appendChild(mkEl("span", "rwg-late-badge", "\u26A0 TELAT " + grp.telatCount + "X"));
+      head.appendChild(mkEl("span", "rwg-count", String(grp.sessions.length)));
+
+      var body = mkEl("div", "rwg-body" + (isOpen ? " open" : ""));
+      var scrollWrap = mkEl("div", "rwg-scroll");
+      var table = mkEl("table", "rwg-table");
+      var thead = mkEl("thead");
+      var htr = mkEl("tr");
+      ["NAMA STAFF","ROLE","TANGGAL","JAM KELUAR","JAM MASUK","DURASI","TELAT","KETERANGAN","#"].forEach(function(h) {
+        htr.appendChild(mkEl("th", "", h));
+      });
+      thead.appendChild(htr); table.appendChild(thead);
+      var tbody = mkEl("tbody");
+      var sorted = grp.sessions.slice().sort(function(a,b) { return a.keluar < b.keluar ? 1 : (a.keluar > b.keluar ? -1 : 0); });
+      for (var si = 0; si < sorted.length; si++) {
+        var s = sorted[si];
+        var tr = mkEl("tr");
+        tr.appendChild(mkEl("td", "", grp.nm));
+        tr.appendChild(mkEl("td", "", grp.role));
+        tr.appendChild(mkEl("td", "", fmtTglShort()));
+        tr.appendChild(mkEl("td", "", s.keluar));
+        tr.appendChild(mkEl("td", "", s.masuk));
+        tr.appendChild(mkEl("td", "", fmtDurHMS(s.durMs)));
+        var telTd = mkEl("td");
+        if (s.late) {
+          var overMs = typeof s.late.overMs === "number" ? s.late.overMs : Math.max(0, s.durMs - BATAS_MS);
+          telTd.appendChild(mkEl("span", "", "+" + fmtDurHMS(overMs)));
+          telTd.style.color = "var(--red)"; telTd.style.fontWeight = "800";
+        } else {
+          telTd.textContent = "-"; telTd.style.color = "var(--t3)";
+        }
+        tr.appendChild(telTd);
+        var stTd = mkEl("td");
+        var stBadge = mkEl("span", "rwg-status " + (s.late ? "rwg-status-late" : "rwg-status-ok"),
+          (s.late ? "\u26A0 Terlambat" : "\u2713 Tepat Waktu"));
+        stTd.appendChild(stBadge);
+        tr.appendChild(stTd);
+        tr.appendChild(mkEl("td", "rwg-seq", String(s.seq)));
+        tbody.appendChild(tr);
+      }
+      table.appendChild(tbody);
+      scrollWrap.appendChild(table); body.appendChild(scrollWrap);
+
+      head.addEventListener("click", function() {
+        var open = !rwOpenState[grp.uid];
+        rwOpenState[grp.uid] = open;
+        head.classList.toggle("open", open);
+        body.classList.toggle("open", open);
+      });
+
+      card.appendChild(head); card.appendChild(body);
+      wrap.appendChild(card);
+    })(groups[gi]);
   }
 }
 
@@ -2522,6 +2725,7 @@ function renderMonit() {
     info.appendChild(iNm); info.appendChild(iRole);
     var stEl = mkEl("span", "", "Belum login hari ini"); stEl.style.cssText = "color:var(--t3);font-size:.78rem;font-weight:500";
     var r = lsGet(sk(uid));
+    var onlineFlag = lsGet("l99_online_" + uid);
     if (r) {
       try {
         var d = JSON.parse(r);
@@ -2529,7 +2733,12 @@ function renderMonit() {
           stEl.textContent = "";
           stEl.className = "";
           stEl.style.cssText = "";
-          if (d.sedangDiluar && d.waktuKeluarMs) {
+          if (onlineFlag === "0") {
+            stEl.className = "lst";
+            var ldot = mkEl("span", "ldot-s"); ldot.style.cssText = "background:var(--red);box-shadow:0 0 6px var(--red);width:6px;height:6px;border-radius:50%";
+            var ltxt = mkEl("span", "", "Staff Telah Logout"); ltxt.style.cssText = "color:var(--red);font-weight:700";
+            stEl.appendChild(ldot); stEl.appendChild(ltxt);
+          } else if (d.sedangDiluar && d.waktuKeluarMs) {
             var rem = BATAS_MS - (now - d.waktuKeluarMs), over = rem < 0;
             var abs = Math.abs(rem), mm = Math.floor(abs/60000), ss = Math.floor((abs%60000)/1000);
             var lbl = (over?"+":"")+pad(mm)+":"+pad(ss)+(over?" telat":" sisa");
@@ -2571,7 +2780,7 @@ function renderStaffTable() {
     tr.appendChild(tdNm);
     // Role
     var tdRole = document.createElement("td");
-    var badgeEl = mkEl("span", "tbadge" + (role==="Admin"?" tbadge-admin":role==="HRD"?" tbadge-hrd":role==="Kasir"?" tbadge-kasir":""), role);
+    var badgeEl = mkEl("span", "tbadge" + (role==="Admin"?" tbadge-admin":role==="Kapten"?" tbadge-hrd":role==="Kasir"?" tbadge-kasir":""), role);
     tdRole.appendChild(badgeEl); tr.appendChild(tdRole);
     // Kuota
     var tdKuota = document.createElement("td"); tdKuota.textContent = u.kuota + "x"; tdKuota.style.fontWeight = "800";
@@ -2595,7 +2804,7 @@ function renderStaffTable() {
     // Aksi
     var tdAksi = document.createElement("td");
     if (!isMe) {
-      var wrap = mkEl("span",""); wrap.style.cssText = "display:flex;gap:.4rem";
+      var wrap = mkEl("span",""); wrap.style.cssText = "display:flex;gap:.4rem;flex-wrap:nowrap";
       var editBtn = mkEl("button","bsm bedit","Edit");
       editBtn.dataset.uid = uid;
       editBtn.addEventListener("click", function() { openEmod(this.dataset.uid); });
@@ -2603,6 +2812,14 @@ function renderStaffTable() {
       delBtn.dataset.uid = uid;
       delBtn.addEventListener("click", function() { doDelStaff(this.dataset.uid); });
       wrap.appendChild(editBtn); wrap.appendChild(delBtn);
+      if (role !== "Admin" && CU && CU.role === "Admin") {
+        var acc = getStaffAccess(uid);
+        var hasAnyAccess = acc.monit || acc.staff || acc.hist;
+        var accBtn = mkEl("button", "bsm " + (hasAnyAccess ? "bacc-on" : "bacc-off"), hasAnyAccess ? "Kelola Akses" : "Beri Akses");
+        accBtn.dataset.uid = uid;
+        accBtn.addEventListener("click", function() { openAksesModal(this.dataset.uid); });
+        wrap.appendChild(accBtn);
+      }
       tdAksi.appendChild(wrap);
     } else {
       tdAksi.appendChild(mkEl("span","",""));
@@ -2610,6 +2827,28 @@ function renderStaffTable() {
     tr.appendChild(tdAksi);
     tb.appendChild(tr);
   }
+}
+function openAksesModal(uid) {
+  var u = USERS[uid]; if (!u) return;
+  var nm = lsGet("name_"+uid)||u.nama;
+  g("akmUid").value = uid;
+  g("akmWho").textContent = "Pilih menu admin yang bisa diakses oleh " + nm + " (" + uid + ")";
+  var acc = getStaffAccess(uid);
+  g("akmMonit").checked = acc.monit;
+  g("akmStaff").checked = acc.staff;
+  g("akmHist").checked = acc.hist;
+  g("akmOvl").classList.add("open");
+}
+function closeAksesModal() { g("akmOvl").classList.remove("open"); }
+function doSaveAksesModal() {
+  var uid = g("akmUid").value; if (!uid) return;
+  var acc = { monit: g("akmMonit").checked, staff: g("akmStaff").checked, hist: g("akmHist").checked };
+  lsSet("l99_access_" + uid, JSON.stringify(acc));
+  var anyGranted = acc.monit || acc.staff || acc.hist;
+  toast(anyGranted ? "Akses untuk staff ini diperbarui" : "Semua akses admin dicabut", anyGranted ? "success" : "warn");
+  closeAksesModal();
+  renderStaffTable();
+  if (CU && CU.id === uid) showAdminMenus();
 }
 
 // =========================================
@@ -2668,68 +2907,119 @@ function doDelStaff(id) {
 // =========================================
 // ADMIN: HISTORY ALL STAFF
 // =========================================
+function toISO(d) { return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
+function fmtISOShort(iso) {
+  var p = iso.split("-"); var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+  return d.getDate() + " " + BLN[d.getMonth()].slice(0,3) + " " + d.getFullYear();
+}
+function dateRangeKeys(startStr, endStr) {
+  var out = [];
+  var start = new Date(startStr + "T00:00:00");
+  var end = new Date(endStr + "T00:00:00");
+  if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) return out;
+  var cur = new Date(start);
+  var guard = 0;
+  while (cur <= end && guard < 400) {
+    out.push(cur.toDateString());
+    cur.setDate(cur.getDate() + 1);
+    guard++;
+  }
+  return out;
+}
+function setHistRange(startD, endD) {
+  g("histStart").value = toISO(startD);
+  g("histEnd").value = toISO(endD);
+}
+function applyHistPreset(preset) {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var s = new Date(today), e = new Date(today);
+  if (preset === "today") { /* s=e=today */ }
+  else if (preset === "week") { s.setDate(today.getDate() - ((today.getDay()+6)%7)); }
+  else if (preset === "month") { s.setDate(1); }
+  else if (preset === "lastweek") {
+    s.setDate(today.getDate() - ((today.getDay()+6)%7) - 7);
+    e = new Date(s); e.setDate(s.getDate() + 6);
+  } else if (preset === "lastmonth") {
+    s.setMonth(today.getMonth()-1, 1);
+    e = new Date(today.getFullYear(), today.getMonth(), 0);
+  }
+  setHistRange(s, e);
+  document.querySelectorAll(".hp-btn").forEach(function(b) { b.classList.toggle("active", b.dataset.preset === preset); });
+  renderHistAdmin();
+}
 function renderHistAdmin() {
   var el = g("histAdminList"), info = g("histInfo"); if (!el) return;
   el.innerHTML = "";
-  var n = new Date();
-  if (info) info.textContent = "Data hari ini . " + n.getDate() + " " + BLN[n.getMonth()] + " " + n.getFullYear();
-  var totalRows = 0;
+  var startVal = g("histStart") ? g("histStart").value : "", endVal = g("histEnd") ? g("histEnd").value : "";
+  if (!startVal || !endVal) { var t = new Date(); startVal = endVal = toISO(t); if (g("histStart")) { g("histStart").value = startVal; g("histEnd").value = endVal; } }
+  var dateKeys = dateRangeKeys(startVal, endVal);
+  if (info) info.textContent = (startVal === endVal ? "Data tanggal " + fmtISOShort(startVal) : "Data " + fmtISOShort(startVal) + " s/d " + fmtISOShort(endVal));
+  var totalRows = 0, activeStaff = 0;
   var frag = document.createDocumentFragment();
+  var multiDay = dateKeys.length > 1;
   for (var uid in USERS) {
     var nm = lsGet("name_"+uid)||USERS[uid].nama;
     var role = lsGet("role_"+uid)||USERS[uid].role;
-    var r = lsGet(sk(uid)); if (!r) continue;
-    try {
-      var d = JSON.parse(r);
-      if (d.tanggal !== todayStr() || !d.history || !d.history.length) continue;
-      var grp = mkEl("div",""); grp.style.marginBottom = ".8rem";
-      var hdr = mkEl("div","",nm + " . " + uid + " . " + role);
-      hdr.style.cssText = "font-size:.7rem;font-weight:800;color:var(--t1);letter-spacing:.05em;text-transform:uppercase;padding:.4rem .8rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem";
-      grp.appendChild(hdr);
-      for (var i = 0; i < d.history.length; i++) {
-        var h = d.history[i];
-        var row = mkEl("div","hitem"); row.style.marginBottom = ".3rem";
-        var dot = mkEl("div","hdot "+(h.type==="keluar"?"hdot-k":"hdot-m"));
-        var txt = mkEl("span","htxt",h.type==="keluar"?"Izin Keluar":"Kembali ke Kantor");
-        var tm = mkEl("span","htm",h.time);
-        row.appendChild(dot); row.appendChild(txt); row.appendChild(tm);
-        grp.appendChild(row); totalRows++;
-      }
-      frag.appendChild(grp);
-    } catch(e) {}
+    var combined = [];
+    for (var di = 0; di < dateKeys.length; di++) {
+      var raw = lsGet("l99_hist_" + uid + "_" + dateKeys[di]);
+      if (!raw) continue;
+      try {
+        var hist = JSON.parse(raw);
+        for (var i = 0; i < hist.length; i++) combined.push({ h: hist[i], tgl: dateKeys[di] });
+      } catch(e) {}
+    }
+    if (!combined.length) continue;
+    activeStaff++;
+    var grp = mkEl("div",""); grp.style.marginBottom = ".8rem";
+    var hdr = mkEl("div","",nm + " . " + uid + " . " + role);
+    hdr.style.cssText = "font-size:.7rem;font-weight:800;color:var(--t1);letter-spacing:.05em;text-transform:uppercase;padding:.4rem .8rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;margin-bottom:.4rem";
+    grp.appendChild(hdr);
+    for (var i = 0; i < combined.length; i++) {
+      var h = combined[i].h;
+      var row = mkEl("div","hitem"); row.style.marginBottom = ".3rem";
+      var dot = mkEl("div","hdot "+(h.type==="keluar"?"hdot-k":"hdot-m"));
+      var lbl = h.type==="keluar"?"Izin Keluar":"Kembali ke Kantor";
+      if (multiDay) lbl += " \u00B7 " + fmtISOShort(toISO(new Date(combined[i].tgl)));
+      var txt = mkEl("span","htxt",lbl);
+      var tm = mkEl("span","htm",h.time);
+      row.appendChild(dot); row.appendChild(txt); row.appendChild(tm);
+      grp.appendChild(row); totalRows++;
+    }
+    frag.appendChild(grp);
   }
-  if (!totalRows) { el.appendChild(mkEl("div","hempty","Belum ada data absensi hari ini")); }
-  else { var info2 = mkEl("div","",totalRows+" aktivitas dari "+Object.keys(USERS).length+" staff"); info2.style.cssText="font-size:.78rem;color:var(--t2);font-weight:600;margin-bottom:.8rem"; el.insertBefore(info2, el.firstChild); el.appendChild(frag); }
+  if (!totalRows) { el.appendChild(mkEl("div","hempty","Belum ada data absensi pada rentang tanggal ini")); }
+  else { var info2 = mkEl("div","",totalRows+" aktivitas dari "+activeStaff+" staff"); info2.style.cssText="font-size:.78rem;color:var(--t2);font-weight:600;margin-bottom:.8rem"; el.insertBefore(info2, el.firstChild); el.appendChild(frag); }
 }
 function exportAllData() {
+  var startVal = g("histStart") ? g("histStart").value : "", endVal = g("histEnd") ? g("histEnd").value : "";
+  if (!startVal || !endVal) { var t = new Date(); startVal = endVal = toISO(t); }
+  var dateKeys = dateRangeKeys(startVal, endVal);
   var csv = "UserID,Nama,Role,Tipe,Waktu,Keterlambatan,Tanggal\n", rows = 0;
   for (var uid in USERS) {
     var nm = lsGet("name_"+uid)||USERS[uid].nama;
     var role = lsGet("role_"+uid)||USERS[uid].role;
-    var r = lsGet(sk(uid)); if (!r) continue;
-    try {
-      var d = JSON.parse(r); if (!d.history) continue;
-      var telatRaw = lsGet("l99_telat_" + uid + "_" + todayStr());
-      var userTelat = telatRaw ? JSON.parse(telatRaw) : [];
-      for (var i = 0; i < d.history.length; i++) {
-        var h = d.history[i];
+    for (var di = 0; di < dateKeys.length; di++) {
+      var tgl = dateKeys[di];
+      var raw = lsGet("l99_hist_" + uid + "_" + tgl);
+      if (!raw) continue;
+      var hist; try { hist = JSON.parse(raw); } catch(e) { continue; }
+      var telatRaw = lsGet("l99_telat_" + uid + "_" + tgl);
+      var userTelat = telatRaw ? (function(){ try { return JSON.parse(telatRaw); } catch(e) { return []; } })() : [];
+      for (var i = 0; i < hist.length; i++) {
+        var h = hist[i];
         var delayStr = "";
         if (h.type === "keluar") {
-          for (var j = 0; j < userTelat.length; j++) {
-            if (userTelat[j].keluar === h.time) {
-              delayStr = "+" + userTelat[j].durasi;
-              break;
-            }
-          }
+          for (var j = 0; j < userTelat.length; j++) { if (userTelat[j].keluar === h.time) { delayStr = "+" + userTelat[j].durasi; break; } }
         }
-        csv += uid + ',' + nm + ',' + role + ',' + h.type + ',' + h.time + ',' + delayStr + ',' + (d.tanggal||'') + '\n'; rows++;
+        csv += uid + ',' + nm + ',' + role + ',' + h.type + ',' + h.time + ',' + delayStr + ',' + tgl + '\n'; rows++;
       }
-    } catch(e) {}
+    }
   }
-  if (!rows) { toast("Tidak ada data untuk diekspor", "warn"); return; }
+  if (!rows) { toast("Tidak ada data untuk diekspor pada rentang tanggal ini", "warn"); return; }
   var blob = new Blob([csv], { type:"text/csv;charset=utf-8;" });
   var a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = "SMB_Absensi_" + new Date().toISOString().slice(0,10) + ".csv";
+  a.download = "SMB_Absensi_" + startVal + "_sd_" + endVal + ".csv";
   document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
   toast("Export " + rows + " baris berhasil!", "success");
 }
@@ -2827,6 +3117,7 @@ function closeConfirm() { g("confirmOvl").classList.remove("open"); }
 // =========================================
 function init() {
   loadExtra(); autoClean(); attachFbSync();
+  migrateLegacyRoles();
   document.addEventListener("visibilitychange", function() { if (!document.hidden) refreshActivePanel(); });
   window.addEventListener("focus", refreshActivePanel);
 
@@ -2870,6 +3161,18 @@ function init() {
   g("btnMasuk").addEventListener("click", aksMasuk);
   g("btnGoAddStaff").addEventListener("click", function() { goPanel("set-add"); });
   g("btnExport").addEventListener("click", exportAllData);
+  document.querySelectorAll(".hp-btn").forEach(function(b) {
+    b.addEventListener("click", function() { applyHistPreset(this.dataset.preset); });
+  });
+  g("histStart").addEventListener("change", function() {
+    document.querySelectorAll(".hp-btn").forEach(function(b) { b.classList.remove("active"); });
+    renderHistAdmin();
+  });
+  g("histEnd").addEventListener("change", function() {
+    document.querySelectorAll(".hp-btn").forEach(function(b) { b.classList.remove("active"); });
+    renderHistAdmin();
+  });
+  (function() { var t = new Date(); setHistRange(t, t); })();
 
   // Profile and security configuration
   eyeToggle("eyeCpOld", "cpOld"); eyeToggle("eyeCpNew", "cpNew");
@@ -2899,6 +3202,9 @@ function init() {
   g("btnCloseEmod").addEventListener("click", closeEmod);
   g("btnCancelEmod").addEventListener("click", closeEmod);
   g("btnSaveEmod").addEventListener("click", doSaveEmod);
+  g("btnCloseAkm").addEventListener("click", closeAksesModal);
+  g("btnCancelAkm").addEventListener("click", closeAksesModal);
+  g("btnSaveAkm").addEventListener("click", doSaveAksesModal);
   g("emodOvl").addEventListener("click", function(e) { if (e.target === this) closeEmod(); });
   eyeToggle("eyeEm", "emPw");
 

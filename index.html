@@ -337,7 +337,7 @@ input, button, select {
   align-items: center;
   justify-content: space-between;
   padding: 0 1.8rem;
-  height: 76px;
+  height: clamp(76px, 2vw + 65px, 100px);
   background: rgba(8, 12, 20, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -348,7 +348,7 @@ input, button, select {
   flex-shrink: 0;
 }
 .tb-left { display: flex; align-items: center; gap: 1rem; }
-.tb-brand { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.01em; color: #fff; }
+.tb-brand { font-size: clamp(1.35rem, 0.6vw + 1.15rem, 1.6rem); font-weight: 900; letter-spacing: -0.01em; color: #fff; }
 .tb-brand span {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
@@ -370,10 +370,10 @@ input, button, select {
   margin-right: 0.5rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
-  padding: 0.4rem 0.75rem;
+  padding: clamp(0.4rem, 0.3vw + 0.3rem, 0.6rem) clamp(0.75rem, 0.5vw + 0.55rem, 1.05rem);
   border-radius: 9px;
 }
-.tb-signal svg { width: 22px; height: 16px; display: block; overflow: visible; }
+.tb-signal svg { width: clamp(22px, 1vw + 18px, 30px); height: clamp(16px, 0.73vw + 13px, 22px); display: block; overflow: visible; }
 .tsig-dot { transition: fill 0.3s; }
 .tsig-b1, .tsig-b2, .tsig-b3 { fill: none; stroke-width: 2; stroke-linecap: round; transition: stroke 0.3s; }
 .tsig-b1 { animation: tsig 1.6s ease-in-out 0s infinite; }
@@ -392,7 +392,7 @@ input, button, select {
 
 /* Topbar Buttons */
 .tbbtn {
-  height: 42px;
+  height: clamp(42px, 1.1vw + 38px, 54px);
   padding: 0 1.1rem;
   border-radius: 11px;
   background: rgba(255, 255, 255, 0.04);
@@ -423,8 +423,8 @@ input, button, select {
   transform: translateY(-1px);
 }
 .tb-avatar {
-  width: 44px;
-  height: 44px;
+  width: clamp(44px, 1.2vw + 40px, 58px);
+  height: clamp(44px, 1.2vw + 40px, 58px);
   border-radius: 50%;
   background: var(--gradient-primary);
   border: 2px solid transparent;
@@ -2827,6 +2827,8 @@ function closeConfirm() { g("confirmOvl").classList.remove("open"); }
 // =========================================
 function init() {
   loadExtra(); autoClean(); attachFbSync();
+  document.addEventListener("visibilitychange", function() { if (!document.hidden) refreshActivePanel(); });
+  window.addEventListener("focus", refreshActivePanel);
 
   // Login Screen
   g("btnLogin").addEventListener("click", doLogin);

@@ -307,30 +307,6 @@ input, button, select {
 .lcard h2 { font-size: clamp(1.2rem, 0.4vw + 1.05rem, 1.4rem); font-weight: 800; margin-bottom: 0.3rem; color: var(--t0); }
 .lcard .lsub { color: var(--t2); font-size: 0.85rem; margin-bottom: 1.6rem; font-weight: 500; }
 
-/* ======= FORGOT PASSWORD SCREEN ======= */
-#screen-forgot { align-items: center; justify-content: center; background: var(--bg-base); }
-.awrap { width: 100%; max-width: 420px; padding: 1.5rem; }
-.acard {
-  background: var(--bg-card);
-  backdrop-filter: blur(24px);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 2.2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-.acard h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.3rem; color: var(--t0); }
-.acard .asub { color: var(--t2); font-size: 0.85rem; margin-bottom: 1.6rem; line-height: 1.5; font-weight: 500; }
-.ibox {
-  background: rgba(139, 92, 246, 0.08);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 12px;
-  padding: 0.8rem 1.1rem;
-  margin-bottom: 1.1rem;
-  font-size: 0.85rem;
-  color: var(--accent-light);
-  line-height: 1.6;
-}
-
 /* ======= DASHBOARD & LAYOUT ======= */
 #screen-dash { flex-direction: column; background: var(--bg-base); }
 .dlayout { display: flex; flex: 1; min-height: calc(100vh - 64px); }
@@ -1480,41 +1456,8 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
         </div>
       </div>
       <button class="btn-primary" id="btnLogin">Masuk</button>
-      <div style="text-align:center;margin-top:1.1rem">
-        <button class="lnk" id="btnGoForgot">Lupa password?</button>
-      </div>
     </div>
     <p class="login-footer">&copy; 2026 MyBrand. Dibuat dengan &#10084;&#65039; di Indonesia</p>
-  </div>
-</div>
-
-<!-- ===== FORGOT PASSWORD SCREEN ===== -->
-<div class="screen" id="screen-forgot">
-  <div class="awrap">
-    <button class="backbtn" id="btnBackLogin">
-      <!-- Inline SVG Arrow Icon for professional layout -->
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-      Kembali ke Login
-    </button>
-    <div class="acard">
-      <h2>Lupa Password</h2>
-      <p class="asub">Masukkan User ID Anda untuk mencari akun dan buat password baru.</p>
-      <div class="field"><label>User ID</label><input id="fgId" type="text" placeholder="Contoh: CS001"/></div>
-      <button class="btn-primary" id="btnFgSearch">Cari Akun</button>
-      <div class="ibox hidden" id="fgHint"></div>
-      <div class="hidden" id="fgForm">
-        <div class="field">
-          <label>Password Baru</label>
-          <div class="fw">
-            <input id="fgPw1" type="password" placeholder="Min. 6 karakter"/>
-            <button class="eye-btn" id="eyeFg1">Lihat</button>
-          </div>
-          <div class="sbar"><div class="sfill" id="fgStr"></div></div>
-        </div>
-        <div class="field"><label>Konfirmasi Password</label><input id="fgPw2" type="password" placeholder="Ulangi password baru"/></div>
-        <button class="btn-primary" id="btnFgReset">Simpan Password</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1582,7 +1525,8 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
           <div class="sbsub" id="sb-set-pw">Ubah Password</div>
           <div class="sbsub" id="sb-set-name">Ganti Nama</div>
           <div class="sbsub" id="sb-set-prof">Foto Profil</div>
-          <div class="sbsub" id="sb-set-add">Tambah Staff</div>
+          <div class="sbsub hidden" id="sb-set-add">Tambah Staff</div>
+          <div class="sbsub hidden" id="sb-set-reset">Reset Password Staff</div>
         </div>
       </div>
       <div class="sb-foot">
@@ -1645,7 +1589,7 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
           </button>
           <button class="abt abt-m disabled" id="btnMasuk">
             <span class="a-lbl">KEMBALI MASUK</span>
-            <span class="a-sub">Klik saat kembali ke kantor</span>
+            <span class="a-sub">Klik saat kembali to kantor</span>
           </button>
         </div>
 
@@ -1798,6 +1742,37 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
         </div></div>
       </div>
 
+      <!-- PANEL RESET PASSWORD STAFF -->
+      <div class="panel" id="panel-set-reset">
+        <div class="ph"><div class="pt">Reset Password Staff</div></div>
+        <div class="scard-wrap"><div class="scard">
+          <div class="msg-err" id="srErr"></div>
+          <div class="msg-ok" id="srOk"></div>
+          <p class="asub" style="font-size:0.85rem;color:var(--t2);margin-bottom:1.2rem">Cari akun staff berdasarkan User ID untuk mereset password mereka.</p>
+          <div class="field">
+            <label>User ID Staff</label>
+            <input id="srId" type="text" placeholder="Contoh: CS001"/>
+          </div>
+          <button class="btn-primary" id="btnSrSearch">Cari Akun</button>
+          <div class="ibox hidden" id="srHint" style="margin-top:1.1rem;margin-bottom:1.1rem"></div>
+          <div class="hidden" id="srForm">
+            <div class="field">
+              <label>Password Baru Staff</label>
+              <div class="fw">
+                <input id="srPw1" type="password" placeholder="Min. 6 karakter"/>
+                <button class="eye-btn" id="eyeSr1">Lihat</button>
+              </div>
+              <div class="sbar"><div class="sfill" id="srStr"></div></div>
+            </div>
+            <div class="field">
+              <label>Konfirmasi Password</label>
+              <input id="srPw2" type="password" placeholder="Ulangi password baru"/>
+            </div>
+            <button class="btn-primary" id="btnSrReset">Simpan Password</button>
+          </div>
+        </div></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1945,6 +1920,13 @@ function fbRemove(key) {
 }
 function refreshActivePanel() {
   if (!CU) return;
+  if (S && S.sedangDiluar && S.waktuKeluarMs) {
+    var keluarDay = new Date(S.waktuKeluarMs).toDateString();
+    if (keluarDay !== todayStr() || (S_LOADED_DAY !== null && S_LOADED_DAY !== todayStr())) {
+      stopCD();
+      loadState(); loadTelat();
+    }
+  }
   showAdminMenus();
   renderLiveKeluar();
   var active = null;
@@ -2112,7 +2094,13 @@ function showAdminMenus() {
   if (!CU) return;
   var isA = CU.role === "Admin";
   var acc = isA ? { monit:true, staff:true, hist:true } : getStaffAccess(CU.id);
-  var map = { "sb-monit":"monit", "sb-staff":"staff", "sb-hist-admin":"hist" };
+  var map = { 
+    "sb-monit": "monit", 
+    "sb-staff": "staff", 
+    "sb-hist-admin": "hist",
+    "sb-set-add": "staff",
+    "sb-set-reset": "staff"
+  };
   for (var id in map) {
     var el = g(id);
     if (el) { if (acc[map[id]]) el.classList.remove("hidden"); else el.classList.add("hidden"); }
@@ -2122,8 +2110,8 @@ function showAdminMenus() {
 // =========================================
 // PANEL NAVIGATION
 // =========================================
-var panelNames = ["dash","riwayat","monit","staff","hist-admin","set-pw","set-name","set-prof","set-add"];
-var sbItems = ["sb-dash","sb-riwayat","sb-monit","sb-staff","sb-hist-admin","sb-set-pw","sb-set-name","sb-set-prof","sb-set-add"];
+var panelNames = ["dash","riwayat","monit","staff","hist-admin","set-pw","set-name","set-prof","set-add","set-reset"];
+var sbItems = ["sb-dash","sb-riwayat","sb-monit","sb-staff","sb-hist-admin","sb-set-pw","sb-set-name","sb-set-prof","sb-set-add","sb-set-reset"];
 
 function goPanel(name) {
   for (var i = 0; i < panelNames.length; i++) {
@@ -2146,6 +2134,10 @@ function goPanel(name) {
   if (name === "set-name") {
     g("cnCur").value = CU.nama; g("cnNew").value = ""; g("cnRole").value = CU.role;
     hideMsg("cnOk");
+  }
+  if (name === "set-reset") {
+    g("srId").value = ""; g("srHint").classList.add("hidden"); hideEl("srForm");
+    hideMsg("srErr"); hideMsg("srOk");
   }
   if (name === "set-prof") loadProfForm();
   if (name === "staff") renderStaffTable();
@@ -2184,36 +2176,47 @@ function doLogin() {
 }
 
 // =========================================
-// FORGOT PASSWORD
+// RESET PASSWORD STAFF (ADMIN ACCESS)
 // =========================================
-function doForgotSearch() {
+function doStaffResetSearch() {
   loadExtra();
-  var id = g("fgId").value.trim().toUpperCase();
+  var id = g("srId").value.trim().toUpperCase();
+  hideMsg("srErr"); hideMsg("srOk");
+  if (!id) { toast("User ID tidak boleh kosong", "error"); return; }
   var u = USERS[id];
   if (!u) {
-    var h = g("fgHint");
+    var h = g("srHint");
     h.textContent = "User ID tidak ditemukan.";
     h.classList.remove("hidden");
-    hideEl("fgForm");
+    hideEl("srForm");
     return;
   }
   var nm = lsGet("name_" + id) || u.nama;
-  var h = g("fgHint");
-  h.textContent = "Akun ditemukan: " + nm + " (" + u.role + ")";
+  var role = lsGet("role_" + id) || u.role;
+  var h = g("srHint");
+  h.textContent = "Akun ditemukan: " + nm + " (" + role + ")";
   h.classList.remove("hidden");
-  showEl("fgForm");
-  g("fgPw1").value = ""; g("fgPw2").value = "";
-  g("fgStr").style.width = "0";
+  showEl("srForm");
+  g("srPw1").value = ""; g("srPw2").value = "";
+  g("srStr").style.width = "0";
 }
-function doForgotReset() {
-  var id = g("fgId").value.trim().toUpperCase();
-  var p1 = g("fgPw1").value, p2 = g("fgPw2").value;
-  if (p1.length < 6) { toast("Min. 6 karakter", "error"); return; }
-  if (p1 !== p2) { toast("Konfirmasi tidak cocok", "error"); return; }
+function doStaffResetSave() {
+  var id = g("srId").value.trim().toUpperCase();
+  var p1 = g("srPw1").value, p2 = g("srPw2").value;
+  hideMsg("srErr"); hideMsg("srOk");
+  if (p1.length < 6) { toast("Password baru minimal 6 karakter", "error"); return; }
+  if (p1 !== p2) { toast("Konfirmasi password tidak cocok", "error"); return; }
   lsSet("pw_" + id, btoa(p1));
-  toast("Password berhasil direset!", "success");
-  hideEl("fgForm");
-  setTimeout(function() { showScreen("screen-login"); }, 1400);
+  
+  if (CU && id === CU.id) {
+    CU.pw = btoa(p1);
+    saveSession();
+  }
+  
+  toast("Password staff " + id + " berhasil direset!", "success");
+  hideEl("srForm");
+  g("srHint").classList.add("hidden");
+  g("srId").value = "";
 }
 
 // =========================================
@@ -2235,7 +2238,9 @@ function doLogout() {
 // STATE
 // =========================================
 function sk(uid) { return "l99_s_" + uid; }
+var S_LOADED_DAY = null;
 function loadState() {
+  S_LOADED_DAY = todayStr();
   var raw = lsGet(sk(CU.id));
   if (raw) {
     var d = JSON.parse(raw);
@@ -2282,6 +2287,13 @@ function setCC(cls) {
 }
 function tickCD() {
   if (!S.sedangDiluar) { stopCD(); return; }
+  var keluarDay = S.waktuKeluarMs ? new Date(S.waktuKeluarMs).toDateString() : null;
+  if ((S_LOADED_DAY !== null && S_LOADED_DAY !== todayStr()) || (keluarDay && keluarDay !== todayStr())) {
+    stopCD();
+    loadState(); loadTelat();
+    renderDash();
+    return;
+  }
   var rem = BATAS_MS - (Date.now() - S.waktuKeluarMs);
   var arcEl = g("ccArc");
   if (rem > 0) {
@@ -2522,7 +2534,7 @@ function aksMasuk() {
   S.sedangDiluar = false;
   S.history.push({ type:"masuk", time:t, ms:Date.now() });
   saveState(); updateUI(); stopCD(); saveSession(); renderLiveKeluar();
-  toast("Kembali ke kantor pukul " + t, "success");
+  toast("Kembali to kantor pukul " + t, "success");
 }
 
 // =========================================
@@ -3126,17 +3138,6 @@ function init() {
   g("loginId").addEventListener("keydown", function(e) { if (e.key === "Enter") doLogin(); });
   g("loginPw").addEventListener("keydown", function(e) { if (e.key === "Enter") doLogin(); });
   eyeToggle("eyeLogin", "loginPw");
-  g("btnGoForgot").addEventListener("click", function() {
-    g("fgId").value = ""; g("fgHint").classList.add("hidden"); hideEl("fgForm");
-    showScreen("screen-forgot");
-  });
-
-  // Forgot Screen
-  g("btnBackLogin").addEventListener("click", function() { showScreen("screen-login"); });
-  g("btnFgSearch").addEventListener("click", doForgotSearch);
-  g("btnFgReset").addEventListener("click", doForgotReset);
-  eyeToggle("eyeFg1", "fgPw1");
-  strBar("fgPw1", "fgStr");
 
   // Topbar menu toggle
   g("hambtn").addEventListener("click", toggleSB);
@@ -3153,6 +3154,7 @@ function init() {
   g("sb-set-name").addEventListener("click", function() { goPanel("set-name"); });
   g("sb-set-prof").addEventListener("click", function() { goPanel("set-prof"); });
   g("sb-set-add").addEventListener("click", function() { goPanel("set-add"); });
+  g("sb-set-reset").addEventListener("click", function() { goPanel("set-reset"); });
   g("sbGH").addEventListener("click", toggleSBG);
   g("btnSbLogout").addEventListener("click", doLogout);
 
@@ -3197,6 +3199,12 @@ function init() {
   eyeToggle("eyeAs", "asPw"); strBar("asPw", "asStr");
   g("btnAddStaff").addEventListener("click", doAddStaff);
   g("btnGoStaffList").addEventListener("click", function() { goPanel("staff"); });
+
+  // Reset password staff event listeners
+  g("btnSrSearch").addEventListener("click", doStaffResetSearch);
+  g("btnSrReset").addEventListener("click", doStaffResetSave);
+  eyeToggle("eyeSr1", "srPw1");
+  strBar("srPw1", "srStr");
 
   // Modals management
   g("btnCloseEmod").addEventListener("click", closeEmod);
